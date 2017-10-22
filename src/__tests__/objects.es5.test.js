@@ -134,8 +134,9 @@ test("inheritance", () => {
     expect(p instanceof Object).toBeTruthy();
 
     // If you want to examine an object's prototype.
-    console.log("Person's prototype : " + Object.getOwnPropertyNames(Person.prototype));
-    console.log("Teacher's prototype : " + Object.getOwnPropertyNames(Teacher.prototype));
+    expect(Object.getOwnPropertyNames(Person.prototype)
+    // console.log("Person's prototype : " + Object.getOwnPropertyNames(Person.prototype));
+    // console.log("Teacher's prototype : " + Object.getOwnPropertyNames(Teacher.prototype));
 });
 
 test("json", () => {

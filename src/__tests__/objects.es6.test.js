@@ -2,10 +2,13 @@
 //
 // ES6 improves object creation.
 //
-// * Property initializer shorthand allows you to create objects more concisely.
+// * Property initializer shorthand allows you to concisely define objects.
+// * Computed property names allow you to use variable values as property names.
 //
 
 
+//
+// Concise property syntax.
 //
 // If the name of a property is the value of a variable, you
 // can omit the value when creating a property.
@@ -18,10 +21,16 @@ test("property-initializer-shorthand", () => {
     const age = 41;
 
     const person = {
-        // Concise property syntax. `name : name` can be replaced with `name`.
+        //
+        // Concise property syntax. 
+        // * `name : name` can be replaced with just `name`.
+        //
         name,
         age,
-        // Concise method syntax. `description : function()` can be replaced with `description()`
+        //
+        // Concise method syntax. 
+        // * `description : function()` can be replaced with just `description()`
+        //
         description() {
             return `${this.name} ${this.age}`
         }

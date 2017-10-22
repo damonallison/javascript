@@ -1,8 +1,15 @@
 //
+// Javascript is dynamically typed language.
+//
+// Javascript has a value of `undefined`, which will not throw type errors.
+//
 // [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript)
 //
+//
 
+//
 // Javascript has a single `number` type - a 64 bit float (double in java)
+//
 test('number parsing', () => {
 
     const n = Number("20"); // string -> number
@@ -11,12 +18,17 @@ test('number parsing', () => {
 
     expect(n.toString()).toBe("20"); // number -> string
 
+    const n2 = Number("20.0");
+    expect(n2).toEqual(n);
+    expect(n2.toString()).toBe("20");
 });
 
 //
-// Strings in ES6 are unicode.
-// ES6 adds convenience functions for working with strings (contains, startsWith, endsWith)
-// Temlates and tagged templates allow for more advanced string creation.
+// Strings
+//
+// * Strings in ES6 are unicode.
+// * ES6 adds convenience functions for working with strings (contains, startsWith, endsWith).
+// * String template literals provide string interpolation and allow for embedded expressions.
 //
 test("strings", () => {
     //
@@ -38,14 +50,16 @@ test("strings", () => {
 
     //
     // ES6 string template literals : backticks.
-    // Multi-line strings using \. Tabs count on newlines, so watch indentations.
-    // Expressions can be embedded into templates using ${}.
+    //
+    // * Multi-line strings using \. Tabs count on newlines, so watch indentations.
+    // * Expressions can be embedded into templates using ${}.
     //
     const name = "damon";
     const s10 = `
 I said:
     "hello, ${name}. We can embed expressions. The time is: ${new Date().toString()}!"`
-    console.log(s10);
+    // console.log(s10);
+    expect(s10.indexOf(name) > 0).toBeTruthy();
 
     //
     // Tagged templates.
