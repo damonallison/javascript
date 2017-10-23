@@ -1,6 +1,10 @@
 //
 // Objects in JS are based on prototypal inheritance.
-// Proponents of JS think this is more powerful than traditional OO.
+//
+// Proponents of JS (and dynamic languages) think this is more powerful 
+// than traditional OO.
+// Why?
+// * Flexability. Objects can be dynamically altered at runtime. Prototypes can be updated.
 //
 // Objects in ES5:
 // Each object has a prototype chain.
@@ -10,7 +14,6 @@
 // Prototype chain:
 // obj -> Object.prototype -> null
 //
-//
 // Each *function* has a different prototype chain.
 //
 // func f { console.log("js prototypes. uh.")}
@@ -18,20 +21,9 @@
 // Prototype chain:
 // f -> Function.prototype -> null
 //
-// Evidently someone didn't like JS's prototypal inheritance -
-// so the keyword `class` was introduced in ES2015, along with
-// other traditional OO keywords.
-//
-// The problem is they had to deal with backward compatibility, so
-// they are not the same as you'd expect from java.
-//
-// The new ES2015 keywords are:
-// class, constructor, static, extends, and super.
-//
 // Rules:
 // * Don't add custom functions to base types. It clutters up built-in types,
 //   and potentially steps on other libraries doing the same thing.
-//
 //
 // NOTE : Hopefully ES6 (2015) saves us from this shit pile that is prototypal
 //        inheritance.
@@ -74,7 +66,7 @@ function Person(name) {
     }
 }
 Person.prototype.createAJoke = function() {
-    return "Oh " + this.name + "... You're as silly as prototypal inheritance.";
+    return `Oh ${this.name}... You're as silly as prototypal inheritance.`;
 };
 
 //
@@ -87,7 +79,7 @@ function Teacher(name, subject) {
 
     // Here, we override a function on Person.
     this.createAJoke = function() {
-        return "Teacher, " + this.name + "... Teach a real language.";
+        return `Teacher, ${this.name}... Teach a real language.`;
     };
 }
 
@@ -103,6 +95,7 @@ Teacher.prototype.constructor = Teacher;
 //
 // This test shows how to create objects using the "new" syntax.
 //
+// New does the following
 test("constructors", () => {
 
     let p = new Person("damon");
@@ -134,9 +127,14 @@ test("inheritance", () => {
     expect(p instanceof Object).toBeTruthy();
 
     // If you want to examine an object's prototype.
-    expect(Object.getOwnPropertyNames(Person.prototype)
-    // console.log("Person's prototype : " + Object.getOwnPropertyNames(Person.prototype));
-    // console.log("Teacher's prototype : " + Object.getOwnPropertyNames(Teacher.prototype));
+    expect(Object.getOwnPropertyNames(Person.prototype).indexOf("createAJoke") > 0).toBeTruthy();
+
+    // 
+    // Why is this falsy? Person and Teacher both have `createAJoke` on their prototype.
+    // And we can call `createAJoke` - we we did above. It must be using the definition 
+    // associated with Person, it's not an "Own" property on Teacher.
+    //
+    expect(Object.getOwnPropertyNames(Teacher.prototype).indexOf("createAJoke") > 0).toBeFalsy();
 });
 
 test("json", () => {

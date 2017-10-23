@@ -4,6 +4,12 @@
 //
 // * Property initializer shorthand allows you to concisely define objects.
 // * Computed property names allow you to use variable values as property names.
+// * ES2015 introduces classes and extensions to bring more traditional OO capabilities to JS.
+// * Object destructing allows you to pull only relevant parts out of an object.
+//
+// 
+// The new ES2015 OO related keywords are:
+// * class, constructor, static, extends, and super.
 //
 
 
@@ -15,6 +21,7 @@
 //
 // Concise method syntax allows you to omit the name and `function`
 // keyword when creating a method.
+//
 //
 test("property-initializer-shorthand", () => {
     const name = "damon";
@@ -239,6 +246,7 @@ test("destructured-parameters", () => {
 
     process("http://google.com", {
         secure: true,
-        expires: 10
+        expires: 10,
+        someOtherVar: "test",
     });
 });
