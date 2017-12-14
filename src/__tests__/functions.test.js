@@ -2,14 +2,19 @@
 
 //
 // ES6 cleans up functions in the following ways:
+//
 // * Default values.
+//
 // * Varadic parameters ("rest" parameters). These eliminate the
 //   need for `arguments`.
 //
 // Problems with javascript functions:
 //
 // * Javascript does not require you call a function with
-//   all arguments. This is a hack.
+//   the same number of arguments as the function defines.
+//   If you call a function with fewer arguments than defined,
+//   the remainder will be `undefined`. If you call with more,
+//   the extra fall off.
 //
 // * Default values
 //
@@ -20,14 +25,13 @@
 //
 //     This use of "default values" in ES5 was a complete hack.
 //
-//  * Default values are cleaned up nicely with ES6.
+//  * Default values are cleaned up nicely with ES6. Only if the
+//    value is `undefined` will the default value be assumed.
 //
 //  * Javascript adds an `arguments` array to every function. This is a hack.
 //    Callers do not know they can pass additional arguments to a function
 //    by looking at its definition.
 //
-
-
 //
 // In ES5, checking for default values requires specific checks for `undefined`.
 // Using || is not recommended as a falsy value (0) may be a legal value.
@@ -140,5 +144,5 @@ test("es6-arrow-functions", () => {
     expect(f instanceof Function).toBeTruthy();
 
     // You can still use `call`, `apply`, and `bind` with arrow functions
-    
+
 });
