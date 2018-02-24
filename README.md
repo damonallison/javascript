@@ -21,11 +21,14 @@
 
 ## TODO
 
+* Packaging
+  * `npm`
+  * `webpack`
+
 * Typescript
 
 * React tooling
 	* Babel (ES6 -> ES5 compiler)
-	* Webpack (compiler)
 	* Yarn
 
 * Browser Libraries
@@ -152,6 +155,13 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
   })
 ```
 
+## Tools
+
+* `ncu` (`npm-check-update`)
+  * Allows you to upgrade all project dependencies via one command line.
+  * Run `ncu` in your project root to determine which dependencies are out of sync.
+
+
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
@@ -181,6 +191,8 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
 	* Function. When a function is not bound to an object, including inner functions, `this` is bound to the global object.
 	* Constructor
 	* Apply
+
+
 
 
 ## Completed Research Materials
