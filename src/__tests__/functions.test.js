@@ -8,6 +8,7 @@
 // * Varadic parameters ("rest" parameters). These eliminate the
 //   need for `arguments`.
 //
+//
 // Problems with javascript functions:
 //
 // * Javascript does not require you call a function with
@@ -45,7 +46,7 @@ test("es5-default-values", () => {
         calledArg2 = (typeof arg2 !== "undefined") ? arg2 : "default";
     };
 
-    test("one");
+    test("one"); /// yuk!
 
     expect(calledArg1).toEqual("one");
     expect(calledArg2).toEqual("default");
@@ -58,6 +59,7 @@ test("es5-default-values", () => {
 // will be used.
 //
 test("es6-default-values", () => {
+
     let calledArg1;
     expect(calledArg1).toEqual(undefined);
 
@@ -99,10 +101,13 @@ test("es6-variadic-parameters", () => {
             vars[i] = arg2[i];
         }
     };
+
     test("damon", "grace", "lily", "cole");
     expect(vars[0]).toEqual("grace");
     expect(vars[1]).toEqual("lily");
     expect(vars[2]).toEqual("cole");
+
+    vars = []
 
     // The "spread" operator (also ...) allows you to split an array to
     // use the arguments as inputs to a variadic parameter.
@@ -139,10 +144,9 @@ test("es6-arrow-functions", () => {
     expect(person.getName()).toEqual("damon");
 
     // Arrow functions are truly functions
-    let f = () => {};
+    let f = () => { console.log("yuk")};
     expect(typeof f === "function").toBeTruthy();
     expect(f instanceof Function).toBeTruthy();
 
     // You can still use `call`, `apply`, and `bind` with arrow functions
-
 });

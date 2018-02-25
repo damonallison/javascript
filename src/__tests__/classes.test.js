@@ -5,7 +5,6 @@
 //
 // * All code inside of classes run in strict mode automatically.
 //
-
 class Person {
     //
     // Class properties can only be set in the constructor and
@@ -40,9 +39,7 @@ class Person {
     // to handle printing a string correctly from console.log?
     toString() {
         this.lastUpdated = Date();
-        return `${this.name} \
-was created on ${this.createdDate}. \
-Last updated ${this.lastUpdated}`;
+        return `${this.name} was created on ${this.createdDate}. Last updated ${this.lastUpdated}`;
     }
 
     static personFactory(name) {
@@ -62,12 +59,12 @@ class Teacher extends Person {
     toString() {
         return `${super.toString()} with ${this.students.length} students.`;
     }
-
 }
 test("class-creation", () => {
 
     let p = new Person("damon");
 
+    expect(p instanceof Teacher).not.toBeTruthy();
     expect(p instanceof Person).toBeTruthy();
     expect(p instanceof Object).toBeTruthy();
 
@@ -103,6 +100,6 @@ test("inheritance", () => {
     expect(t instanceof Person).toBeTruthy();
     expect(t instanceof Object).toBeTruthy();
 
-    console.log(t.toString());
+    expect(t.toString()).toMatch(/^damon.*students.$/)
 
 });

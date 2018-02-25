@@ -1,7 +1,7 @@
 //
 // Objects in JS are based on prototypal inheritance.
 //
-// Proponents of JS (and dynamic languages) think this is more powerful 
+// Proponents of JS (and dynamic languages) think this is more powerful
 // than traditional OO.
 // Why?
 // * Flexability. Objects can be dynamically altered at runtime. Prototypes can be updated.
@@ -95,7 +95,6 @@ Teacher.prototype.constructor = Teacher;
 //
 // This test shows how to create objects using the "new" syntax.
 //
-// New does the following
 test("constructors", () => {
 
     let p = new Person("damon");
@@ -129,9 +128,9 @@ test("inheritance", () => {
     // If you want to examine an object's prototype.
     expect(Object.getOwnPropertyNames(Person.prototype).indexOf("createAJoke") > 0).toBeTruthy();
 
-    // 
+    //
     // Why is this falsy? Person and Teacher both have `createAJoke` on their prototype.
-    // And we can call `createAJoke` - we we did above. It must be using the definition 
+    // And we can call `createAJoke` - we we did above. It must be using the definition
     // associated with Person, it's not an "Own" property on Teacher.
     //
     expect(Object.getOwnPropertyNames(Teacher.prototype).indexOf("createAJoke") > 0).toBeFalsy();

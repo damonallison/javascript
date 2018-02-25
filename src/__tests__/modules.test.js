@@ -1,21 +1,39 @@
 //
 // ES6 introduces "modules"
 //
+// * Prior to modules, javascript was essentially a global, "shared everything" environment.
 // Modules:
 //
 // * Run in `strict mode`.
 // * Must export anything that should be publicly available.
 // * May import bindings from other modules.
 //
+// In order to understand modules, you must understand exporting and importing.
 //
-// What are the differences between node.js's / ES6 modules (called "packages" in node?)
+// Exporting:
+// * See ../modules/calculator.js for examples of exporting.
 //
+// Importing
+//
+// There are a few ways to import members from a module.
+//
+// All non-default elements being imported from a module
+// must be enclosed in curly braces.
+//
+import { echo } from "../modules/calculator";
 
-import Calculator, { echo } from "../modules/calculator";
+//
+// Default elements being imported do *not* need to be enclosed
+// in curly braces. This is the most common way to implement
+// members, since ideally each module should only export a single, default, element.
+//
+import Calculator from "../modules/calculator";
 
 //
-// A "namespace import" : all exports are referenced
-// via the `CalculatorModule` "namespace"
+// A "namespace import"
+//
+// All exports are referenced via the `CalculatorModule` object.
+// The `CalculatorObject` becomes the "namespace" in which you access the module's exports.
 //
 import * as CalculatorModule from "../modules/calculator";
 

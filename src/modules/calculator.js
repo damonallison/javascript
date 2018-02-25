@@ -1,8 +1,29 @@
-
-// Each module can have a single default.
+//
+// Module example.
+//
+// Exporting:
+//
+// There are two ways to export code from modules.
+//
+// 1. Place `export` in front of any variable or function to export it.
+// export function sum()
+//
+// 2. Export it later
+// function sub(x, y) {
+//   return x - y;
+//}
+//
+// export { sub }
+//
+//
+// Default export
+//
+// Each module can have a single default export.
+//
 // This simplifies the import statment - avoiding the use of
 //
 // import Calculator from "../modules/calculator";
+//
 
 export default class Calculator {
 
@@ -16,6 +37,8 @@ export default class Calculator {
 
 }
 
-export function echo(s) {
+function echo(s) {
     return s;
 }
+
+export { echo };

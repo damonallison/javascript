@@ -1,7 +1,7 @@
 //
 // ES6 added iterators and generators
 //
-// Iterators : a custom object which provides an interface for iteration (IEnumerable)
+// Iterators : a custom object which provides an interface for iteration (think IEnumerable from C#, Iterable from Java)
 // Generator : A function which returns an iterator.
 //             A generator function which has a `*` character in front of the name.
 

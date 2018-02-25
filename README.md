@@ -11,30 +11,12 @@
 ## Books
 
 * [Javascript - The Good Parts](http://shop.oreilly.com/product/9780596517748.do)
-* [Read Understanding ECMAScript 6 | Leanpub](https://leanpub.com/understandinges6/read)
 * [Node.js in Action: Alex R. Young, Bradley Meck, Mike Cantelon, Tim Oxley, Marc Harter, TJ Holowaychuk, Nathan Rajlich: 9781617292576: Amazon.com: Books](https://www.amazon.com/Node-js-Action-Alex-R-Young/dp/1617292575/ref=dp_ob_title_bk)
 
 ## Links
 
 * [Mozilla : A re-introduction to Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
 * [ECMAScript Specification](http://www.ecma-international.org/ecma-262/8.0/index.html)
-
-## TODO
-
-* Packaging
-  * `npm`
-  * `webpack`
-
-* Typescript
-
-* React tooling
-	* Babel (ES6 -> ES5 compiler)
-	* Yarn
-
-* Browser Libraries
-	* Local Storage
-
-* JSLint.
 
 ## ECMAScript Versions
 
@@ -101,9 +83,10 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
     * Not lexical. `var`, even when defined in a block, is available to the entire function.
 
 * Type cohesion.
-    * Strings will coherse when necessary.
-* `parseInt` stops parsing on the first non-numeric character.
-	* `parseInt("20 damon") // 20`
+  * Strings will coherse when necessary.
+  * `parseInt` stops parsing on the first non-numeric character.
+	  * `parseInt("20 damon") // 20`
+
 
 ### Javascript. The Language.
 
@@ -113,10 +96,10 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
 * Function improvements.
   * `rest` parameters (`...args`). Removes need for `arguments`.
   * Default arguments.
-  * Arrow functions. Succinct. Does not
+  * Arrow functions. Succinct.
 
 * Supports OOP via prototypal inheritance.
-* Types
+* Types 
 	* `Number`, `String`, `Boolean`, `Function`, `Object`, `Symbol`
 
 * Numbers
@@ -177,6 +160,7 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
 * JS is more like Lisp than Java.
 
 ### Language
+
 * Only a single number type.
 * `NaN` is not equal to any number, including itself.
 * `string`s are immutable.
@@ -201,3 +185,5 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
 	* Not recommended. Too light, not relevant.
 	* A high level JS walk through, all from a DOM manipulation perspective.
 	* Is not up to date with ES2015. Inheritance examples were done using prototypal inheritance, which `class` *should* clean up.
+
+* [Read Understanding ECMAScript 6 | Leanpub](https://leanpub.com/understandinges6/read)

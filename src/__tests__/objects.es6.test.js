@@ -2,12 +2,11 @@
 //
 // ES6 improves object creation.
 //
+// * ES2015 introduces classes and extensions to bring more traditional OO capabilities to JS.
 // * Property initializer shorthand allows you to concisely define objects.
 // * Computed property names allow you to use variable values as property names.
-// * ES2015 introduces classes and extensions to bring more traditional OO capabilities to JS.
 // * Object destructing allows you to pull only relevant parts out of an object.
 //
-// 
 // The new ES2015 OO related keywords are:
 // * class, constructor, static, extends, and super.
 //
@@ -29,13 +28,13 @@ test("property-initializer-shorthand", () => {
 
     const person = {
         //
-        // Concise property syntax. 
+        // Concise property syntax.
         // * `name : name` can be replaced with just `name`.
         //
         name,
         age,
         //
-        // Concise method syntax. 
+        // Concise method syntax.
         // * `description : function()` can be replaced with just `description()`
         //
         description() {
