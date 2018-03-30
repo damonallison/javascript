@@ -203,7 +203,11 @@ test("array-destructuring", () => {
     expect(blue).toBe("blue");
 });
 
-test("mixed-destructuring", () => {
+
+//
+// Object destructuring allows you to pull out select pieces of an object.
+//
+test("object-destructuring", () => {
     let person = {
         firstName : "damon",
         age: 41,

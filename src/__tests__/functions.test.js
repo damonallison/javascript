@@ -92,7 +92,7 @@ test("es6-default-parameter-expressions", () => {
 });
 
 //
-// ES6 introduces "rest parameters (...arg2) to replace `arguments`.
+// ES6 introduces a "rest argument (...arg2) to replace `arguments`.
 //
 test("es6-variadic-parameters", () => {
     let vars = [];
@@ -103,6 +103,7 @@ test("es6-variadic-parameters", () => {
     };
 
     test("damon", "grace", "lily", "cole");
+    expect(vars.length).toEqual(3)
     expect(vars[0]).toEqual("grace");
     expect(vars[1]).toEqual("lily");
     expect(vars[2]).toEqual("cole");
@@ -118,6 +119,7 @@ test("es6-variadic-parameters", () => {
     test("damon", ...names, "roxie");
     expect(vars.length).toEqual(5);
     expect(vars[0]).toEqual("kari");
+    expect(vars[vars.length - 1]).toEqual("roxie")
 });
 
 //

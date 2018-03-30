@@ -1,5 +1,15 @@
 # Javascript
 
+This project contains tests which highlight ES6 features.
+
+## Quick Start
+
+* All tests are in the `__tests__` folder. The tests are written usnig [jest](https://facebook.github.io/jest/)
+
+```
+$ npm install
+$ npm test
+```
 ## Questions
 
 * What is `strict mode` in ES5? Why not *always* use it?
@@ -26,7 +36,8 @@ ES6 is the largest update to JS in history. It was the first major release to JS
 
 ES6 brings more formality and rigor to the wild, wild west (shit show) that was ES5. Key features include:
 
-* Lexical scoping
+* Lexical (block) scoping with (`let`).
+* `const`
 * Classes
 * Modules
 * Promises
@@ -38,8 +49,8 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
 
 ### Likes
 
+* Development ecosystem speed. REPL, lightweight tooling.
 * Functions are first class objects. Closures, HOF, etc.
-* Ecosystem. REPL, lightweight tooling.
 * ES6 drastically cleaned up the language.
     * String interoplation.
     * Lexical scoping with `let` and `const`, block level functions.
@@ -99,7 +110,7 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
   * Arrow functions. Succinct.
 
 * Supports OOP via prototypal inheritance.
-* Types 
+* Types
 	* `Number`, `String`, `Boolean`, `Function`, `Object`, `Symbol`
 
 * Numbers
