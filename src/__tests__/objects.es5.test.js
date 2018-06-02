@@ -3,7 +3,9 @@
 //
 // Proponents of JS (and dynamic languages) think this is more powerful
 // than traditional OO.
+//
 // Why?
+//
 // * Flexability. Objects can be dynamically altered at runtime. Prototypes can be updated.
 //
 // Objects in ES5:
@@ -22,6 +24,7 @@
 // f -> Function.prototype -> null
 //
 // Rules:
+//
 // * Don't add custom functions to base types. It clutters up built-in types,
 //   and potentially steps on other libraries doing the same thing.
 //

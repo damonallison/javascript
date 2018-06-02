@@ -1,4 +1,3 @@
-
 //
 // Before ES6, all vars were function or globally scoped.
 //

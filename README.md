@@ -4,19 +4,19 @@ This project contains tests which highlight ES6 features.
 
 ## Quick Start
 
-* All tests are in the `__tests__` folder. The tests are written usnig [jest](https://facebook.github.io/jest/)
+* All tests are in the `__tests__` folder. The tests are written using [jest](https://facebook.github.io/jest/)
 
 ```
 $ npm install
 $ npm test
 ```
+
 ## Questions
 
 * What is `strict mode` in ES5? Why not *always* use it?
-* Is `react-test` compiling down to ES5? Thru `babel`? How to run ES6?
+* Is `react-test` compiling down to ES5? Thru `babel`? How to run ES6 without compiling down to ES5?
 * How does exception handling work in ES6? (`try / catch / throw`)?
   * What are the built in exception types?
-
 
 ## Books
 
@@ -30,9 +30,12 @@ $ npm test
 
 ## ECMAScript Versions
 
-### [ES6 (ES2015)](http://www.ecma-international.org/ecma-262/8.0/index.html)
+* [ES6 (ES2015)](http://www.ecma-international.org/ecma-262/6.0/index.html)
+* [ES7 (ES2016)](http://www.ecma-international.org/ecma-262/7.0/index.html)
+* [ES8 (ES2015)](http://www.ecma-international.org/ecma-262/8.0/index.html)
 
-ES6 is the largest update to JS in history. It was the first major release to JS since 2007 (8 years!) It was a multi-year, tumultuous effort which ended up dividing and reuniting the community (google "javascript harmony").
+ES6 was the largest update to JS in history. It was the first major release to JS since 2007 (8 years!) It was a multi-year, tumultuous effort which ended up dividing and reuniting the community (google "javascript harmony").
+
 
 ES6 brings more formality and rigor to the wild, wild west (shit show) that was ES5. Key features include:
 
@@ -74,7 +77,7 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
   * Calling functions with `call`, `apply`, and `bind`.
   * The problem is the `this` pointer differs based on how the function is invoked. It's confusing.
 
-* Semicolons are optional but line termination rules could read the program not as intended. Use semicolons.
+* Semicolons are *optional* but line termination rules could read the program not as intended. **Use semicolons.**
 
 * Function arguments.
     * Arguments to a function do not have to match the function's declaration.
@@ -82,7 +85,7 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
         * This is confusing to the caller. The caller does not know he can pass additional parameters.
         * `arguments` behaves different in `strict mode`. In `strict mode`, you cannot alter the value of an `arguments` object (`arguments[0] = 'test'`). Without strict mode, you can.
         * `arguments` does not account for default parameters.
-        * Use ES6's default parameters and
+        * Use ES6's default parameters.
 * Objects
     * `this`
         * Confusing to track what `this` is pointing to.
@@ -98,6 +101,8 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
   * `parseInt` stops parsing on the first non-numeric character.
 	  * `parseInt("20 damon") // 20`
 
+
+---
 
 ### Javascript. The Language.
 

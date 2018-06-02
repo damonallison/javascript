@@ -60,13 +60,14 @@ class Teacher extends Person {
         return `${super.toString()} with ${this.students.length} students.`;
     }
 }
+
 test("class-creation", () => {
 
     let p = new Person("damon");
 
-    expect(p instanceof Teacher).not.toBeTruthy();
-    expect(p instanceof Person).toBeTruthy();
     expect(p instanceof Object).toBeTruthy();
+    expect(p instanceof Person).toBeTruthy();
+    expect(p instanceof Teacher).not.toBeTruthy()
 
     expect(p.capitalizedName).toBe("DAMON");
 
