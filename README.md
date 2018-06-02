@@ -30,25 +30,57 @@ $ npm test
 
 ## ECMAScript Versions
 
-* [ES6 (ES2015)](http://www.ecma-international.org/ecma-262/6.0/index.html)
-* [ES7 (ES2016)](http://www.ecma-international.org/ecma-262/7.0/index.html)
-* [ES8 (ES2015)](http://www.ecma-international.org/ecma-262/8.0/index.html)
+### ES5 (2009)
 
-ES6 was the largest update to JS in history. It was the first major release to JS since 2007 (8 years!) It was a multi-year, tumultuous effort which ended up dividing and reuniting the community (google "javascript harmony").
+The goal of ES5 was to codify the de-facto interpretations of JS that had already been added to browsers. The spec was catching up to the industry.
 
+* Accessor properties
+* Reflective creation and inspection of objects
+* Additional array manipulation functions
+* JSON
+* Strict mode
 
-ES6 brings more formality and rigor to the wild, wild west (shit show) that was ES5. Key features include:
+### ES6 (ES 2015)
+
+[ES6 (ES2015)](http://www.ecma-international.org/ecma-262/6.0/index.html)
+
+ES6 was the largest update to JS in history. It was the first major release to JS since ES5 in 2009. It was a multi-year, tumultuous effort which ended up dividing and reuniting the community (google "javascript harmony"). Many of the ES6 features were developed for ES4 - which was never released.
+
+The goals of ES6 were centered around support for larger applications and better project structure.
 
 * Lexical (block) scoping with (`let`).
 * `const`
 * Classes
 * Modules
+* Iterators / generators
 * Promises
 * Function definitions - default / variadic arguments
 * Cleaner "arrow" function syntax
 * Proxies / reflection
+* Maps / sets
 
 > Some of its major enhancements included modules, class declarations, lexical block scoping, iterators and generators, promises for asynchronous programming, destructuring patterns, and proper tail calls.
+
+### ECMAScript 2016
+
+[ECMAScript 2016](http://www.ecma-international.org/ecma-262/7.0/index.html)
+
+ECMAScript was the first release under TC39's yearly release cadence and open development process.
+
+### ECMAScript 2017 | 2018 | 2019
+
+I'm not quite sure what happened between 2017, 2018, and 2019. All of the specs look identical. Here is the 2019 version.
+
+* [ECMAScript 2018](http://www.ecma-international.org/ecma-262/8.0/index.html)
+
+### ECMAScript 2019
+
+* Async functions
+* Shared Memory
+* Atomics
+
+
+---
 
 ### Likes
 
@@ -93,8 +125,8 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
 	    * If dot notation was *not* used, `this` is the global object. Inner functions need hacks to capture the parent `this` pointer. (`var that = this`)
         * Object creation - calling a function with `new`.
 
-* `var` scoping.
-    * Not lexical. `var`, even when defined in a block, is available to the entire function.
+* Scoping
+  * `var` scoping is not lexical. `var`, even when defined in a block, is available to the entire function.
 
 * Type cohesion.
   * Strings will coherse when necessary.
@@ -104,7 +136,41 @@ ES6 brings more formality and rigor to the wild, wild west (shit show) that was 
 
 ---
 
-### Javascript. The Language.
+## ECMAScript Specification Notes
+
+### 4. Overview
+
+The spec authors describe ES as an "object oriented" language first and foremost. Taking queues from C, Java, Self, and Scheme. Interesting they describe it as OO given classes are syntactic sugar around prototypal inheritance.
+
+Objects in the ES sense are property maps.
+
+```
+{
+  "firstName" : "damon",
+  "lastName" : "allison"
+}
+```
+
+Properties can hold other objects, primitive values, or functions.
+
+Primitive types include:
+* Undefined
+* Null
+* Boolean
+* Number
+* String
+* Symbol
+
+ES intentionally resembles Java syntax. ES is relaxed to enable it to serve as an easy-to-use scripting language. 
+
+* Variables do not have to have it's type declared.
+* Types are not associated with properties.
+* Properties can be added to objects dynamically by assigning values to them.
+* Constructors are not required to name or assign values to all or any of the object's properties.
+
+ECMAScript 2015 introduced `class` definitions which are syntactic sugar around ES's prototypal inheritance.
+
+Each `constructor` is a function that has a propery named `prototype` that is used to implement `prototype based inheritance`. 
 
 #### ES6 Improvements
 
