@@ -17,6 +17,7 @@ $ npm test
 * Is `react-test` compiling down to ES5? Thru `babel`? How to run ES6 without compiling down to ES5?
 * How does exception handling work in ES6? (`try / catch / throw`)?
   * What are the built in exception types?
+* What are the built in functions?
 
 ## Books
 
@@ -123,7 +124,7 @@ I'm not quite sure what happened between 2017, 2018, and 2019. All of the specs 
         * Confusing to track what `this` is pointing to.
 	    * Dot/bracket notation makes `this` the current object.
 	    * If dot notation was *not* used, `this` is the global object. Inner functions need hacks to capture the parent `this` pointer. (`var that = this`)
-        * Object creation - calling a function with `new`.
+    * Object creation - calling a function with `new`.
 
 * Scoping
   * `var` scoping is not lexical. `var`, even when defined in a block, is available to the entire function.
@@ -172,6 +173,8 @@ ECMAScript 2015 introduced `class` definitions which are syntactic sugar around 
 
 Each `constructor` is a function that has a propery named `prototype` that is used to implement `prototype based inheritance`. 
 
+---
+
 #### ES6 Improvements
 
 * Lexical scoping (`let` and `const`).
@@ -180,7 +183,6 @@ Each `constructor` is a function that has a propery named `prototype` that is us
   * Default arguments.
   * Arrow functions. Succinct.
 
-* Supports OOP via prototypal inheritance.
 * Types
 	* `Number`, `String`, `Boolean`, `Function`, `Object`, `Symbol`
 
