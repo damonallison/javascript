@@ -21,12 +21,26 @@ $ npm test
 
 ## Books
 
-* [Javascript - The Good Parts](http://shop.oreilly.com/product/9780596517748.do)
-* [Node.js in Action: Alex R. Young, Bradley Meck, Mike Cantelon, Tim Oxley, Marc Harter, TJ Holowaychuk, Nathan Rajlich: 9781617292576: Amazon.com: Books](https://www.amazon.com/Node-js-Action-Alex-R-Young/dp/1617292575/ref=dp_ob_title_bk)
+* [Javascript - The Good Parts](http://shop.oreilly.com/product/9780596517748.do) - Douglas Crockford
+
+* [Effective Javascript](https://www.amazon.com/Effective-JavaScript-Specific-Software-Development/dp/0321812182) - David Herman
+
+* [Node.js in Action](https://www.amazon.com/Node-js-Action-Alex-R-Young/dp/1617292575/ref=dp_ob_title_bk) - Alex R. Young, Bradley Meck, Mike Cantelon, Tim Oxley, Marc Harter, TJ Holowaychuk, Nathan Rajlich
+
+### Completed Research Materials
+
+* [Mozilla : Javascript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript)
+	* Not recommended. Too light, not relevant.
+	* A high level JS walk through, all from a DOM manipulation perspective.
+	* Is not up to date with ES2015. Inheritance examples were done using prototypal inheritance, which `class` *should* clean up.
+
+* [Read Understanding ECMAScript 6 | Leanpub](https://leanpub.com/understandinges6/read)
+
 
 ## Links
 
 * [Mozilla : A re-introduction to Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
+
 * [ECMAScript Specification](http://www.ecma-international.org/ecma-262/8.0/index.html)
 
 ## ECMAScript Versions
@@ -100,6 +114,7 @@ I'm not quite sure what happened between 2017, 2018, and 2019. All of the specs 
 ### Dislikes
 
 * Dynamic typing.
+* Global variables.
 
 * `strict` and `non strict` mode.
   * You need a different mental model depending if strict mode is enabled or not.
@@ -229,8 +244,6 @@ Each `constructor` is a function that has a propery named `prototype` that is us
   * Run `ncu` in your project root to determine which dependencies are out of sync.
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
 
 ## Javascript : The Good Parts
 
@@ -263,11 +276,4 @@ Each `constructor` is a function that has a propery named `prototype` that is us
 
 
 
-## Completed Research Materials
 
-* [Mozilla : Javascript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript)
-	* Not recommended. Too light, not relevant.
-	* A high level JS walk through, all from a DOM manipulation perspective.
-	* Is not up to date with ES2015. Inheritance examples were done using prototypal inheritance, which `class` *should* clean up.
-
-* [Read Understanding ECMAScript 6 | Leanpub](https://leanpub.com/understandinges6/read)

@@ -1,12 +1,58 @@
 //
-// Javascript is dynamically typed language.
+// Javascript has the following set of built in types:
 //
-// Javascript has a value of `undefined`, which will not throw type errors.
+// * Undefined
+// * Null
+// * Boolean
+// * Number
+// * String
+// * Symbol
+// * Object
 //
-// [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript)
-//
+// These tests show examples of working with these types.
+// Objects are a bigger topic and will be described elsewhere.
 //
 
+test("undefined", () => {
+
+    // The variable v is undefined. It is not assigned to a value.
+    var v;
+    expect(v).toBeUndefined()
+
+    // The property `y` on object `x` is not defined.
+    var x = {};
+    expect(x.y).toBeUndefined();
+
+    // Using typeof on an undefined variable will always return "undefined"
+    expect(typeof z).toEqual("undefined");
+
+    // The function does not have a return statement, therefore
+    // the return value is `undefined`
+    var f = (arg) => {};
+    expect(f("test")).toBeUndefined();
+
+    // Variables can be "undefined"
+    x = undefined;
+    expect(x === undefined).toBeTruthy();
+
+});
+
+test("null", () => {
+
+    // Simply declaring a variable does not make it `null`.
+    // Until it is assigned a value (including `null`), it is `undefined`.
+    var x;
+    expect(x).toBeUndefined();
+    expect(x).toBeFalsy();
+
+    x = null;
+    expect(x).toBeNull();
+    expect(x).toBeFalsy();
+
+    // careful - typeof null will return "object". This is a long standing JS bug that will never be fixed.
+    expect(typeof x).toEqual("object");
+
+});
 //
 // Javascript has a single `number` type - a 64 bit float (double in java)
 //
