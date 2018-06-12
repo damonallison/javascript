@@ -8,8 +8,10 @@
 //
 // * Flexability. Objects can be dynamically altered at runtime. Prototypes can be updated.
 //
+
+//
 // Objects in ES5:
-// Each object has a prototype chain.
+// * Each object has a prototype chain.
 //
 // var obj = {a : 1}
 //
@@ -31,6 +33,10 @@
 // NOTE : Hopefully ES6 (2015) saves us from this shit pile that is prototypal
 //        inheritance.
 //
+
+//
+// 
+// 
 test("object basics", () => {
 
     // Javascript objects are key/value pairs (associative arrays).
@@ -45,6 +51,25 @@ test("object basics", () => {
     };
 
     expect(p.fullName()).toEqual("damon allison");
+
+    // Objects are fluid - they can be updated at any time.
+    //
+    // NOTE: There has to be a better way to add / update functions to existing objects.
+    //       In this example, we really want to use `this` from within the function.
+    //       If this object were created via a constructor function, we should
+    //       be able to update the object's `prototype` property.
+    //
+    // In general, it's probably not wise to be adding / updating functions 
+    // dynamically during runtime.
+
+    p.fullName = () => {
+        return `Mr. ${p.firstName.toUpperCase()} ${p.lastName.toUpperCase()}`
+    }
+    expect(p.fullName()).toEqual("Mr. DAMON ALLISON")
+
+    p.firstName = "cole"
+    expect(p.fullName()).toEqual("Mr. COLE ALLISON")
+
 });
 
 //

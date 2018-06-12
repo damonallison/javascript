@@ -1,4 +1,5 @@
 "use strict";
+
 //
 // ES6 improves object creation.
 //
