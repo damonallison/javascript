@@ -1,17 +1,25 @@
 "use strict";
 
 //
+// Functions
+//
+// Functions in ES are first class.
+// 
 // ES6 cleans up functions in the following ways:
 //
-// * Default values.
+// * Default parameter values.
 //
 // * Varadic parameters ("rest" parameters). These eliminate the
-//   need for `arguments`.
+//   need for the implicit `arguments` parameter you could use
+//   from within a function. 
 //
+//   * Don't ever use the `arguments` implicit parameter!
 //
 // Problems with javascript functions:
 //
-// * Javascript does not require you call a function with
+// * Arguments
+//
+//   Javascript does not require you call a function with
 //   the same number of arguments as the function defines.
 //   If you call a function with fewer arguments than defined,
 //   the remainder will be `undefined`. If you call with more,
@@ -19,34 +27,39 @@
 //
 // * Default values
 //
-//   * In ES5, the logical || operator was used to default values.
-//     The problem with || is you may want to pass a falsy value as
-//     an argument (i.e., 0). Therefore, || should *not* be used.
-//     use (typeof arg !== "undefined") ? arg1 : "default value"
+//   In ES5, the logical || operator was used to default values.
+//   The problem with || is you may want to pass a falsy value as
+//   an argument (i.e., 0). Therefore, || should *not* be used.
+//   use (typeof arg !== "undefined") ? arg1 : "default value"
 //
-//     This use of "default values" in ES5 was a complete hack.
-//
-//  * Default values are cleaned up nicely with ES6. Only if the
-//    value is `undefined` will the default value be assumed.
+//   // Safe way to set default values.
+//   let v = typeof arg !== "undefined" ? arg : {}
 //
 //  * Javascript adds an `arguments` array to every function. This is a hack.
 //    Callers do not know they can pass additional arguments to a function
 //    by looking at its definition.
 //
 //
-// In ES5, checking for default values requires specific checks for `undefined`.
-// Using || is not recommended as a falsy value (0) may be a legal value.
 //
-test("es5-default-values", () => {
+
+
+// 
+// Default argument values.
+//
+// One of the biggest hacks of javascript is you can invoke a function without
+// using the correct number of arguments.
+//
+test("default arguments are undefined", () => {
 
     let calledArg1;
     let calledArg2;
-    const test = (arg1, arg2) => {
-        calledArg1 = (typeof arg1 !== "undefined") ? arg1 : "default";
-        calledArg2 = (typeof arg2 !== "undefined") ? arg2 : "default";
+
+    const func = (arg1, arg2) => {
+        calledArg1 = arg1 || "default";
+        calledArg2 = arg2 || "default";
     };
 
-    test("one"); /// yuk!
+    func("one"); // This is disgusting. It should throw an error.
 
     expect(calledArg1).toEqual("one");
     expect(calledArg2).toEqual("default");
@@ -54,41 +67,60 @@ test("es5-default-values", () => {
 });
 
 //
-// ES6 default values allows us to skip the check for `undefined`.
+// ES6 default values
+// 
 // If an undefined value is passed to a function, the default value
 // will be used.
 //
-test("es6-default-values", () => {
+test("default argument values", () => {
 
     let calledArg1;
-    expect(calledArg1).toEqual(undefined);
+    let calledArg2;
 
-    const test = (arg1, arg2 = "default") => {
-        calledArg1 = arg1;
-        expect(arg2).toEqual("default");
+    expect(calledArg1).toBe(undefined);
+    expect(calledArg2).toBe(undefined);
+
+    const func = (arg1, arg2 = "default") => {
+        calledArg1 = arg1 || "default";
+        calledArg2 = arg2;
     };
 
-    test("one");
+    func("one");
     expect(calledArg1).toEqual("one");
+    expect(calledArg2).toEqual("default");
 
-    test("one", undefined);
+    func("one", undefined);
     expect(calledArg1).toEqual("one");
+    expect(calledArg2).toEqual("default");
+    
 
 });
 
 //
+// Default Parameter Expressions
+//
 // In ES6, default parameters can be expressions.
 // Remember: Expressions are only executed when there is no default value.
 //
-test("es6-default-parameter-expressions", () => {
+test("default parameter expressions", () => {
 
+    let val = 10;
     function getValue() {
-        return 10;
+        val = val + 1;
+        return val;
     };
-    const test = (arg1, arg2 = getValue()) => {
+    const func = (arg1, arg2 = getValue()) => {
         return arg2;
     };
-    expect(test(1)).toEqual(10);
+
+    expect(func(1)).toEqual(11);
+    expect(func(1)).toEqual(12);
+    
+    expect(val).toBe(12);
+
+    // Because arg2 is specified, getValue() will not be called.
+    expect(func(1, 2)).toBe(2);
+    expect(val).toBe(12);
 });
 
 //
@@ -151,4 +183,39 @@ test("es6-arrow-functions", () => {
     expect(f instanceof Function).toBeTruthy();
 
     // You can still use `call`, `apply`, and `bind` with arrow functions
+});
+
+//
+// The `this` pointer in a function is most likely one of the most confusing
+// aspects of ES.
+// 
+// Depending on how a function is invoked, it may or may not have a `this` pointer.
+// 
+// * Using "." notation, `this` will refer to the object upon which the function is invoked.
+// * using "call" notation, `this` is passed as an argument to call().
+// 
+// The vast majority of the time, `this` will be the object associated with the invocation.
+//
+test("this", () => {
+
+    function f() {
+        return this === undefined ? undefined : this.bar;
+    }
+    let bar = "global";
+
+    let obj1 = {
+        bar : "obj1",
+        foo : f
+    };
+
+    let obj2 = {
+        bar : "obj2"
+    };
+
+    expect(f()).toBe(undefined);
+    expect(obj1.foo()).toBe("obj1");
+    expect(f.call(obj2)).toBe("obj2");
+
+
+
 });

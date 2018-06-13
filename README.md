@@ -192,11 +192,17 @@ Each `constructor` is a function that has a propery named `prototype` that is us
 
 ### Strict Mode
 
+Strict mode represents the future direction of ES. Always use strict mode.
+
 (NOTE: These rules were not taken from the ECMA spec. They were written down as they were found).
 
 * Variable references
   * Strict mode: Reference errors are thrown trying to access a variable that does not exist.
   * Sloppy mode: A variable is created at the global scope when first referenced.
+
+* `arguments`
+  * Strict mode: The `arguments` implicit parameter cannot be altered.
+  * Sloppy mode: The `arguments` implicit parameter can be altered. (e.g., arguments[0] = `new value`).
 
 
 ---
