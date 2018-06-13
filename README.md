@@ -64,6 +64,7 @@ ES6 was the largest update to JS in history. It was the first major release to J
 The goals of ES6 were centered around support for larger applications and better project structure.
 
 * Lexical (block) scoping with (`let`).
+  * Don't ever use `var`. Use `let`, which is truly lexically scoped.
 * `const`
 * Classes
 * Modules
@@ -114,6 +115,10 @@ I'm not quite sure what happened between 2017, 2018, and 2019. All of the specs 
 ### Dislikes
 
 * Dynamic typing.
+
+* Type cohesion.
+  * Different cohesion rules apply for equality operators (`==`) than inequality operators (`<` or `>`).
+
 * Global variables.
 
 * `strict` and `non strict` mode.
@@ -121,19 +126,16 @@ I'm not quite sure what happened between 2017, 2018, and 2019. All of the specs 
   * Someone realized that JS needed to be controlled, introduced strict mode.
   * ES6 will always apply `use strict` in classes, making it difficult to reason about when strict mode is on/off.
 
-* The meta-programming.
-  * Calling functions with `call`, `apply`, and `bind`.
-  * The problem is the `this` pointer differs based on how the function is invoked. It's confusing.
-
-* Semicolons are *optional* but line termination rules could read the program not as intended. **Use semicolons.**
-
 * Function arguments.
-    * Arguments to a function do not have to match the function's declaration.
+    * Arguments passed to a function do not have to match the function's declaration.
     * The `arguments` implicit parameter was created to inspect all function parameters passed into a function without having to formally define the parameter.
         * This is confusing to the caller. The caller does not know he can pass additional parameters.
         * `arguments` behaves different in `strict mode`. In `strict mode`, you cannot alter the value of an `arguments` object (`arguments[0] = 'test'`). Without strict mode, you can.
         * `arguments` does not account for default parameters.
         * Use ES6's default parameters.
+  * Calling functions with `call`, `apply`, and `bind`.
+    * `this` differs based on how the function is invoked.
+
 * Objects
     * `this`
         * Confusing to track what `this` is pointing to.
@@ -179,7 +181,7 @@ Primitive types include:
 
 ES intentionally resembles Java syntax. ES is relaxed to enable it to serve as an easy-to-use scripting language. 
 
-* Variables do not have to have it's type declared.
+* Variables do not have types. Values have types. Variables are only containers for values.
 * Types are not associated with properties.
 * Properties can be added to objects dynamically by assigning values to them.
 * Constructors are not required to name or assign values to all or any of the object's properties.
@@ -187,6 +189,15 @@ ES intentionally resembles Java syntax. ES is relaxed to enable it to serve as a
 ECMAScript 2015 introduced `class` definitions which are syntactic sugar around ES's prototypal inheritance.
 
 Each `constructor` is a function that has a propery named `prototype` that is used to implement `prototype based inheritance`. 
+
+### Strict Mode
+
+(NOTE: These rules were not taken from the ECMA spec. They were written down as they were found).
+
+* Variable references
+  * Strict mode: Reference errors are thrown trying to access a variable that does not exist.
+  * Sloppy mode: A variable is created at the global scope when first referenced.
+
 
 ---
 
@@ -256,13 +267,18 @@ Each `constructor` is a function that has a propery named `prototype` that is us
 * All top level variables are out into the "global object".
 * JS is more like Lisp than Java.
 
+## YDKJS
+
+* Great passion for learning JS, deeply understanding, not avoiding, the "hard parts".
+* He's sympathetic to JS, doesn't call out JS's flaws - like it's type cohecion rules or 
+  hard to remember gotchas (parameters don't have to match function declaration), 
+  variable hoisting, `this`, etc.
+
 ### Language
 
-* Only a single number type.
-* `NaN` is not equal to any number, including itself.
-* `string`s are immutable.
-* Use `typeof` to determine type.
-	* `typeof flight.num === 'number'`
+* Write in a functional style. Don't use `var` or depend on global scope.
+  * Declare all variables using `let` or `const`.
+
 * Put all objects into a single global object for your app. This avoids collisions with globals from other apps.
 * JS's implementation of functions is well done. First class, very functional language.
 	* Inner functions.
