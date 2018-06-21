@@ -116,10 +116,13 @@ I'm not quite sure what happened between 2017, 2018, and 2019. All of the specs 
 
 * Dynamic typing.
 
+* Global variables.
+
+* Differing execution contexts. Node, various browsers.
+
 * Type cohesion.
   * Different cohesion rules apply for equality operators (`==`) than inequality operators (`<` or `>`).
 
-* Global variables.
 
 * `strict` and `non strict` mode.
   * You need a different mental model depending if strict mode is enabled or not.
@@ -133,15 +136,16 @@ I'm not quite sure what happened between 2017, 2018, and 2019. All of the specs 
         * `arguments` behaves different in `strict mode`. In `strict mode`, you cannot alter the value of an `arguments` object (`arguments[0] = 'test'`). Without strict mode, you can.
         * `arguments` does not account for default parameters.
         * Use ES6's default parameters.
-  * Calling functions with `call`, `apply`, and `bind`.
-    * `this` differs based on how the function is invoked.
 
-* Objects
-    * `this`
-        * Confusing to track what `this` is pointing to.
-	    * Dot/bracket notation makes `this` the current object.
-	    * If dot notation was *not* used, `this` is the global object. Inner functions need hacks to capture the parent `this` pointer. (`var that = this`)
-    * Object creation - calling a function with `new`.
+* Calling functions with `call`, `apply`, and `bind`.
+  * `this` differs based on how the function is invoked.
+
+* `this`
+  * `this` depends on how the function was invoked. `this` could be different for each function invocation.
+  * Confusing to track what `this` is pointing to.
+  * Dot/bracket notation makes `this` the current object.
+  * If dot notation was *not* used, `this` is the global object. Inner functions need hacks to capture the parent `this` pointer. (`var that = this`)
+* Object creation - calling a function with `new`.
 
 * Scoping
   * `var` scoping is not lexical. `var`, even when defined in a block, is available to the entire function.
@@ -204,7 +208,11 @@ Strict mode represents the future direction of ES. Always use strict mode.
   * Strict mode: The `arguments` implicit parameter cannot be altered.
   * Sloppy mode: The `arguments` implicit parameter can be altered. (e.g., arguments[0] = `new value`).
 
+* `this`
+  * Strict mode: Functions declared in the global scope have `this === undefined`.
+  * Sloppy mode: Functions declared in the global scope have `this === global`.
 
+* 
 ---
 
 #### ES6 Improvements
@@ -236,11 +244,6 @@ Strict mode represents the future direction of ES. Always use strict mode.
   * `const` : immutable. Block scoped.
   * `var` : mutable. Function scoped.
 
-* Equality
-  * `==` Type cohesion will occur with different types.
-    * `123 == '123' // => true`
-  * `===` No type cohesion.
-
 * Arrays
   * `length` is always 1 higher **than the highest index**. Not the number of elements. WTF.
 
@@ -261,6 +264,24 @@ Strict mode represents the future direction of ES. Always use strict mode.
   * Run `ncu` in your project root to determine which dependencies are out of sync.
 
 
+## Guidance
+
+* Write in a functional style. 
+* Don't use `var` or depend on global scope.
+* Declare all variables using `let` or `const`.
+* Put all objects into a single global object for your app. This avoids collisions with globals from other apps.
+
+* JS's implementation of functions is well done. First class, very functional language.
+	* Support for inner functions, closures.
+
+* `this` and the function invocation pattern
+	* Method. `this` is bound to the object on which the method is attached.
+	* Function. When a function is not bound to an object, including inner functions, `this` is bound to the global object.
+	* Constructor
+	* Apply
+
+
+---
 
 ## Javascript : The Good Parts
 
@@ -270,32 +291,48 @@ Strict mode represents the future direction of ES. Always use strict mode.
 	* Don't need to fight the type system.
 * JSON is flexible.
 * Prototypal inheritance. Confusing to OO developers.
-* All top level variables are out into the "global object".
+* Massive design flaw: global. All top level variables are out into the "global object".
 * JS is more like Lisp than Java.
 
 ## YDKJS
 
+### Book 1: Up and Going
+
 * Great passion for learning JS, deeply understanding, not avoiding, the "hard parts".
+* He really takes aim at Crockford's position of avoiding the hard parts. He's taking 
+  the position of learning and embracing the hard parts.
 * He's sympathetic to JS, doesn't call out JS's flaws - like it's type cohecion rules or 
   hard to remember gotchas (parameters don't have to match function declaration), 
-  variable hoisting, `this`, etc.
+  variable hoisting, `this`, etc. He goes out of his way to *defend* JS's nightmarish 
+  type coercion, scoping complexity.
+* He's very "anti class, anti OO". He recommends thinking in terms of prototype and delegation. 
+  * Prototype delegation may be the ES5 way of doing things, however ES6 added `class` and appears
+    to be moving into the OO direction.
+* The books were written as ES6 was completing. They should be updated for ES6 only.
 
-### Language
+### Book 2: Scopes and Closures
 
-* Write in a functional style. Don't use `var` or depend on global scope.
-  * Declare all variables using `let` or `const`.
+* The book starts off explaining how a compiler lexes, parses, and executes javascript. That isn't needed.
+* Javascript's scoping rules are complex and riddled with leaks. 
+* Javascript is lexically scoped. `eval` and `with` can circumvent.
+* Javascript is based on global scope. Modules cannot alter the global scope. You must specifically import identifiers into scope.
+* He takes the stance that we "should know and use all javascript features to 
+  produce more readable / maintainable code" - but using all of the "hard parts"
+  of the language requires you to remember javascript's isoteric and easy to forget
+  "features". For example,`let` and `const` should replace `var`, however he claims
+  that you should continue to use `var` when appropriate. That requires mental
+  overhead that we shouldn't need to remember (hoisting).
+* The examples in `scopes and closures` use `var` everywhere. He should use `let`
+  or at least *mention* that `let` and `const` are preferred.
 
-* Put all objects into a single global object for your app. This avoids collisions with globals from other apps.
-* JS's implementation of functions is well done. First class, very functional language.
-	* Inner functions.
-	* Closures.
-* `this` and the function invocation pattern
-	* Method. `this` is bound to the object on which the method is attached.
-	* Function. When a function is not bound to an object, including inner functions, `this` is bound to the global object.
-	* Constructor
-	* Apply
+### Book 3: this @ Object Prototypes
 
-
-
-
-
+* The forward and chapter 1 both downplay `this` and it's complexity. The truth is:
+  * `this` is more complex than other languages.
+  * By making `this` an implicit parameter is sold as "cleaner code". Bullshit.
+    You're now relying on an implicit object's state which is not part of the 
+    function's definition.
+* He claims that Javascript's complexities are easy to understand, but nobody takes 
+  the time to understand them. That bay indeed be true, but it's not the entire story.
+  Javascript truly has a lot of "bad parts" that, when all added up, amount to a lot of
+  unnecessary mental overhead.

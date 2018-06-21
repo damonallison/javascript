@@ -42,6 +42,32 @@
 //
 //
 
+//
+// Javascript has closures.
+//
+// Always declare variables with `let` or `const`. 
+// `var` variables are hoisted to the top of the function, not the block.
+//
+test("closures", () => {
+
+    let a = 0;
+
+    let makeIncrementer = () => {
+        return () => {
+            a += 1 
+            return a
+        }
+    };
+
+    let m = makeIncrementer();
+
+    a = 10;
+
+    expect(m()).toBe(11);
+    expect(m()).toBe(12);
+
+});
+
 
 // 
 // Default argument values.
@@ -55,8 +81,8 @@ test("default arguments are undefined", () => {
     let calledArg2;
 
     const func = (arg1, arg2) => {
-        calledArg1 = arg1 || "default";
-        calledArg2 = arg2 || "default";
+        calledArg1 = arg1 !== undefined ? arg1 : "default";
+        calledArg2 = arg2 !== undefined ? arg2 : "default";
     };
 
     func("one"); // This is disgusting. It should throw an error.
@@ -185,37 +211,3 @@ test("es6-arrow-functions", () => {
     // You can still use `call`, `apply`, and `bind` with arrow functions
 });
 
-//
-// The `this` pointer in a function is most likely one of the most confusing
-// aspects of ES.
-// 
-// Depending on how a function is invoked, it may or may not have a `this` pointer.
-// 
-// * Using "." notation, `this` will refer to the object upon which the function is invoked.
-// * using "call" notation, `this` is passed as an argument to call().
-// 
-// The vast majority of the time, `this` will be the object associated with the invocation.
-//
-test("this", () => {
-
-    function f() {
-        return this === undefined ? undefined : this.bar;
-    }
-    let bar = "global";
-
-    let obj1 = {
-        bar : "obj1",
-        foo : f
-    };
-
-    let obj2 = {
-        bar : "obj2"
-    };
-
-    expect(f()).toBe(undefined);
-    expect(obj1.foo()).toBe("obj1");
-    expect(f.call(obj2)).toBe("obj2");
-
-
-
-});

@@ -1,7 +1,12 @@
+"use strict";
+
 //
 // ES6 introduces "modules"
 //
-// * Prior to modules, javascript was essentially a global, "shared everything" environment.
+// * Prior to modules, javascript was essentially a global, "shared everything" 
+//   environment. Modules allow us to encapsulate logic and selectively import
+//   pieces of functionality into our current scope.
+//
 // Modules:
 //
 // * Run in `strict mode`.

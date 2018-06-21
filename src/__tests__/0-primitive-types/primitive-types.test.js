@@ -149,10 +149,24 @@ test("truthy and falsy", () => {
 });
 
 //
-// ==   : checks for value equality. Type cohesion occurs if necessary to perform the comparison.
+// Javascript only performs equality checks between two values of the same type.
+//
+// Using value equality operators (== and !=), Javascript will coerce types as necessary to perform comparisons.
+//
+// ==   : checks for value equality. Type coercion occurs if necessary to perform the comparison.
 // ===  : checks for value and type equality. Type coercion is not done.
 //
-test("equality", () => {
+// Type coercion rules are found in the ES spec here:
+// http://www.ecma-international.org/ecma-262/5.1/#sec-11.9.3
+//
+// When performing value equality on values with two different types (x == y) where Type(x) != Type(y):
+//
+// * If x is Number() and y is String(), perform x == ToNumber(y)
+// * If y is Number() and x is String(), perform ToNumber(x) == y
+// * If x is Boolean(), return ToNumber(x) == y
+// * If y is Boolean(), return x == ToNumber(y)
+//
+test("equality and type coercion", () => {
 
     const zero = "0";
 
@@ -192,7 +206,7 @@ test("equality", () => {
 });
 
 //
-// Javascript's cohercion rules for inequality are different than equality. (Shocker)
+// Javascript's coercion rules for inequality are different than equality. (Shocker)
 //
 // If both values are strings, values are compared lexiographically.
 // If one or both is *not* a string, both are coerced into numbers.
