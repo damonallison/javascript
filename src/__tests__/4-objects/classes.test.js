@@ -42,6 +42,9 @@ class Person {
         return `${this.name} was created on ${this.createdDate}. Last updated ${this.lastUpdated}`;
     }
 
+    // 
+    // An example static function.
+    //
     static personFactory(name) {
         return new Person(name);
     }
@@ -65,9 +68,10 @@ test("class-creation", () => {
 
     let p = new Person("damon");
 
+    expect(typeof p).toBe("object");
     expect(p instanceof Object).toBeTruthy();
     expect(p instanceof Person).toBeTruthy();
-    expect(p instanceof Teacher).not.toBeTruthy()
+    expect(p instanceof Teacher).toBeFalsy();
 
     expect(p.capitalizedName).toBe("DAMON");
 
@@ -77,6 +81,11 @@ test("class-creation", () => {
 
 test("singleton", () => {
 
+    // // Not sure what value this provides over an object literal like this:
+    // let p2 = {
+    //     name: "damon"
+    // }
+
     let p2 = new class {
         constructor(name) {
             this.name = name;
@@ -84,7 +93,6 @@ test("singleton", () => {
     }("damon");
 
     expect(p2.name).toBe("damon");
-
 });
 
 test("factory", () => {

@@ -185,7 +185,6 @@ test("es6-variadic-parameters", () => {
 // in a number of important ways. All of them good. ES6 cleans up ES5 by
 // reducing the "magic" that is allowed.
 //
-// * No bindings for: `this`, `super`, `arguments` and `new.target`.
 // * Cannot be called with `new`.
 // * `prototype` does not exist.
 // * Can't change the value of `this`. `this` is lexically bound)
@@ -204,10 +203,12 @@ test("es6-arrow-functions", () => {
     expect(person.getName()).toEqual("damon");
 
     // Arrow functions are truly functions
-    let f = () => { console.log("yuk")};
+    let f = () => { return 10};
     expect(typeof f === "function").toBeTruthy();
     expect(f instanceof Function).toBeTruthy();
 
-    // You can still use `call`, `apply`, and `bind` with arrow functions
+    // You can still use `call`, `apply`, and `bind` with arrow functions. 
+    expect(f.call(null)).toBe(10);
+    expect(f.apply(undefined, [])).toBe(10);
 });
 
