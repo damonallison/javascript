@@ -11,6 +11,7 @@
 * Constructor functions.
 * Adding methods to objects - understanding `prototype` and `this`.
 * `Object.prototype` available functions. Metaprogramming.
+* Do classes in JS provide any encapsulation?
 
 ## Libraries
 

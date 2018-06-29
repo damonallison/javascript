@@ -13,7 +13,6 @@ $ npm test
 
 ## Questions
 
-* What is `strict mode` in ES5? Why not *always* use it?
 * Is `react-test` compiling down to ES5? Thru `babel`? How to run ES6 without compiling down to ES5?
 * How does exception handling work in ES6? (`try / catch / throw`)?
   * What are the built in exception types?
@@ -91,10 +90,11 @@ I'm not quite sure what happened between 2017, 2018, and 2019. All of the specs 
 
 ### ECMAScript 2019
 
+* [ECMAScript 2019](https://tc39.github.io/ecma262/)
+
 * Async functions
 * Shared Memory
 * Atomics
-
 
 ---
 
@@ -183,13 +183,6 @@ Primitive types include:
 * String
 * Symbol
 
-ES intentionally resembles Java syntax. ES is relaxed to enable it to serve as an easy-to-use scripting language. 
-
-* Variables do not have types. Values have types. Variables are only containers for values.
-* Types are not associated with properties.
-* Properties can be added to objects dynamically by assigning values to them.
-* Constructors are not required to name or assign values to all or any of the object's properties.
-
 ECMAScript 2015 introduced `class` definitions which are syntactic sugar around ES's prototypal inheritance.
 
 Each `constructor` is a function that has a propery named `prototype` that is used to implement `prototype based inheritance`. 
@@ -212,7 +205,8 @@ Strict mode represents the future direction of ES. Always use strict mode.
   * Strict mode: Functions declared in the global scope have `this === undefined`.
   * Sloppy mode: Functions declared in the global scope have `this === global`.
 
-* 
+* In ES6, `class` always runs in strict mode.
+
 ---
 
 #### ES6 Improvements
@@ -264,21 +258,21 @@ Strict mode represents the future direction of ES. Always use strict mode.
   * Run `ncu` in your project root to determine which dependencies are out of sync.
 
 
-## Guidance
+## Guidance (The Good Parts)
 
 * Write in a functional style. 
 * Don't use `var` or depend on global scope.
 * Declare all variables using `let` or `const`.
 * Put all objects into a single global object for your app. This avoids collisions with globals from other apps.
 
-* JS's implementation of functions is well done. First class, very functional language.
-	* Support for inner functions, closures.
+* JS's implementation of functions is well done. First class, very functional language. 
+  * Support for inner functions, closures.
 
 * `this` and the function invocation pattern
-	* Method. `this` is bound to the object on which the method is attached.
-	* Function. When a function is not bound to an object, including inner functions, `this` is bound to the global object.
-	* Constructor
-	* Apply
+  * Method. `this` is bound to the object on which the method is attached.
+  * Defau. When a function is not bound to an object, including inner functions, `this` is bound to the global object.
+  * Constructor
+  * Apply
 
 
 ---
@@ -325,14 +319,64 @@ Strict mode represents the future direction of ES. Always use strict mode.
 * The examples in `scopes and closures` use `var` everywhere. He should use `let`
   or at least *mention* that `let` and `const` are preferred.
 
-### Book 3: this @ Object Prototypes
+### Book 3: this & Object Prototypes
 
 * The forward and chapter 1 both downplay `this` and it's complexity. The truth is:
-  * `this` is more complex than other languages.
-  * By making `this` an implicit parameter is sold as "cleaner code". Bullshit.
-    You're now relying on an implicit object's state which is not part of the 
-    function's definition.
-* He claims that Javascript's complexities are easy to understand, but nobody takes 
-  the time to understand them. That bay indeed be true, but it's not the entire story.
+  * `this` is much more complex than other languages.
+  * Making `this` an implicit function parameter is sold as "cleaner code". Bullshit.
+    You're now relying on implicit state which is not part of the  function's definition.
+
+* He claims that Javascript's complexities are easy to understand, that nobody takes
+  the time to understand them. That may indeed be true, but it's not the entire story.
   Javascript truly has a lot of "bad parts" that, when all added up, amount to a lot of
   unnecessary mental overhead.
+
+* You can force `this` to be set to an object by using `call`. The first parameters to `call` will be `this` in the called function.
+
+```javascript
+
+let f = (a) => console.log(this);
+f.call(this, arg);
+
+```
+
+* `this` has nothing to do with lexical scope. `this` is completely determined based on how a function is called.
+
+
+Arrow functions have `this` bound to their lexical scope value (bravo!)
+
+```javascript
+
+var obj = {
+  count: 2,
+  cool: () => {
+    console.log(`count == ${this.count}`)
+  }
+}
+
+```
+
+
+* `this` has nothing to do with the function's scope or lexical scope at all. It is simply a pointer to an object based on how the function is invoked.
+
+#### Classes
+
+The book explains how linking objects via prototypes, not classes, is less mentally confusing than using classes.
+
+```javascript
+
+let Controller {
+  user: "damon",
+  errors: [],
+  getUser() {
+    return user;
+  }
+};
+
+let AuthController = Object.Create(Controller);
+
+AuthController.login = function(pass) {
+  console.log(`logging in ${super.user} with pass ${pass}`);
+}
+
+```

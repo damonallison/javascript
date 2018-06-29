@@ -109,6 +109,8 @@ test("inheritance", () => {
     expect(t instanceof Person).toBeTruthy();
     expect(t instanceof Object).toBeTruthy();
 
-    expect(t.toString()).toMatch(/^damon.*students.$/)
-
+    expect(t.name).toBe("damon");
+    expect(t.subject).toBe("math");
+    expect(t.toString()).toMatch(/^damon.*students.$/i)
+    
 });

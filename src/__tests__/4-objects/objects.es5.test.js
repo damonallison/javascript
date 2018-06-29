@@ -3,24 +3,26 @@
 //
 // Objects in JS are based on prototypal inheritance. The tests in 
 // this file show how to create an "object" and update prototype 
-// links to simulate inheritance. 
+// links to simulate inheritance using ES5 functions and prototypes.
 //
 // Prototypal inheritance differs from classical OO inheritance in an 
 // important way. In classical inheritance, an entire object is created
 // from the class hierarchy. In this respect, you can (via metaprogramming)
-// alter one class without altering another.
+// alter one class definition without altering another.
 //
 // In Javascript, prototypes are linked to each other. Updating a prototype
 // impacts all objects which include that object in it's prototype chain.
 //
-
 //
-// Objects in ES5:
-// * Each object has a prototype chain.
+// A prototype chain is similar in some respects to an object hierarchy.
+// If the current object does not have a property, the prototype chain is
+// traversed until the property is found. If the property is not found on 
+// any prototype in the prototype chain, `unknown` is returned.
 //
 // var obj = {a : 1}
 //
 // Prototype chain:
+//
 // obj -> Object.prototype -> null
 //
 // Each *function* has a different prototype chain.
@@ -28,19 +30,23 @@
 // function f { console.log("js prototypes. uh.")}
 //
 // Prototype chain:
+//
 // f -> Function.prototype -> null
 //
 // Rules:
 //
-// * Don't add custom functions to base types. It clutters up built-in types,
-//   and potentially steps on other libraries doing the same thing.
+// * Don't add custom functions to base types (like Number).
+//   It clutters up built-in types and potentially steps on other
+//   libraries doing the same thing.
 //
-// NOTE : Hopefully ES6 (2015) saves us from this shit pile that is prototypal
-//        inheritance.
+// NOTE:
 //
+// * The tests in this file are *not* how you should write classes in JS.
+//   ES6 includes `class` and is much better suited for OO. This is 
+//   simply an example of how objects were handled in ES5.
 
 //
-// 
+// Showing how to create and use an object.
 // 
 test("object basics", () => {
 
@@ -55,7 +61,16 @@ test("object basics", () => {
         },
     };
 
+    //
+    // Use `InstanceOf` to determine if an object has a certain
+    // object in it's prototype chain.
+    //
     expect(p instanceof Object).toBeTruthy();
+
+    //
+    // JS includes functions for metaprogramming - querying and manipulating
+    // objects during runtime.
+    //
     expect(Object.getOwnPropertyNames(p).indexOf("fullName") >= -1).toBeTruthy();
 
     expect(p.fullName()).toEqual("damon allison");
@@ -79,7 +94,17 @@ test("object basics", () => {
 
 //
 // This is an example of a "constructor function".
+//
+// A constructor function is a function that, when called with `new`,
+// will:
+// 
+// 1. Create a new object instance.
+// 2. Set the `this` property within the constructor to the newly created object.
+// 3. Return the newly created object.
+//
+//
 // Create a new instance of the Person "class":
+//
 // const p = new Person("damon");
 //
 // Note that calling this function without `new` will *not*
@@ -133,7 +158,7 @@ function Teacher(name, subject) {
 // Then everything you add to Teacher.prototype also gets added to Person.prototype,
 // which is not what you want.
 //
-Teacher.prototype = Object.create(Person.prototype);
+Object.setPrototypeOf(Teacher.prototype, Person.prototype);
 
 Teacher.prototype.createAJoke = function() {
     return `Teacher, ${this.name}... Teach a real language.`;
@@ -150,11 +175,11 @@ test("constructors", () => {
     expect(p.debugInfo).toBeDefined();
     expect(p.createAJoke()).toContain(p.name);
 
-    // There are two ways to get an object's prototype.
-    // Object.getPrototypeOf() feels much less hacky.
-    //
+    expect(p instanceof Teacher).toBeFalsy();
+    expect(p instanceof Person).toBeTruthy();
+    expect(p instanceof Object).toBeTruthy();
+
     // `__proto__` was officially adopted in ES6.
-    expect(Object.getPrototypeOf(p)).toBe(Person.prototype);
     expect(p.__proto__).toBe(Person.prototype);
 
     //
@@ -205,12 +230,6 @@ test("inheritance", () => {
     expect(Person.prototype.isPrototypeOf(t)).toBeTruthy();
     expect(Object.prototype.isPrototypeOf(t)).toBeTruthy();
 
-    let p = new Person("damon");
-    
-    expect(p instanceof Teacher).toBeFalsy(); // nope
-    expect(p instanceof Person).toBeTruthy();
-    expect(p instanceof Object).toBeTruthy();
-
     //
     // Use `getOwnPropertyNames` to examine an object's prototype.
     //
@@ -218,13 +237,35 @@ test("inheritance", () => {
     expect(Object.getOwnPropertyNames(Teacher.prototype).indexOf("createAJoke") >= 0).toBeTruthy();
 });
 
-
 //
-// Javascript and prototypal inheritance is inherently "delegation based".
-// If an object does not contain a member, the prototype chain is consulted.
+// In the book "You Don't Know JS" (Chapter 3),
+// the author makes a claim that ES6 classes add unnecessary mental
+// overhead to JS. He claims that using straight objects and delegation
+// is a preferred way to handle inheritance. 
 //
-// When working with JS, think in terms of "delegation", not "inheritance".
+// What is behavior delegation? It's simply linking two objects via
+// prototypes. If the more "derived" object doesn't have a member on it's 
+// prototype, it walks the prototype chain until it's found.
+// 
+// Behavior delegation feels confusing. From a code perspective, there is no
+// "bounds" on the object definition, making it difficult to determine what 
+// the object contains. It's hard to reason about object structure.
 //
 test("behavior-delegation", () => {
-    const x = {};
+    let Controller = {
+        user: "damon",
+        errors: [],
+        getUser() {
+          return this.user;
+        }
+    };
+      
+    let AuthController = Object.create(Controller);
+    
+    AuthController.login = function(pass) {
+        return `logging in ${this.getUser()} with pass ${pass}`;
+    };
+
+    expect(AuthController.login("mypass")).toMatch(/damon.*pass/i);
+      
 });
