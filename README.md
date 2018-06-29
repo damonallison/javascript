@@ -382,3 +382,6 @@ AuthController.login = function(pass) {
 }
 
 ```
+
+### Book 4: Types & Grammar
+
