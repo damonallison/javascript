@@ -363,6 +363,8 @@ var obj = {
 
 The book explains how linking objects via prototypes, not classes, is less mentally confusing than using classes.
 
+With ES6 (and React), `class` wins. So regardless of what the author thinks, using prototypes and delegation lost to classes. While this book may be great for JS purists, it is not aging well.
+
 ```javascript
 
 let Controller {

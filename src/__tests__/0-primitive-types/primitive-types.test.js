@@ -27,9 +27,18 @@
 // 
 test("undefined", () => {
 
-    // The variable v is undefined. It is not assigned to a value.
+    //
+    // Variables that have no value are `undefined`.
+    // 
+    // It's tempting to think "Oh, v is defined - I just defined it.".
+    // From Javascript's perspective, if it doesn't have a *value* it's
+    // considered undefined.
+    //
     let v;
     expect(v).toBeUndefined()
+
+    // Use `typeof` to determine if a variable exists.
+    expect(typeof NOTTHERE).toBe("undefined");
 
     // The property `y` on object `x` is not defined.
     let x = {};
@@ -89,17 +98,21 @@ test("typeof", () => {
     expect(typeof 42).toBe("number")
     expect(typeof "42").toBe("string");
     expect(typeof Symbol("42")).toBe("symbol");
-    expect(typeof {}).toBe("object");
     expect(typeof (() => {})).toBe("function");
 
+    // 
+    // Objects
+    //
+    expect(typeof {}).toBe("object");
     // null is reported as an object (bug?)
     expect(typeof null).toBe("object");
+    // Arrays are objects
+    expect(typeof([1, 2])).toBe("object");
 
     // Another function example.
     const f = v => `print ${v}`;
     expect(typeof f).toBe("function");
     expect(typeof f()).toBe("string")
-    
 });
 
 //
@@ -112,6 +125,8 @@ test("explicit type coersion", () => {
 
     const n = "42";
     const n2 = Number(n) + 1;
+
+    expect(typeof n2).toBe("number");
     expect(n2).toBe(43);
 
 });
@@ -145,6 +160,7 @@ test("truthy and falsy", () => {
     expect(" ").toBeTruthy();
     expect("0").toBeTruthy();
     expect({}).toBeTruthy();
+    expect(() => {}).toBeTruthy();
     
 });
 
@@ -154,7 +170,6 @@ test("truthy and falsy", () => {
 // Using value equality operators (== and !=), Javascript will coerce types as necessary to perform comparisons.
 //
 // ==   : checks for value equality. Type coercion occurs if necessary to perform the comparison.
-// ===  : checks for value and type equality. Type coercion is not done.
 //
 // Type coercion rules are found in the ES spec here:
 // http://www.ecma-international.org/ecma-262/5.1/#sec-11.9.3

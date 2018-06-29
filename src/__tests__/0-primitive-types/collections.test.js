@@ -1,7 +1,7 @@
 "use strict";
 
 //
-// Arrays in JS are not typed.
+// Arrays in JS can contain values of different types.
 //
 test('arrays', () => {
 
@@ -19,6 +19,27 @@ test('arrays', () => {
 
     // `slice()` will copy an array.
     expect(a1.slice()).toEqual(a1);
+    expect(a1.slice()).not.toBe(a1); // toBe uses ===
+
+
+    // 
+    // Deleting objects
+    //
+    let a3 = [1, 2, 3];
+    expect(a3.length).toBe(3);
+
+    // Delete will replace the value with `undefined`.
+    //
+    // **Don't use delete with arrays**
+    delete a3[0];
+    expect(a3[0]).not.toBeDefined();
+    
+    // Use `pop` or `shift` to remove elements from the array.
+    expect(a3.shift()).not.toBeDefined();
+    expect(a3).toEqual([2, 3]);
+
+    expect(a3.pop()).toBe(3);
+    expect(a3).toEqual([2]);
 });
 
 
