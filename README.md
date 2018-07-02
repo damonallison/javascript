@@ -115,9 +115,7 @@ I'm not quite sure what happened between 2017, 2018, and 2019. All of the specs 
 ### Dislikes
 
 * Dynamic typing.
-
 * Global variables.
-
 * Differing execution contexts. Node, various browsers.
 
 * Type cohesion.
