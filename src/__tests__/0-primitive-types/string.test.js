@@ -3,13 +3,37 @@
 //
 // Strings
 //
+// JS strings are immutable. They are "array-like" in that you can 
+// access characters by ordinal, but they are *not* arrays.
+//
 
 test("string native", () => {
 
     const s = "test";
 
+    // Array-like properties.
+    expect(s.length).toBe(4); // length
+    expect(s[0]).toBe("t");   // ordinal access
+
+    // String properties
     expect(s.toUpperCase()).toBe("TEST");
+
+    //
+    // Strings in JS are immutable. In order to operate on strings
+    // as arrays (ability to move characters, convert the string to
+    // an array. Split("")ting an array and join("") to get the string
+    // representation back is actually a very common operation.
+    //
+    // Example: Reverse a string. **WARNING: This will **NOT** work for
+    //          unicode characters. Find an npm package to do this operation.
+    //
+    // Split the string into an array, reverse the array, and rejoin. 
+    //
+    let s2 = s.split("").reverse().join("");
+    expect(s2).toBe("tset");
+
 });
+
 //
 // * Strings in ES6 are unicode.
 // * ES6 adds convenience functions for working with strings (contains, startsWith, endsWith).
@@ -22,6 +46,7 @@ test("unicode strings", () => {
     const text = "𠮷";
     expect(text.length).toBe(2); // There are two code units.
     expect(/^.$/u.test(text)).toBeTruthy(); // But it is only treated as one character.
+
     //
     // When comparing strings w/ the potential for Unicode code points,
     // always normalize the strings. This ensures that two character strings
@@ -78,13 +103,13 @@ I said:
 
 test('string iterating', () => {
     const name = "damon";
-    var found = "";
+    let found = "";
     for (let i = 0; i < name.length; i++) {
         // creates a new immutable string with every iteration.
         // would be more efficient as an array.
         found += name[i];
     }
-    expect(found).toEqual(name);
+    expect(found).toBe(name);
 });
 
 
