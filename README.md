@@ -117,6 +117,9 @@ I'm not quite sure what happened between 2017, 2018, and 2019. All of the specs 
 * Dynamic typing.
 * Global variables.
 * Differing execution contexts. Node, various browsers.
+* The `Number` type.
+  * Single type to handle `Int` and `Float` values.
+  * The concept of infinity, +0, -0, isNaN.
 
 * Type cohesion.
   * Different cohesion rules apply for equality operators (`==`) than inequality operators (`<` or `>`).
@@ -183,7 +186,7 @@ Primitive types include:
 
 ECMAScript 2015 introduced `class` definitions which are syntactic sugar around ES's prototypal inheritance.
 
-Each `constructor` is a function that has a propery named `prototype` that is used to implement `prototype based inheritance`. 
+Each `constructor` is a function that has a propery named `prototype` that is used to implement `prototype based inheritance`.
 
 ### Strict Mode
 
@@ -258,12 +261,12 @@ Strict mode represents the future direction of ES. Always use strict mode.
 
 ## Guidance (The Good Parts)
 
-* Write in a functional style. 
+* Write in a functional style.
 * Don't use `var` or depend on global scope.
 * Declare all variables using `let` or `const`.
 * Put all objects into a single global object for your app. This avoids collisions with globals from other apps.
 
-* JS's implementation of functions is well done. First class, very functional language. 
+* JS's implementation of functions is well done. First class, very functional language.
   * Support for inner functions, closures.
 
 * `this` and the function invocation pattern
@@ -291,13 +294,13 @@ Strict mode represents the future direction of ES. Always use strict mode.
 ### Book 1: Up and Going
 
 * Great passion for learning JS, deeply understanding, not avoiding, the "hard parts".
-* He really takes aim at Crockford's position of avoiding the hard parts. He's taking 
+* He really takes aim at Crockford's position of avoiding the hard parts. He's taking
   the position of learning and embracing the hard parts.
-* He's sympathetic to JS, doesn't call out JS's flaws - like it's type cohecion rules or 
-  hard to remember gotchas (parameters don't have to match function declaration), 
-  variable hoisting, `this`, etc. He goes out of his way to *defend* JS's nightmarish 
+* He's sympathetic to JS, doesn't call out JS's flaws - like it's type cohecion rules or
+  hard to remember gotchas (parameters don't have to match function declaration),
+  variable hoisting, `this`, etc. He goes out of his way to *defend* JS's nightmarish
   type coercion, scoping complexity.
-* He's very "anti class, anti OO". He recommends thinking in terms of prototype and delegation. 
+* He's very "anti class, anti OO". He recommends thinking in terms of prototype and delegation.
   * Prototype delegation may be the ES5 way of doing things, however ES6 added `class` and appears
     to be moving into the OO direction.
 * The books were written as ES6 was completing. They should be updated for ES6 only.
@@ -305,10 +308,10 @@ Strict mode represents the future direction of ES. Always use strict mode.
 ### Book 2: Scopes and Closures
 
 * The book starts off explaining how a compiler lexes, parses, and executes javascript. That isn't needed.
-* Javascript's scoping rules are complex and riddled with leaks. 
+* Javascript's scoping rules are complex and riddled with leaks.
 * Javascript is lexically scoped. `eval` and `with` can circumvent.
 * Javascript is based on global scope. Modules cannot alter the global scope. You must specifically import identifiers into scope.
-* He takes the stance that we "should know and use all javascript features to 
+* He takes the stance that we "should know and use all javascript features to
   produce more readable / maintainable code" - but using all of the "hard parts"
   of the language requires you to remember javascript's isoteric and easy to forget
   "features". For example,`let` and `const` should replace `var`, however he claims
