@@ -28,18 +28,88 @@ test('arrays', () => {
     let a3 = [1, 2, 3];
     expect(a3.length).toBe(3);
 
+    //
     // Delete will replace the value with `undefined`.
     //
-    // **Don't use delete with arrays**
+    // **Don't use delete with arrays**. Use `pop` or `shift` 
+    // as shown below.
+    //
     delete a3[0];
     expect(a3[0]).not.toBeDefined();
+    expect(a3.length).toBe(3);
     
+    //
     // Use `pop` or `shift` to remove elements from the array.
+    //
+    // Shift removes and returns the left most item in the list.
+    //
     expect(a3.shift()).not.toBeDefined();
     expect(a3).toEqual([2, 3]);
 
+    //
+    // Pop removes and returns the right most item in the list.
+    //
     expect(a3.pop()).toBe(3);
     expect(a3).toEqual([2]);
+});
+
+//
+// Array length is the highest ordinal in the array. 
+//
+// * Arrays do not have to be contiguous.
+// * If elements are missing, they will be returned as "undefined".
+// * Only elements which are explicity set will be included in iteration.
+//
+test("sparse arrays", () => {
+
+    let a = [];
+
+    a[0] = 0;
+    a[1] = undefined;
+    a[9] = 9;
+
+    expect(a.length).toBe(10);
+
+    
+    expect(a[2]).not.toBeDefined();
+
+    // 
+    // Enumeration will "skip" any elements which are not explicitly set,
+    // even if set to `undefined`.
+    //
+    let count = 0
+    for(let i in a) {
+        count++
+    }
+
+    expect(count).toBe(3);
+
+    //
+    // Arrays can have string properties assigned to them - which are *not* 
+    // part of the array
+    //
+
+    let a2 = [1, 2, 3];
+    expect(a2.length).toBe(3);
+
+    //
+    // Arrays are like any JS object. You can add any properties
+    // you want to the array. You should *not* do this - use another
+    // object if want to store state.
+    //
+    a2["test"] = "test"; // not part of the array
+    expect(a2.length).toBe(3);
+
+    a2["2"] = "test"; // watch out for string ordinals!
+    expect(a2.length).toBe(3);
+
+    //
+    // Using an explicit cast will force ordinal access.
+    //
+    a2[Number("2")] = 100;
+    expect(a2.length).toBe(3);
+    expect(a2[2]).toBe(100);
+
 });
 
 
@@ -61,11 +131,15 @@ test("sets", () => {
     set.add("1");
 
     expect(set.size).toBe(2);
+    expect(set.has(Number(1))).toBeTruthy();
+    expect(set.has("1")).toBeTruthy();
 
     let found = new Set();
 
+    //
     // Set iteration using `forEach`
     // `key` and `value` are identical for sets.
+    
     set.forEach((value) => {
         found.add(value);
     });
