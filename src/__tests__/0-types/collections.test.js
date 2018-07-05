@@ -1,14 +1,15 @@
 "use strict";
 
-//
-// Arrays in JS can contain values of different types.
-//
 test('arrays', () => {
 
+    //
+    // Arrays in JS can contain values of different types.
+    //
     const a1 = ["tree", 20, [1, 2, 3]];
     expect(typeof a1).toBe("object");
-
     expect(a1[0]).toEqual("tree");
+    expect(a1[1]).toEqual(20);
+    expect(a1[2]).toEqual([1, 2, 3]);
 
     // Copy the array via iteration.
     var a2 = []
@@ -19,7 +20,7 @@ test('arrays', () => {
 
     // `slice()` will copy an array.
     expect(a1.slice()).toEqual(a1);
-    expect(a1.slice()).not.toBe(a1); // toBe uses ===
+    expect(a1.slice()).not.toBe(a1);
 
 
     // 
@@ -70,33 +71,29 @@ test("sparse arrays", () => {
 
     expect(a.length).toBe(10);
 
-    
-    expect(a[2]).not.toBeDefined();
+    // Missing elements are `undefined`
+    expect(a[2]).toBeUndefined();
+    expect(typeof a[2]).toBe("undefined");
 
     // 
     // Enumeration will "skip" any elements which are not explicitly set,
     // even if set to `undefined`.
     //
+
     let count = 0
     for(let i in a) {
         count++
     }
-
+    expect(a.length).toBe(10); // Remember - a is sparse
     expect(count).toBe(3);
-
-    //
-    // Arrays can have string properties assigned to them - which are *not* 
-    // part of the array
-    //
-
-    let a2 = [1, 2, 3];
-    expect(a2.length).toBe(3);
 
     //
     // Arrays are like any JS object. You can add any properties
     // you want to the array. You should *not* do this - use another
     // object if want to store state.
     //
+    
+    let a2 = [1, 2, 3];
     a2["test"] = "test"; // not part of the array
     expect(a2.length).toBe(3);
 

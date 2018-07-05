@@ -1,6 +1,6 @@
 # Javascript
 
-This project contains tests which highlight ES6 features.
+Tests to show how javascript works.
 
 ## Quick Start
 
@@ -35,6 +35,24 @@ $ npm test
 
 * [Read Understanding ECMAScript 6 | Leanpub](https://leanpub.com/understandinges6/read)
 
+* [A Brief History of JavaScript](https://auth0.com/blog/a-brief-history-of-javascript/)
+  * Conceived in 1995 by Brendan Eich to allow HTML designers to interact with the DOM.
+  * JS was originally called Mocha, a play on "Java", which was on the rise at the time.
+  * Eich was contracted by Netscape (Marc Andreessen) to create a "Scheme for the browser".
+  * Java was too big for the web, Netscape thought, they wanted to create something simple.
+  * Due to time constraints, JS was born. It looks like java, with Scheme underneath.
+  * Sun / Netscape closed a deal - Java for the backend, JavaScript for the browser.
+  * Eich was happy he chose Scheme's first class functions and Self's prototypes.
+  * The java influences (primitive vs. Object -- `string` vs `String`) were unfortunate.
+  * Prototypes allow you to differ the behavior of one instance over another - by modifying the object's prototype.
+    This is harder to do with a `class` based approach. (But how many times will you do this in practice?)
+  * When the language was standardized, ECMA could not use `JavaScript` due to trademark reasons. They chose `ECMAScript`.
+  * The web (CSS / HTML / JS) evolve by implementors (Google, Microsoft, Firefox) pushing the standards bodies.
+  * Microsoft, during ES3, was implementing ActiveX extensions in their `embrace, extend, extinguish` model.
+  * ES4 was an ambitious, large project aimed at making JS scale to work better for large projects.
+  * ES4 was under development for 8 years and was scrapped. Two projects were formed - ES 3.1 and Harmony.
+  * Harmony would go on to develop future versions of the language.
+
 
 ## Links
 
@@ -44,14 +62,26 @@ $ npm test
 
 ## ECMAScript Versions
 
-### ES5 (2009)
+### ES3 (1999)
+
+* Regular expressions.
+* do / while
+* Exceptions and try / catch.
+* `in` and `instanceof`
+
+### ES4 
+
+* ES4 was scrapped. The community was divided.
+
+### ES5(2009)
 
 The goal of ES5 was to codify the de-facto interpretations of JS that had already been added to browsers. The spec was catching up to the industry.
 
-* Accessor properties
+* Accessor properties (getters / setters)
 * Reflective creation and inspection of objects
 * Additional array manipulation functions
 * JSON
+* Immutable global objects (`undefined`, `NaN`, `Infinity`)
 * Strict mode
 
 ### ES6 (ES 2015)
@@ -62,17 +92,17 @@ ES6 was the largest update to JS in history. It was the first major release to J
 
 The goals of ES6 were centered around support for larger applications and better project structure.
 
-* Lexical (block) scoping with (`let`).
+* Lexical (block) scoping with `let` and `const`
   * Don't ever use `var`. Use `let`, which is truly lexically scoped.
-* `const`
 * Classes
 * Modules
-* Iterators / generators
+* Iterators / generators / for-of
 * Promises
 * Function definitions - default / variadic arguments
-* Cleaner "arrow" function syntax
+* Cleaner "arrow" functions and lexical `this`.
 * Proxies / reflection
-* Maps / sets
+* Map / Set / WeakMap / WeakSet
+* Object destructuring
 
 > Some of its major enhancements included modules, class declarations, lexical block scoping, iterators and generators, promises for asynchronous programming, destructuring patterns, and proper tail calls.
 

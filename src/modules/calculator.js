@@ -20,7 +20,7 @@
 //
 // Each module can have a single default export.
 //
-// This simplifies the import statment - avoiding the use of
+// This simplifies the import statement - avoiding the use of
 //
 // import Calculator from "../modules/calculator";
 //

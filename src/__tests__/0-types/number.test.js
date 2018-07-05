@@ -86,14 +86,6 @@ test("Infinity", () => {
 
 });
 
-//
-// JS has the concept of +0, -0.
-//
-test("zero", () => {
-
-});
-
-
 test('number parsing', () => {
 
     //
@@ -209,11 +201,27 @@ test("number comparisons", () => {
 
     expect(num1 + num2).not.toBe("0.3");
     expect(areLogicallyEqual(num1 + num2, 0.3)).toBeTruthy();
+
+    //
+    // Jest has floating point friendly matchers.
+    //
+    expect(num1 + num2).toBeCloseTo(0.3);
+
+    // 
+    // Javascript has +0 and -0 to distinguish between how the number arrived at 0.
+    //
+    // For example, if the direction of movement was negative, the value -0 could
+    // be used. If the direction of movement was positive, the value 0 could be used.
+    //
+    expect(-0).toBe(+0);
 });
 
 //
 // Because of how numbers are represented in JS, there is a range of "safe"
 // values for whole number integers, and it's significiantly less than Number.MAX_VALUE.
+//
+// A "safe" value is guaranteed that the requested value is actually representable
+// unambiguously.
 //
 // The naximum integer that can be safely represented is 9,007,199,254,740,991.
 //
@@ -227,5 +235,6 @@ test("number comparisons", () => {
 //
 test("large numbers", () => {
 
+        expect(Number.isSafeInteger(100)).toBeTruthy();
 
 });

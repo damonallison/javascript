@@ -3,11 +3,13 @@
 //
 // Strings
 //
+
+
+//
 // JS strings are immutable. They are "array-like" in that you can 
 // access characters by ordinal, but they are *not* arrays.
 //
-
-test("string native", () => {
+test("strings are \"array like\"", () => {
 
     const s = "test";
 
@@ -24,13 +26,45 @@ test("string native", () => {
     // an array. Split("")ting an array and join("") to get the string
     // representation back is actually a very common operation.
     //
-    // Example: Reverse a string. **WARNING: This will **NOT** work for
-    //          unicode characters. Find an npm package to do this operation.
+    // Example: Reverse a string. 
     //
     // Split the string into an array, reverse the array, and rejoin. 
     //
+    // **WARNING: This will **NOT** work for unicode characters.
+    // Find an npm package to do this operation. (esrever)
+    //
     let s2 = s.split("").reverse().join("");
     expect(s2).toBe("tset");
+
+});
+
+//
+// Primitive `string` vs Object `String`.
+//
+// One of the biggest mistakes in the initial implementation of JS was making
+// the "native" and "object" versions of a type (like Java).
+//
+// 
+test("native string vs object String", () => {
+
+    const native = "test";
+    const obj = new String("test");
+
+    expect(native).toEqual(obj);
+    expect(native).not.toBe(obj);
+
+    expect(typeof native).toBe("string");
+    expect(typeof obj).toBe("object");
+
+    expect(native instanceof String).toBeFalsy();
+    expect(obj instanceof String).toBeTruthy();
+
+    //
+    // Natives will be boxed on the fly. 
+    //
+    // Here, "trim " is a native which is boxed to `String` for a call to `trim`.
+    //
+    expect("test ".trim()).toBe("test");
 
 });
 

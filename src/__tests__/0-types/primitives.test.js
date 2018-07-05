@@ -24,6 +24,10 @@
 // Each primitive type has a "native" type which primitives are boxed into when 
 // needed. For example, string's native is String(). String() defines the capabilities
 // for strings, like `.toUpperCase()`.
+//
+// Native vs. Object types was one of the regrets Brendan Eich had when creating JavaScript.
+// He called it "unfortunate" that they made it into the language - he would
+// have rather had a single type.
 // 
 test("undefined", () => {
 
@@ -91,7 +95,9 @@ test("null", () => {
 // 
 test("typeof", () => {
 
+    //
     // An example of all the `typeof` values.
+    //
     let v;
     expect(typeof v).toBe("undefined");
     expect(typeof true).toBe("boolean");
@@ -100,7 +106,11 @@ test("typeof", () => {
     expect(typeof Symbol("42")).toBe("symbol");
     expect(typeof (() => {})).toBe("function");
 
+    //
+    // typeof can be used to determine if a variable exists.
     // 
+    expect(typeof x).toBe("undefined");
+
     // Objects
     //
     expect(typeof {}).toBe("object");
@@ -135,10 +145,16 @@ test("implicit type coercion", () => {
 
     const n = "42"
     const n2 = n + 1; // Here, 1 is implicitly coerced into a string
+    const n3 = 1 + n; // Same, 1 is implicitly coerced into a string
+
+    expect(typeof n2).toBe("string");
     expect(n2).toBe("421");
 
-    const n3 = n * 2; // Here, n is implicity coerced into a number
-    expect(n3).toBe(84);
+    expect(typeof n3).toBe("string");
+    expect(n3).toBe("142");
+
+    const num = n * 2; // Here, n is implicity coerced into a number (why?)
+    expect(num).toBe(84);
 });
 
 
