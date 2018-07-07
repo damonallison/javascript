@@ -17,14 +17,13 @@ test("error handling", () => {
     catch (err) {
         expect(err instanceof Error).toBeTruthy();
 
+        //
         // Use the stack property for a read only string representation of the call stack.
+        // 
+        expect(err instanceof Error).toBeTruthy();        
+        expect(err.message).toBe("oops");
+        expect(err.name).toBe("Error");
         expect(typeof err.stack).toBe("string");
-
-        console.log(typeof err.stack);
-        console.log(err.stack);
-        if (err instanceof Error) {
-            console.log("horray");
-        }
     }
 
     // 
@@ -33,7 +32,7 @@ test("error handling", () => {
     try {
         throw "hello";
     }
-    catch(err) {
+    catch (err) {
         expect(typeof err).toBe("string");
         expect(err).toBe("hello");
     }
