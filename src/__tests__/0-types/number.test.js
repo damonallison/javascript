@@ -107,7 +107,20 @@ test('number parsing', () => {
     expect(parseInt("20")).toBe(20)
     expect(parseFloat("20.0000")).toBe(20)
 
-    // Explicitly casting using Number()
+    //
+    // Be careful! parseInt / parseFloat are tolerant of non-numeric characters.
+    // parsing will stop when a non-numeric character is reached.
+    //
+    // If you do *not* want to tolerate non-numeric characters (which I would
+    // highly encourage), than do not use parseInt() or parseFloat(). Use 
+    // a numeric conversion instead (e.g., Number(val))
+    //
+    expect(parseInt("100test")).toBe(100);
+    expect(parseFloat("20.ATest")).toBe(20);
+
+    //
+    // Explicit coercion using Number()
+    //
     const n = Number("20");
     expect(n).toBe(20);
     expect(n).toBe(20.00); // Again, 20 and 20.0 are exactly the same - only 1 number type!
@@ -118,7 +131,10 @@ test('number parsing', () => {
     expect(n2).toEqual(n);
 
     const n3 = Number("test")
-    expect(isNaN(n3)).toBeTruthy();
+
+    expect(Number.isNaN(n3)).toBeTruthy();
+
+
 
 });
 

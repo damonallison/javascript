@@ -50,6 +50,18 @@ test("native string vs object String", () => {
     const native = "test";
     const obj = new String("test");
 
+    //
+    // Strings are immutable. 
+    //
+    // To mutate individual characters, you'll have to convert
+    // the string to an array.
+    //
+    // let a = obj.split("");
+    //
+    obj.replace(/e/, "E");
+    expect(obj.charAt(1)).toBe("e");
+    expect(obj.charAt(100)).toBe(""); // uh!
+    
     expect(native).toEqual(obj);
     expect(native).not.toBe(obj);
 
@@ -65,6 +77,7 @@ test("native string vs object String", () => {
     // Here, "trim " is a native which is boxed to `String` for a call to `trim`.
     //
     expect("test ".trim()).toBe("test");
+    expect("test".length).toBe(4);
 
 });
 

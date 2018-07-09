@@ -29,6 +29,8 @@ test("error handling", () => {
     // 
     // But, you can legally throw any value you want.
     //
+    let finallyExectued = false;
+
     try {
         throw "hello";
     }
@@ -36,5 +38,8 @@ test("error handling", () => {
         expect(typeof err).toBe("string");
         expect(err).toBe("hello");
     }
-
+    finally {
+        finallyExectued = true;
+    }
+    expect(finallyExectued).toBeTruthy();
 });

@@ -39,8 +39,6 @@
 //    Callers do not know they can pass additional arguments to a function
 //    by looking at its definition.
 //
-//
-//
 
 //
 // Javascript has closures.
@@ -66,6 +64,7 @@ test("closures", () => {
     expect(m()).toBe(11);
     expect(m()).toBe(12);
 
+    expect(a).toBe(12);
 });
 
 

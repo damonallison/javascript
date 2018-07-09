@@ -21,7 +21,7 @@ class Person {
 
         this.name = name;
         this.createdDate = Date();
-    }
+    };
 
     //
     // Note that properties are defined as functions, however
@@ -30,25 +30,22 @@ class Person {
     //
     get capitalizedName() {
         return this.name.toLocaleUpperCase();
-    }
+    };
     set capitalizedName(value) {
         this.name = value.toLocaleLowerCase();
-    }
-
-    // TODO : what magic property do we need to implement
-    // to handle printing a string correctly from console.log?
+    };
     toString() {
         this.lastUpdated = Date();
         return `${this.name} was created on ${this.createdDate}. Last updated ${this.lastUpdated}`;
-    }
+    };
 
     // 
     // An example static function.
     //
     static personFactory(name) {
         return new Person(name);
-    }
-}
+    };
+};
 
 class Teacher extends Person {
     constructor(name, subject, students) {
@@ -57,7 +54,7 @@ class Teacher extends Person {
         super(name);
         this.subject = subject;
         this.students = students;
-    }
+    };
 
     toString() {
         return `${super.toString()} with ${this.students.length} students.`;
@@ -77,6 +74,9 @@ test("class-creation", () => {
 
     p.name = "cole";
     expect(p.capitalizedName).toBe("COLE");
+
+    // toString() will be used
+    expect(p.toString()).toMatch(/created on.*Last updated/i);
 });
 
 test("singleton", () => {

@@ -18,7 +18,8 @@
 
 * ES6 built-ins. Including "native" types (`String`, `Boolean`, etc).
 * lodash
-* Functions to check for array equality.
+* Library to check for array equality.
+* What are the built in functions / native environment?
 
 ## Tools
 
@@ -27,6 +28,9 @@
 * v8 - JIT compilation, execution, relationship to Node.
 
 ### Node
+
+* What is the node environment? What is the top level (host) object? How does it compare to a browser?
+* What functions does the host environment have on it?
 
 ### Webpack
 
@@ -39,3 +43,8 @@
 * Local file system environment.
 * `package.json`: scripts and semver.
 * Transpilers: Babel (Facebook) vs. Traceur (Google)
+
+
+### React
+
+* Is `react-test` compiling down to ES5? Thru `babel`? How to run ES6 without compiling down to ES5?
