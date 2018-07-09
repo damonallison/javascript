@@ -36,7 +36,7 @@ test("simple-promise", () => {
     });
 
     // Note the promise chain (then / catch) next is *always invoked*.
-    return promise.then(success => {
+    promise.then(success => {
         expect(success).toBe("success");
         return "successful";
     }).catch (err => {
