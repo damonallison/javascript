@@ -96,7 +96,7 @@ $ npm test
 * Exceptions and try / catch.
 * `in` and `instanceof`
 
-### ES4 
+### ES4
 
 * ES4 was scrapped. The community was divided.
 
@@ -182,13 +182,17 @@ look identical. Here is the 2019 version.
 
 ### Dislikes
 
-* Global variables, shared global object with all JS running in the browser (not
-  a problem w/ Node).
+* Differing execution contexts. Node, browser. Browser differences.
+  * Global variables, shared global object with all JS running in the browser.
+
 * Dynamic typing - no static analyzer, poor tooling support.
-* Differing execution contexts. Node, various browsers.
+
 * The `Number` type.
   * Single type to handle `Int` and `Float` values.
-  * The concept of infinity, +0, -0, isNaN.
+  * The concept of Infinity, +0, -0, isNaN.
+
+* Multiple module systems.
+  * Differences between ES6 modules, and CommonJS modules.
 
 * Type coercion.
   * Different cohesion rules apply for equality operators (`==`) than inequality
@@ -204,19 +208,18 @@ look identical. Here is the 2019 version.
     about when strict mode is on/off.
   * **Always `use strict`!**
 
-* Function arguments.
-    * Arguments passed to a function do not have to match the function's
-      declaration.
-    * The `arguments` implicit parameter was created to inspect all function
-      parameters passed into a function without having to formally define the
-      parameter.
-        * This is confusing to the caller. The caller does not know he can pass
-          additional parameters.
-        * `arguments` behaves different in `strict mode`. In `strict mode`, you
-          cannot alter the value of an `arguments` object (`arguments[0] =
-          'test'`). Without strict mode, you can.
-        * `arguments` does not account for default parameters.
-        * Use ES6's default parameters.
+* Function invocation
+  * Arguments passed to a function do not have to match the function's
+    declaration.
+  * The `arguments` implicit parameter was created to inspect all function
+    parameters passed into a function without having to formally define the parameter.
+    * This is confusing to the caller. The caller does not know he can pass
+      additional parameters.
+    * `arguments` behaves different in `strict mode`. In `strict mode`, you
+      cannot alter the value of an `arguments` object (`arguments[0] = 'test'`).
+      Without strict mode, you can.
+    * `arguments` does not account for default parameters.
+    * Use ES6's default parameters.
 
 * Calling functions with `call`, `apply`, and `bind`.
   * `this` differs based on how the function is invoked.
@@ -247,7 +250,7 @@ inheritance.
 
 Objects in the ES sense are property maps.
 
-```
+```javascript
 {
   "firstName" : "damon",
   "lastName" : "allison"
@@ -398,7 +401,7 @@ they were found).
 * The books were written as ES6 was completing. They should be updated for ES6
   only.
 * JavaScript has a *lot* of places where the author says "rather than working
-  around the quirks of the language, you should embrace and learn the quirks". 
+  around the quirks of the language, you should embrace and learn the quirks".
   * There are so many quirks with javascript that this becomes impractical. A
     user should *not* need to keep all of the quirks in their head (prototypes,
     coercion, this, strict vs. non-strict, etc).

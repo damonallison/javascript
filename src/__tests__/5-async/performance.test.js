@@ -24,35 +24,25 @@
 //
 // Callbacks are the most fundamental async pattern in JS.
 //
-test("callbacks", (done) => {
 
-    //
-    // ES does not have a built-in set equality operator.
-    //
-    let eqSets = (set1, set2) => {
-        if (!set1 instanceof Set) {
-            throw new TypeError("set1 is not a Set");
-        }
-        if (!set2 instanceof Set) {
-            throw new TypeError("set2 is not a Set");
-        }
-        if (set1.size != set2.size) {
-            return false;
-        }
-        for (let a of set1) {
-            if (!set2.has(a)) {
-                return false;
-            }
-        }
-        return true;
-    }
+const setEquals = require('sets-equal');
+//
+// There are multiple problems with callbacks.
+//
+// 1. The callback may be executed before you can establish a listener.
+// 2. Tracking completion of multiple callbacks is manual.
+// 3. Chaining callbacks results in confusing "callback hell".
+//
+// All of these problems are addressed with Promises.
+//
+test("callbacks", (done) => {
 
     let completions = new Set();
     let expected = new Set(["immediate", "timeout"]);
 
     let complete = (completed) => {
         completions.add(completed);
-        if (eqSets(expected, completions)) {
+        if (setEquals(expected, completions)) {
             done();
         }
     }

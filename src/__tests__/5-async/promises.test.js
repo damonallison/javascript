@@ -9,43 +9,75 @@
 //
 // General guidance:
 // * When using promises, *always* add a `catch` handler.
-// * Always `throw new Error("message")` objects - this will capture stack traces.
+// * Consider always rejecting with an `Error`. This will capture the stack
+//   trace as part of the response.
 //
+
+const arrayEquals = require('array-equal');
+const setEquals = require('sets-equal');
 
 test("simple-promise", () => {
 
+    let x = 10; // Update this value to trigger rejection.
+
+    let results = new Set();
+    let listenerOrder = [];
+
+    //
+    // The function you give to the promise is executed immediately.
+    // It could return immediately or asychronously, either way,
+    // any listener will be notified when subscribing
+    //
     var promise = new Promise((resolve, reject) => {
 
         // do something async.
         setTimeout(() => {
-            if (1 == 1) {
-                resolve("success");
-            } else {
-                //
-                // It's customary, but not required, to throw an Error object on faulure.
-                // `Error` objects capture a stack trace.
-                //
-                // Throwing an error is the same as, but cleaner, than doing:
-                //
-                // reject(Error("failure");
-                // return;)
-                //
-                throw new Error("failure");
-            }
+            x == 10 ? resolve("success") : reject(new Error("failed"));
         }, 50 /* ms */);
     });
 
-    // Note the promise chain (then / catch) next is *always invoked*.
+    //
+    // Note the promise chain (then / catch) is *always invoked*.
+    //
     promise.then(success => {
+        listenerOrder.push(1);
         expect(success).toBe("success");
+        results.add(success);
         return "successful";
     }).catch (err => {
-        expect(err).toMatch("failure");
-        return "failed";
+        expect(err instanceof Error).toBeTruthy();
+        expect(err.message).toBe("failed");
+        return "failure";
     }).then(val => {
+        //
         // this chained promise will be invoked in both
-        // success and failure cases.
+        // success and failure cases
+        //
         expect(val).toBe("successful");
+        results.add(val);
+        return "final";
+    }).then(val => {
+        expect(val).toBe("final");
+        expect(setEquals(new Set(["success", "successful"]), results)).toBeTruthy();
+    });
+
+    //
+    // A promise can have multiple listeners.
+    //
+    // Obviously this is *not* the same as chaining listeners.
+    //
+    promise.then(
+        (val) => {
+            listenerOrder.push(2);
+            expect(val).toBe("success");
+        },
+        (err) => {
+            throw err;
+        }
+    );
+    promise.then((val) => {
+        listenerOrder.push(3);
+        expect(arrayEquals([1, 2, 3], listenerOrder)).toBeTruthy();
     });
 
     return promise;

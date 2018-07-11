@@ -3,9 +3,9 @@
 //
 // ES6 introduces "modules"
 //
-// * Prior to modules, javascript was essentially a global, "shared everything" 
-//   environment. Modules allow us to encapsulate logic and selectively import
-//   pieces of functionality into our current scope.
+// Prior to modules, javascript was essentially a global, "shared everything"
+// environment. Modules allow us to encapsulate logic and selectively import
+// pieces of functionality into our current scope.
 //
 // Modules:
 //
@@ -22,8 +22,8 @@
 //
 // There are a few ways to import members from a module.
 //
-// All non-default elements being imported from a module
-// must be enclosed in curly braces.
+// All non-default elements being imported from a module must be enclosed in
+// curly braces.
 //
 import { echo } from "../modules/calculator";
 
