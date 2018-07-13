@@ -6,7 +6,7 @@
 // for JS projects.
 //
 // By default, the JavaScript Language Service (part of VS code)
-// will provide intellisense for all js files found 
+// will provide intellisense for all js files found
 // in your workspace.
 //
 // Best Practices:
@@ -15,7 +15,7 @@
 //   of the source code for your project.
 {
     //
-    // Note: VS Code will by default exclude the "node_modules" folder. 
+    // Note: VS Code will by default exclude the "node_modules" folder.
     // Here, we just make it explicit for illustration purposes.
     //
     "exclude": [
@@ -32,6 +32,6 @@
     "typeAcquisition": {
         "include": [
             "jest"
-        ]       
+        ]
     }
 }
