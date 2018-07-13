@@ -1,11 +1,12 @@
 //
 // ES6 formalizes Promises.
 //
-// Promises are an improved version of event handlers and callbacks.
+// Promises are an improved version of callbacks
 //
-// * Event handlers do not allow you to chain multiple operations.
+// * Callbacks do not allow you to elegantly chain operations.
 // * Callbacks put you in callback hell.
-// * Callbacks do not allow you to run multiple operations at a time.
+// * Callbacks do not allow you to run multiple operations at a time, waiting
+//   for all operations to complete.
 //
 // General guidance:
 // * When using promises, *always* add a `catch` handler.
@@ -13,8 +14,8 @@
 //   trace as part of the response.
 //
 
-const arrayEquals = require('array-equal');
-const setEquals = require('sets-equal');
+const arraysEqual = require('array-equal');
+const setsEqual = require('sets-equal');
 
 test("simple-promise", () => {
 
@@ -44,7 +45,7 @@ test("simple-promise", () => {
         expect(success).toBe("success");
         results.add(success);
         return "successful";
-    }).catch (err => {
+    }).catch(err => {
         expect(err instanceof Error).toBeTruthy();
         expect(err.message).toBe("failed");
         return "failure";
@@ -58,13 +59,11 @@ test("simple-promise", () => {
         return "final";
     }).then(val => {
         expect(val).toBe("final");
-        expect(setEquals(new Set(["success", "successful"]), results)).toBeTruthy();
+        expect(setsEqual(new Set(["success", "successful"]), results)).toBeTruthy();
     });
 
     //
     // A promise can have multiple listeners.
-    //
-    // Obviously this is *not* the same as chaining listeners.
     //
     promise.then(
         (val) => {
@@ -75,14 +74,28 @@ test("simple-promise", () => {
             throw err;
         }
     );
+
+    //
+    // Important Note:
+    //
+    // This test shows how promise callbacks are called in order they are
+    // attached to the promise.
+    //
+    // Do *not* write callbacks which depends on the ordering / existence of
+    // other registered callbacks.
+    //
     promise.then((val) => {
         listenerOrder.push(3);
-        expect(arrayEquals([1, 2, 3], listenerOrder)).toBeTruthy();
+        expect(arraysEqual([1, 2, 3], listenerOrder)).toBeTruthy();
     });
 
     return promise;
 });
 
+//
+// Promises ensure that even if the promised is fulfilled synchronously, any
+// callback you define with `then` will be invoked.
+//
 test("settled-promise", () => {
 
     // Create a promise that is already resolved.
@@ -98,9 +111,10 @@ test("settled-promise", () => {
 });
 
 test("multiple-promises", () => {
+    //
     // Promise.all takes an iterable of promises and itself returns
     // a promise that is resolved after all it's promises are resolved.
-
+    //
     let p1 = new Promise((resolve, reject) => {
         setTimeout(() => resolve(1), 100);
     });
@@ -111,10 +125,77 @@ test("multiple-promises", () => {
     return new Promise((resolve, reject) => {
         let p3 = Promise.all([p1, p2]);
         p3.then(value => {
-            expect(value).toEqual([1, 2]);
             resolve();
+            expect(value).toEqual([1, 2]);
         }).catch(error => {
-            throw error;
+            reject(error);
         });
     });
+});
+
+//
+// Only the first parameter sent to resolve() or reject() will be delivered to
+// the handler.
+//
+test("promise-single-return-value", () =>  {
+
+    let p = new Promise((resolve, reject) => {
+        resolve(1, 2, 3); // Attempt to return multiple values.
+    });
+    p.then(value => {
+        expect(value).toBe(1);
+    });
+    return p;
+});
+
+//
+// While we can chain promises, what if one step in the chain needs to
+// run code asynchronously?
+//
+// If you return a Promise from within a `then`, the Promise will be
+// resolved before continuing the chain.
+//
+test("nested-promise", () => {
+
+    let results = new Set();
+
+    return new Promise((resolve, reject) => {
+        results.add(1);
+        resolve(1);
+    }).then(value => {
+        //
+        // Here, we return a new promise. The runtime will resolve
+        // this promise before continuing the outer promise chain.
+        //
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                results.add(2);
+                resolve(2);
+            }, 100);
+        })
+    }).then(value => {
+        expect(setsEqual(new Set([1, 2]), results)).toBeTruthy();
+    });
+});
+
+
+//
+// Errors that occur in a `then` handler, will be handled to the `catch`.
+//
+test("promise-errors-call-reject", () => {
+
+    let p = new Promise((resolve, reject) => {
+        resolve("done");
+    });
+
+    p.then(value => {
+        let x = z; // ReferenceError - `z` is not defined.
+        expect(true).toBeFalsy(); // execution will *not* get here.
+    }).then(value => {
+        expect(true).toBeFalsy();
+    }).catch(err => {
+        expect(err instanceof ReferenceError).toBeTruthy();
+    });
+
+    return p;
 });

@@ -26,6 +26,7 @@
 //
 
 const setEquals = require('sets-equal');
+
 //
 // There are multiple problems with callbacks.
 //
