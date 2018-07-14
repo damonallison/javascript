@@ -1,4 +1,3 @@
-
 const arraysEqual = require('array-equal');
 
 'use strict';
@@ -6,12 +5,20 @@ const arraysEqual = require('array-equal');
 // this
 //
 // The `this` value is most likely one of the most confusing aspects of ES.
+// `this` depends entirely on how the function is being *called* and can be
+// different across function invocations.
 //
-// `this` is the current execution context of a function. How the function is
-// invoked determines the `this` value.
+// Therefore, from within the function, you do not know what `this` is going to
+// point to. This ambiguity is the source of difficult to track down bugs. When
+// writing the function, you have to either:
 //
-// ES has 4 function invocation types.
+// 1. Assume. Assume that `this` will be an object you expect.
+// 2. Program defensively. Write countless checks to verify the expected state
+//    of `this`.
 //
+// ES has 4 function invocation types
+// -----------------------------------
+// 
 // 1. Function invocation. Invoking the function without a context.
 //
 // ```
@@ -33,9 +40,12 @@ const arraysEqual = require('array-equal');
 // 4. Indirect invocation. `object.call(obj, "hello world");
 //
 // With indirect invocation (.call(), .apply(), or .bind()), you manually
-// establish the context - you manually tell the function what it's `this` is going to be.
+// establish the context - you manually tell the function what it's `this` is
+// going to be.
 //
 // In the above example, `this` is hardcoded to `obj`.
+//
+//
 //
 //
 // Resources:
@@ -54,6 +64,7 @@ const arraysEqual = require('array-equal');
 // * `this` === global when running in non-strict mode. (Turn on strict mode!)
 //
 test("this-function-invocation", () => {
+    expect(this).toBeUndefined();
     function echo(val) {
         expect(this).toBeUndefined();
         return (val);
@@ -68,12 +79,16 @@ test("this-function-invocation", () => {
 test("this-function-invocation-nested-function", () => {
     let obj = {
         myFunc() {
-            expect(this).not.toBeUndefined();
+            //
+            // Because this function is being invoked on `obj`, `obj` is the context.
+            //
+            expect(this).toBe(obj);
             function echo(val) {
                 //
-                // Even if `this` is defined in the myFunc() context, that context
-                // does not matter. Because this function was called using function
-                // invocation, this is undefined (we are in strict mode).
+                // Even if `this` is defined in the myFunc() context, that
+                // context does not matter. Because *this* function was called
+                // using function invocation without a context, this is
+                // undefined (we are in strict mode).
                 //
                 expect(this).toBeUndefined();
                 return val;
@@ -90,6 +105,10 @@ test("this-function-invocation-nested-function", () => {
 test("this-function-invocation-arrow-functions", () => {
     let obj = {
         getThis() {
+            //
+            // Capture this to verify the same object is lexically bound from
+            // within the child `echo` function.
+            //
             let that = this;
             let echo = (val) => {
                 expect(that).toBe(this);
@@ -100,8 +119,11 @@ test("this-function-invocation-arrow-functions", () => {
     };
 
     //
-    // In both of the following cases, `this` will be equal in both
-    // the parent `getThis()` function and the child `echo()` function.
+    // In both of the following cases, `this` will be equal in both the parent
+    // `getThis()` function and the child `echo()` function.
+    //
+    // They are equal because `this` in the child function is lexically bound to
+    // the same `this` value in the parent function.
     //
 
     // Call using method invocation - this is bound to obj.
@@ -154,6 +176,9 @@ test("this-constructor-invocation", () => {
     // An example constructor function (pre-ES6)
     function Person(fName, lName, age) {
 
+        //
+        // A check to verify we are being invoked as a constructor function.
+        //
         if (!(this instanceof Person)) {
             throw new Error("Expected a `new` invocation.");
         };
@@ -185,11 +210,9 @@ test("this-constructor-invocation", () => {
     expect(p.lastName).toBe("allison");
     expect(p.age).toBe(41);
 
-    let p2 = new Person2("damon", "allison", 41);
-    expect(p2.firstName).toBe("damon");
-
     //
     // Pitfall - ensure `new` is used when invoking a constructor function.
+    //
     try {
         let p = Person("damon", "allison", 41);
         expect(true).toBeFalsy();
@@ -245,14 +268,22 @@ test("indirect-invocation", () => {
     //
     let f = getThis.bind(obj);
     expect(f()).toBe(obj);
+
+    //
+    // Once a function is bound with `bind`, this will *always* equal the bound
+    // value.
+    //
+    // Here, we try to rebind `this` to a new object, but `this` is still being
+    // bound to the object we bound to (obj).
+    //
+    expect(f.call({})).toBe(obj);
 });
 
 //
 // ES6 introduces arrow functions.
 //
-// Instead of using the 4 standard "this" binding rules,
-// arrow functions adopt the `this` binding from the enclosing
-// function or global scope.
+// Instead of using the 4 standard "this" binding rules, arrow functions adopt
+// the `this` binding from the lexically enclosing function or global scope.
 //
 // This is great, since there is no ambiguity of what `this` points to.
 //
