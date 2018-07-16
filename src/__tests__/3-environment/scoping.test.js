@@ -18,15 +18,14 @@
 //
 // Strict Mode
 //
-// At some point,
+// At some point, someone decided that JS needed a completely different "mode"
+// to restrict JS. This is called "strict mode". Strict mode is on by default in
+// ES6 classes and should *always* be enabled.
+//
 // A function to check if we are running in strict mode.
 //
-// When we are running in strict mode, `this` will *not*
-// point at `global`.
-//
-// Differences between `strict mode` and `non-strict mode` (sloppy mode).
-//
-// * In strict mode, you *cannot* alter the
+// * `this` is undefined at global scope (which `isStrictMode` is defined here
+//   as) with strict mode enabled.
 //
 const isStrictMode = function() {
     return this === undefined;
@@ -40,44 +39,6 @@ const isStrictMode = function() {
 //
 test("check strict mode", () => {
     expect(isStrictMode()).toBeTruthy();
-});
-
-//
-// Before ES6, all vars were function or globally scoped.
-//
-// ES6 introduces lexically scoped vars in the form of `let` and `const` vars.
-//
-// `const` : read only, block based. Only the reference is immutable, the contents
-//           of an object pointed to by a const can change.
-// `let`   : block based. Use instead of `var`.
-//
-// Use `const` by default for immutability, let otherwise.
-//
-test("block bindings", () => {
-    const x = 10;
-
-    // With consts, only the reference is fixed.
-    // The contents of the reference can change.
-    const obj = { name : "damon" };
-    obj.name = "cole";
-
-    let funcs = [];
-    for (let i = 0; i < 10; i++) {
-        // a new value for `i` is created at every iteration.
-        // allowing us to capture the current value in a function
-        funcs.push(() => { return i }); // i is captured as 0, 1, 2, 3...
-    }
-
-    for (let i = 0; i < funcs.length; i++) {
-        expect(funcs[i]()).toEqual(i);
-    }
-
-    // with for-in and for-of
-    for (const key in obj) {
-        expect(key).toEqual("name");
-        // key scoped here
-    }
-
 });
 
 //
@@ -106,13 +67,57 @@ test("scope", () => {
 });
 
 //
+// Before ES6, all vars were function or globally scoped.
+//
+// ES6 introduces lexically scoped vars in the form of `let` and `const` vars.
+//
+// `const` : read only, block based. Only the reference is immutable, the contents
+//           of an object pointed to by a const can change.
+// `let`   : block based. Use instead of `var`.
+//
+// Use `const` by default for immutability, let otherwise.
+//
+test("block bindings", () => {
+
+    const x = 10;
+
+    //
+    // With object consts, only the reference is fixed.
+    // The contents of the reference can change.
+    //
+    const obj = { name : "damon" };
+    obj.name = "cole";
+
+    let funcs = [];
+    for (let i = 0; i < 10; i++) {
+        //
+        // a new value for `i` is created at every iteration.
+        // allowing us to capture the current value in a function
+        //
+        funcs.push(() => { return i }); // i is captured as 0, 1, 2, 3...
+    }
+
+    for (let i = 0; i < funcs.length; i++) {
+        expect(funcs[i]()).toEqual(i);
+    }
+
+    // with for-in and for-of
+    for (const key in obj) {
+        // key scoped here
+        expect(key).toEqual("name");
+    }
+
+});
+
+
+//
 // We are able to cheat lexical scoping by using eval.
 //
 // **Don't ever use eval.**
 //
 //  It's full of security and performance problems.
 //
-test("using eval to cheat lexical scope", () => {
+test("using-eval-to-cheat-lexical-scope", () => {
 
     let a = 10;
 
