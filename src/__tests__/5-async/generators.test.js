@@ -2,42 +2,171 @@
 //
 // Generators / Iterators
 //
-// * Generators express async control flow in a sequential fashion.
-// * Generators create iterators. You must call .next() to start or resume an iterator.
+// An iterator is an object which keeps track of its current position and knows
+// how to access one object at a time. Arrays, Sets, Maps are examples of iterable objects.
 //
-
+// You can write a custom iterator by creating an object which keeps track of it's
+// current position and has a .next() function.
+//
+//
+// * Generators express async control flow in a sequential fashion.
+// * Generators create iterators. You must call .next() to start or resume an
+//   iterator.
+//
+// For more information on Iterators / Generators:
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators
+//
 const arraysEqual = require("array-equal");
 
-test("simple-generator", () => {
+
+//
+// Iterators
+//
+
+
+test("simple-iterable", () => {
+
+    const a = [1, 2, 3];
+
+    const results = [];
+
+    //
+    // Use for...of to iterator over an iterator object.
+    // * for...of will automatically stop when receiving `done: true` from the
+    //   iterator.
+    // * for...of calls .next() for you - you cannot pass arguments into .next().
+    //
+    for(let val of a) {
+        results.push(val);
+    }
+    expect(arraysEqual([1, 2, 3], results)).toBeTruthy();
+});
+
+//
+// An iterator is any object with a .next() function that returns objects of:
+//
+// {
+//   value: "val",
+//   done: true | false
+// }
+//
+// You can use for...of to iterate over an iterable object.
+//
+// Use the ES6 special iterator symbol `Symbol.iterator` to return an iterator.
+//
+//
+// Create a true custom iterator object (without piggybacking on Array as we did
+// above).
+//
+// While custom iterators are useful, they are error prone since they must
+// maintain their internal state.
+//
+test("custom-iterable", () => {
+
+    let pairIterator = {
+        currentPos: 0,
+        left: 1,
+        right: 2,
+        next() {
+            this.currentPos++;
+            if (this.currentPos == 1) {
+                return { value: this.left, done: false };
+            } else if (this.currentPos == 2) {
+                return { value: this.right, done: false };
+            }
+            return { value: undefined, done: true }
+        },
+        [Symbol.iterator]() {
+            return this;
+        }
+    };
+
+    let results = [];
+    for(let val of pairIterator) {
+        results.push(val);
+    }
+
+    expect(arraysEqual([1, 2], results)).toBeTruthy();
+
+});
+
+//
+// Arrays, Sets, and Maps are all iterables.
+//
+// In this example, our custom iterable object uses the Array iterable.
+//
+test("custom-iterable-using-array", () => {
+
+    let myIterable = {
+        values: [1, 2, 3],
+        [Symbol.iterator]() {
+            return this.values[Symbol.iterator]();
+        }
+    }
+
+    const results = [];
+
+    for (let val of myIterable) {
+        results.push(val);
+    }
+    expect(arraysEqual([1, 2, 3], results)).toBeTruthy();
+});
+
+
+//
+// Generators
+//
+// A generator is a special function which is a factory for iterators.
+//
+
+//
+// This test creates a generator and manually advances the returned iterator,
+// allowing us to verify the generator suspends execution on yield.
+//
+test("generator-manual", () => {
 
     let activity = []; // track the order of operations
     let x = 1;
 
     function* gen() {
         activity.push("before yield");
-        yield;
+        yield 10;
         activity.push("after yield");
         expect(x).toBe(100);
     };
 
     activity.push("acquiring generator");
 
-    //
-    // Generators are different than function calls. You must create an instance
-    // of a generator and call .next() on it to begin or resume execution.
-    //
-    let f = gen(); // acquire a generator instance
+    let f = gen(); // Calling the generator function returns an iterator.
     activity.push("acquired generator");
-    f.next(); // start the gen() generator.
+
+    const val = f.next();
+    //
+    // The generator is currently paused at the yield statement and is not complete.
+    //
+    expect(val.value).toBe(10);
+    expect(val.done).toBeFalsy();
+    activity.push(`yielded ${val.value}`); // Manually walk the iterator using .next()
+
+    //
+    // Resume the generator. Because it does not yield any further values, it is
+    // complete.
+    //
+    // We will also alter `x` to illustrate that the generator was truly paused
+    // and when resumed will have access to the updated lexical scope.
+    //
     x = 100;
     activity.push("resuming generator");
-    f.next(); // resume from yield
+    expect(f.next().done).toBeTruthy(); //
     activity.push("done");
+
+    // /console.log(activity);
 
     expect(arraysEqual(
             ["acquiring generator",
              "acquired generator",
              "before yield",
+             "yielded 10",
              "resuming generator",
              "after yield",
              "done"],
@@ -45,16 +174,11 @@ test("simple-generator", () => {
 });
 
 //
-// In JS, an iterator is any object which knows how to access a collection one
-// element at a time, keep it's current position, and has a .next() method.
+// This test shows a more common use of creating and using generator functions.
 //
-// Use for...of to iterator over an iterator object.
-// * for...of will automatically stop when receiving `done: true` from the iterator.
-// * for...of calls .next() for you - you cannot pass arguments into .next().
+// The iterator yields multiple results, and we use for...of to walk the iterator.
 //
-// * String, Array, Map, Set are examples of built-in iterables.
-//
-test("looping-an-iterator", () => {
+test("generator-iteration", () => {
 
     let double = (x) => x * 2;
 
@@ -67,7 +191,8 @@ test("looping-an-iterator", () => {
     let results = [];
 
     //
-    // for...of simplifies consuming an iterator.
+    // for...of simplifies consuming the iterator. for...of will call .next()
+    // for us, as well as terminate when the iterator is done.
     //
     for (let val of repeat(double, 3)) {
         results.push(val);
@@ -104,7 +229,10 @@ test("looping-an-iterator", () => {
 // Yield is an interesting keyword. It can yield a value, it can also receive
 // values from .next().
 //
-test("providing-values-to-yield", () => {
+// This two-way message passing allows you to send values into the generator, as
+// well as receive values out of the generator.
+//
+test("generator-providing-values-to-yield", () => {
 
     function *addWhileLessThanX(x) {
         let sum = 0;
@@ -134,35 +262,4 @@ test("providing-values-to-yield", () => {
         }
         expect(i).toBeLessThanOrEqual(5);
     }
-});
-
-//
-// Any object which provides an iterator is called an "iterable".
-//
-// Use the ES6 special iterator symbol `Symbol.iterator` to return an iterator.
-//
-test("custom-iterable", () => {
-
-    let myIterable = {
-        values: [1, 2, 3],
-        [Symbol.iterator]() {
-            return this.values[Symbol.iterator]();
-        }
-    }
-
-    let results = [];
-    var iterator = myIterable[Symbol.iterator]();
-    for (let val of iterator) {
-        results.push(val);
-    }
-    expect(arraysEqual([1, 2, 3], results)).toBeTruthy();
-
-    results = [];
-    //
-    // for...of will retrieve the iterator from an iterable for you.
-    //
-    for (let val of myIterable) {
-        results.push(val);
-    }
-    expect(arraysEqual([1, 2, 3], results)).toBeTruthy();
 });
