@@ -96,7 +96,7 @@ $ npm test
 * Exceptions and try / catch.
 * `in` and `instanceof`
 
-### ES4 
+### ES4
 
 * ES4 was scrapped. The community was divided.
 
@@ -170,15 +170,15 @@ look identical. Here is the 2019 version.
 * Functions are first class objects. Closures, HOF, etc. The "scheme" part of
   Eich's original JS implementation.
 * ES6 drastically cleaned up the language.
-    * String interoplation.
-    * Lexical scoping with `let` and `const`, block level functions.
-    * Functions.
-      * default parameters and `rest` parameters makes `arguments` irrelevant.
-      * default parameter expressions (`function func(x = getValue()) {}`)
-    * Objects
-      * Introduction of the `super` keyword to invoke methods on an object's
-        prototype.
-      * Object destructuring.
+  * String interoplation.
+  * Lexical scoping with `let` and `const`, block level functions.
+  * Functions.
+    * default parameters and `rest` parameters makes `arguments` irrelevant.
+    * default parameter expressions (`function func(x = getValue()) {}`)
+  * Objects
+    * Introduction of the `super` keyword to invoke methods on an object's
+      prototype.
+    * Object destructuring.
 
 ### Dislikes
 
@@ -247,7 +247,7 @@ inheritance.
 
 Objects in the ES sense are property maps.
 
-```
+```javascript
 {
   "firstName" : "damon",
   "lastName" : "allison"
@@ -257,6 +257,7 @@ Objects in the ES sense are property maps.
 Properties can hold other objects, primitive values, or functions.
 
 Primitive types include:
+
 * Undefined
 * Null
 * Boolean
@@ -264,11 +265,13 @@ Primitive types include:
 * String
 * Symbol
 
+Other types:
+
+* Function
+* Object
+
 ECMAScript 2015 introduced `class` definitions which are syntactic sugar around
 ES's prototypal inheritance.
-
-Each `constructor` is a function that has a propery named `prototype` that is
-used to implement `prototype based inheritance`.
 
 ### Strict Mode
 
@@ -339,12 +342,7 @@ they were found).
   })
 ```
 
-## Tools
-
-* `ncu` (`npm-check-update`)
-  * Allows you to upgrade all project dependencies via one command line.
-  * Run `ncu` in your project root to determine which dependencies are out of
-    sync.
+---
 
 
 ## Guidance (The Good Parts)
@@ -364,9 +362,6 @@ they were found).
   * Constructor
   * Apply
 
-
----
-
 ## Javascript : The Good Parts
 
 * Crockford prefers dynamic typing. Why?
@@ -378,6 +373,8 @@ they were found).
 * Massive design flaw: global. All top level variables are out into the "global
   object".
 * JS is more like Lisp than Java.
+
+---
 
 ## YDKJS
 
@@ -398,7 +395,7 @@ they were found).
 * The books were written as ES6 was completing. They should be updated for ES6
   only.
 * JavaScript has a *lot* of places where the author says "rather than working
-  around the quirks of the language, you should embrace and learn the quirks". 
+  around the quirks of the language, you should embrace and learn the quirks".
   * There are so many quirks with javascript that this becomes impractical. A
     user should *not* need to keep all of the quirks in their head (prototypes,
     coercion, this, strict vs. non-strict, etc).
@@ -510,3 +507,22 @@ AuthController.login = function(pass) {
   the function to code outside of your control. Your callback could be invoked
   multiple times, not at all, or called immediately, before you had a chance to
   register a listener.
+
+#### Performance
+
+* Web workers are a completely separate runtime. Communicate with the main
+  program via message passing.
+  * Use web workers for CPU / Network intensive code. Math, image processing, etc.
+  * What can web workers do? They don't have access to DOM, for example.
+  * How to transfer objects to/from web workers?
+* Shared workers allow you to share a web worker across all pages accessing a domain.
+  * Each page has a `port` into the web worker.
+* `asm.js`
+  * It's hard for JS engines to optimize JS (especially GC and coercion).
+  * It's easier for C/C++ to be transpiled into JS (See Emscripten).
+* Look into WebAssembly.
+
+##### Benchmarks and Tuning
+
+* `benchmark.js`: benchmarking JS library.
+    *
