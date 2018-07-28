@@ -31,14 +31,18 @@ test("simple-iterable", () => {
     const results = [];
 
     //
-    // Use for...of to iterator over an iterator object.
+    // Use for...of to iterate an iterator.
+    //
     // * for...of will automatically stop when receiving `done: true` from the
     //   iterator.
     // * for...of calls .next() for you - you cannot pass arguments into .next().
+    // * for...of iterates an *iterator*, where for...in will loops over enumerable
+    //   property names of an object.
     //
     for(let val of a) {
         results.push(val);
     }
+
     expect(arraysEqual([1, 2, 3], results)).toBeTruthy();
 });
 
@@ -135,18 +139,18 @@ test("generator-manual", () => {
         expect(x).toBe(100);
     };
 
-    activity.push("acquiring generator");
+    activity.push("acquiring iterator");
 
-    let f = gen(); // Calling the generator function returns an iterator.
-    activity.push("acquired generator");
+    let it = gen(); // Calling the generator function returns an iterator.
+    activity.push("acquired iterator");
 
-    const val = f.next();
+    const val = it.next();
     //
     // The generator is currently paused at the yield statement and is not complete.
     //
     expect(val.value).toBe(10);
     expect(val.done).toBeFalsy();
-    activity.push(`yielded ${val.value}`); // Manually walk the iterator using .next()
+    activity.push(`yielded ${val.value}`);
 
     //
     // Resume the generator. Because it does not yield any further values, it is
@@ -156,18 +160,18 @@ test("generator-manual", () => {
     // and when resumed will have access to the updated lexical scope.
     //
     x = 100;
-    activity.push("resuming generator");
-    expect(f.next().done).toBeTruthy(); //
+    activity.push("resuming iterator");
+    expect(it.next().done).toBeTruthy(); 
     activity.push("done");
 
-    // /console.log(activity);
+    // console.log(activity);
 
     expect(arraysEqual(
-            ["acquiring generator",
-             "acquired generator",
+            ["acquiring iterator",
+             "acquired iterator",
              "before yield",
              "yielded 10",
-             "resuming generator",
+             "resuming iterator",
              "after yield",
              "done"],
              activity)).toBeTruthy();
