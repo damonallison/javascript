@@ -1,5 +1,7 @@
 "use strict";
 
+const arraysEqual = require('array-equal');
+
 //
 // Scoping Tests
 //
@@ -101,12 +103,19 @@ test("block bindings", () => {
         expect(funcs[i]()).toEqual(i);
     }
 
-    // with for-in and for-of
+    // for-in iterates object members.
     for (const key in obj) {
         // key scoped here
         expect(key).toEqual("name");
     }
 
+    // for-of iterates an iterable
+    const a = [1, 2, 3];
+    let b = [];
+    for (let val of a) {
+        b.push(val);
+    }
+    expect(arraysEqual(a, b)).toBeTruthy();
 });
 
 

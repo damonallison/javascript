@@ -1,17 +1,19 @@
 "use strict";
 
+const arraysEqual = require("array-equal");
+
 //
 // Functions
 //
 // Functions in ES are first class.
-// 
+//
 // ES6 cleans up functions in the following ways:
 //
 // * Default parameter values.
 //
-// * Varadic parameters ("rest" parameters). These eliminate the
-//   need for the implicit `arguments` parameter you could use
-//   from within a function. 
+// * Varadic parameters ("rest" parameters). These eliminate the need for the
+//   implicit (and long deprecated) `arguments` parameter you could use from
+//   within a function.
 //
 //   * Don't ever use the `arguments` implicit parameter!
 //
@@ -19,31 +21,31 @@
 //
 // * Arguments
 //
-//   Javascript does not require you call a function with
-//   the same number of arguments as the function defines.
-//   If you call a function with fewer arguments than defined,
-//   the remainder will be `undefined`. If you call with more,
-//   the extra fall off.
+//   Javascript does not require you call a function with the same number of
+//   arguments as the function defines. If you call a function with fewer
+//   arguments than defined, the remainder will be `undefined`. If you call with
+//   more, the extra fall off.
 //
 // * Default values
 //
-//   In ES5, the logical || operator was used to default values.
-//   The problem with || is you may want to pass a falsy value as
-//   an argument (i.e., 0). Therefore, || should *not* be used.
-//   use (typeof arg !== "undefined") ? arg1 : "default value"
+//   In ES5, the logical || operator was used to default values. The problem
+//   with || is you may want to pass a falsy value as an argument (i.e., 0).
+//   Therefore, || should *not* be used. use (typeof arg !== "undefined") ? arg1
+//   : "default value"
 //
-//   // Safe way to set default values.
-//   let v = typeof arg !== "undefined" ? arg : {}
+//   Safe way to set default values:
+//
+//      let v = typeof arg !== "undefined" ? arg : {}
 //
 //  * Javascript adds an `arguments` array to every function. This is a hack.
-//    Callers do not know they can pass additional arguments to a function
-//    by looking at its definition.
+//    Callers do not know they can pass additional arguments to a function by
+//    looking at its definition.
 //
 
 //
 // Javascript has closures.
 //
-// Always declare variables with `let` or `const`. 
+// Always declare variables with `let` or `const`.
 // `var` variables are hoisted to the top of the function, not the block.
 //
 test("closures", () => {
@@ -52,7 +54,7 @@ test("closures", () => {
 
     let makeIncrementer = () => {
         return () => {
-            a += 1 
+            a += 1
             return a
         }
     };
@@ -68,7 +70,7 @@ test("closures", () => {
 });
 
 
-// 
+//
 // Default argument values.
 //
 // One of the biggest hacks of javascript is you can invoke a function without
@@ -93,7 +95,7 @@ test("default arguments are undefined", () => {
 
 //
 // ES6 default values
-// 
+//
 // If an undefined value is passed to a function, the default value
 // will be used.
 //
@@ -106,18 +108,22 @@ test("default argument values", () => {
     expect(calledArg2).toBe(undefined);
 
     const func = (arg1, arg2 = "default") => {
-        calledArg1 = arg1 || "default";
+        calledArg1 = arg1
         calledArg2 = arg2;
     };
 
     func("one");
-    expect(calledArg1).toEqual("one");
-    expect(calledArg2).toEqual("default");
+    expect(calledArg1).toBe("one");
+    expect(calledArg2).toBe("default");
 
     func("one", undefined);
-    expect(calledArg1).toEqual("one");
-    expect(calledArg2).toEqual("default");
-    
+    expect(calledArg1).toBe("one");
+    expect(calledArg2).toBe("default");
+
+    func();
+    expect(calledArg1).toBeUndefined();
+    expect(calledArg2).toBe("default");
+
 
 });
 
@@ -140,7 +146,7 @@ test("default parameter expressions", () => {
 
     expect(func(1)).toEqual(11);
     expect(func(1)).toEqual(12);
-    
+
     expect(val).toBe(12);
 
     // Because arg2 is specified, getValue() will not be called.
@@ -160,10 +166,7 @@ test("es6-variadic-parameters", () => {
     };
 
     test("damon", "grace", "lily", "cole");
-    expect(vars.length).toEqual(3)
-    expect(vars[0]).toEqual("grace");
-    expect(vars[1]).toEqual("lily");
-    expect(vars[2]).toEqual("cole");
+    expect(arraysEqual(["grace", "lily", "cole"], vars)).toBeTruthy();
 
     vars = []
 
@@ -206,7 +209,7 @@ test("es6-arrow-functions", () => {
     expect(typeof f === "function").toBeTruthy();
     expect(f instanceof Function).toBeTruthy();
 
-    // You can still use `call`, `apply`, and `bind` with arrow functions. 
+    // You can still use `call`, `apply`, and `bind` with arrow functions.
     expect(f.call(null)).toBe(10);
     expect(f.apply(undefined, [])).toBe(10);
 });

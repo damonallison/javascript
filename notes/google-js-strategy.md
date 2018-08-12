@@ -5,12 +5,10 @@ Javascript is inherently flawed. Google's strategy is 2 fold:
 * Work with TC39 to evolve JS. Low risk / low reward.
 * New language (Dart). High risk / high reward.
 
-
 * Javascript has fundamental problems.
   * Example: Existence of a single `Number` primitive.
   * Cannot be tooled.
   * Has inherent performance problems.
-
 
 ## Evolve JS
 
@@ -22,9 +20,5 @@ Javascript is inherently flawed. Google's strategy is 2 fold:
 
 * Performance
 * Developer Usability. Keep dynamic, no compile, easy to start nature of JS.
-* Tooling. Optional types enable tooling. Types not *required* but encouraged for large-scale projects.
-
-
-
-
-
+* Tooling. Optional types enable tooling. Types not *required* but encouraged
+  for large-scale projects.
