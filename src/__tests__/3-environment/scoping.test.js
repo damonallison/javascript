@@ -77,7 +77,7 @@ test("scope", () => {
 //           of an object pointed to by a const can change.
 // `let`   : block based. Use instead of `var`.
 //
-// Use `const` by default for immutability, let otherwise.
+// Use `const` by default for immutability, `let` otherwise.
 //
 test("block bindings", () => {
 
@@ -94,7 +94,7 @@ test("block bindings", () => {
     for (let i = 0; i < 10; i++) {
         //
         // a new value for `i` is created at every iteration.
-        // allowing us to capture the current value in a function
+        // allowing us to capture the current value in a function.
         //
         funcs.push(() => { return i }); // i is captured as 0, 1, 2, 3...
     }

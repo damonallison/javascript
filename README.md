@@ -1,15 +1,19 @@
 # Javascript
 
-This repo contains unit tests to show JavaScript works.
+Unit tests which show JS features.
 
 ## Quick Start
 
 * All tests are in the `__tests__` folder. The tests are written using
   [jest](https://facebook.github.io/jest/)
 
-```
+```bash
+
+# Quickstart
+
 $ npm install
 $ npm test
+
 ```
 
 ## Links
@@ -184,8 +188,12 @@ look identical. Here is the 2019 version.
 
 * Global variables, shared global object with all JS running in the browser (not
   a problem w/ Node).
+
 * Dynamic typing - no static analyzer, poor tooling support.
+
 * Differing execution contexts. Node, various browsers.
+  * Polyfills / transpilers.
+
 * The `Number` type.
   * Single type to handle `Int` and `Float` values.
   * The concept of infinity, +0, -0, isNaN.

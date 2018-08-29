@@ -155,11 +155,19 @@ test("default parameter expressions", () => {
 });
 
 //
-// ES6 introduces a "rest argument (...arg2) to replace `arguments`.
+// ES6 introduces a `rest` / `spread` operator (...arg2) to replace `arguments`.
+//
+// When used in a function declaration, the "rest" operator gathers all
+// values into the array (use `...` as the last param).
 //
 test("es6-variadic-parameters", () => {
     let vars = [];
     const test = (arg1, ...arg2) => {
+        //
+        // If ...arg2 receives nothing, it should still be a valid object (empty array)
+        //
+        expect(arg2.length).toBeDefined();
+
         for(let i = 0; i < arg2.length; i++) {
             vars[i] = arg2[i];
         }
@@ -169,6 +177,8 @@ test("es6-variadic-parameters", () => {
     expect(arraysEqual(["grace", "lily", "cole"], vars)).toBeTruthy();
 
     vars = []
+    test("damon");
+    expect(vars.length).toBe(0);
 
     // The "spread" operator (also ...) allows you to split an array to
     // use the arguments as inputs to a variadic parameter.
