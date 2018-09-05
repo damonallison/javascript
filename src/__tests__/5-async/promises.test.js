@@ -181,7 +181,7 @@ test("multiple-promises-resolve-and-reject", () => {
     });
     let p2 = new Promise((resolve, reject) => {
         executedPromises.add("p2");
-        reject("bad");
+        reject(new Error("bad"));
     });
 
     // Always attach a `catch` to every promise, including the results from Promise.all()
@@ -190,7 +190,7 @@ test("multiple-promises-resolve-and-reject", () => {
             // will *not* fire, even tho `p1` resolved successfully.
             expect(false).toBeTruthy();
         }).catch(err => {
-            expect(err).toBe("bad");
+            expect(err.message).toBe("bad");
             expect(setsEqual(new Set(["p1", "p2"]), executedPromises)).toBeTruthy();
         });
 });
@@ -229,13 +229,13 @@ test("nested-promise", () => {
         // Here, we return a new promise. The runtime will resolve
         // this promise before continuing the outer promise chain.
         //
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             setTimeout(() => {
                 results.add(2);
                 resolve(2);
             }, 100);
         })
-    }).then(value => {
+    }).then(val => {
         expect(setsEqual(new Set([1, 2]), results)).toBeTruthy();
     });
 });
@@ -254,11 +254,13 @@ test("nested-promise", () => {
 // Both functions are optional. If you omit the first (by using `null`), an
 // implicit handler will be created which simply returns the value.
 //
+// If you omit the second (by using `null`), an implicit handler will be created
+// which simply throws the value.
 //
 // ------------------------------------------------------------------------
 // This:
 //
-// p.then(null, (err) => console.log(err));
+// p.then(undefined, (err) => console.log(err));
 //
 // Will expand into:
 //
@@ -272,9 +274,7 @@ test("nested-promise", () => {
 //
 // Will expand into:
 //
-// p.then(
-//   (val) => { console.log(val); },
-//   (err) => { throw err; }
+// p.then((val) => { console.log(val); }, (err) => { throw err; }
 // );
 //
 // Always include an exception handler, even if just for logging, at the end of
@@ -282,7 +282,7 @@ test("nested-promise", () => {
 //
 test("error-handling", () => {
 
-    const p = new Promise((resolve, reject) => {
+    const p = new Promise((undefined, reject) => {
         reject(new Error("oops"));
     });
     p.catch(err => {
@@ -295,15 +295,12 @@ test("error-handling", () => {
 //
 test("error-handling-within-then", () => {
 
-    let p = new Promise((resolve, reject) => {
-        resolve("done");
-    });
-
+    let p = Promise.resolve("done");
     p.then(value => {
         let x = z; // ReferenceError - `z` is not defined.
         expect(true).toBeFalsy(); // execution will *not* get here.
     }).then(value => {
-        expect(true).toBeFalsy();
+        expect(true).toBeFalsy(); // execution will *not* get here.
     }).catch(err => {
         expect(err instanceof ReferenceError).toBeTruthy();
     });
