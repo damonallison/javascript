@@ -1,10 +1,12 @@
+'use strict';
+
 const arraysEqual = require('array-equal');
 
-'use strict';
 //
 // this
 //
 // The `this` value is most likely one of the most confusing aspects of ES.
+//
 // `this` depends entirely on how the function is being *called* and can be
 // different across function invocations.
 //
@@ -18,7 +20,7 @@ const arraysEqual = require('array-equal');
 //
 // ES has 4 function invocation types
 // -----------------------------------
-// 
+//
 // 1. Function invocation. Invoking the function without a context.
 //
 // ```
@@ -64,10 +66,11 @@ const arraysEqual = require('array-equal');
 // * `this` === global when running in non-strict mode. (Turn on strict mode!)
 //
 test("this-function-invocation", () => {
+    // We are in 'use strict'; - making `this` undefined when called in function invocation.
     expect(this).toBeUndefined();
     function echo(val) {
         expect(this).toBeUndefined();
-        return (val);
+        return val;
     };
     expect(echo("42")).toBe("42");
 });
@@ -96,6 +99,12 @@ test("this-function-invocation-nested-function", () => {
             return echo("hello, world!");
         }
     };
+
+    //
+    // Here, we are invoking `myFunc` using method invocation.
+    // However, within `myFunc`, `echo` is invoked using function invocation.
+    // Within `echo`, `this` will always be undefined.
+    //
     expect(obj.myFunc()).toBe("hello, world!");
 });
 
@@ -129,7 +138,10 @@ test("this-function-invocation-arrow-functions", () => {
     // Call using method invocation - this is bound to obj.
     expect(obj.getThis()).toBe(obj);
 
-    // Call using function invocation - this is undefined.
+    //
+    // Call using function invocation. `this` is always undefined
+    // when using function invocation.
+    //
     let f = obj.getThis;
     expect(f()).toBeUndefined();
 });
@@ -188,23 +200,8 @@ test("this-constructor-invocation", () => {
         this.age = age;
     }
 
-    //
-    // An example class definition (ES6)
-    //
-    class Person2 {
-        //
-        // Object initialization is handled by a special `constructor` function.
-        //
-        // Only **1** constructor function can be defined on a class.
-        //
-        constructor(fName, lName, age) {
-            this.firstName = fName;
-            this.lastName = lName;
-            this.age = age;
-        }
-    }
-
     let p = new Person("damon", "allison", 41);
+    expect(p instanceof Person).toBeTruthy();
 
     expect(p.firstName).toBe("damon");
     expect(p.lastName).toBe("allison");
@@ -222,6 +219,36 @@ test("this-constructor-invocation", () => {
         expect(err.message).toBe("Expected a `new` invocation.");
     }
 });
+
+//
+// Shows an ES6 "class" equivalent to the Person constructor function shown above.
+//
+test("this-class-constructor", () => {
+
+    //
+    // An example class definition (ES6)
+    //
+    class Person2 {
+        //
+        // Object initialization is handled by a special `constructor` function.
+        //
+        // Only **1** constructor function can be defined on a class.
+        //
+        constructor(fName, lName, age) {
+            this.firstName = fName;
+            this.lastName = lName;
+            this.age = age;
+        }
+    }
+
+    const p = new Person2("damon", "allison", 41);
+    expect(p instanceof Person2).toBeTruthy();
+    expect(p.firstName).toBe("damon");
+    expect(p.lastName).toBe("allison");
+    expect(p.age).toBe(41);
+
+});
+
 
 
 //
