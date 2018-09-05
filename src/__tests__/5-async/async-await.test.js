@@ -4,6 +4,9 @@ const arraysEqual = require("array-equal");
 //
 // Async / Await
 //
+// Asychronous functions operate asychronously via the event loop. Asychronous
+// functions always return `Promise` objects.
+//
 // `async` / `await` combines generators and promises to allow writing
 // asychronous code in a synchronous style.
 //
@@ -29,13 +32,11 @@ test("async-await", async () => {
     // This example shows that `await` will pause execution until an entire
     // promise chain is unwound and the outermost promise is resolved.
     //
+
     async function run(func, ms) {
         return new Promise(resolve => {
             setTimeout(() => {
-                resolve(new Promise(resolve => {
-                    setTimeout(() => {
-                        resolve(func()) }, ms);
-                }));
+                resolve(func())
             }, ms);
         });
     };
@@ -78,7 +79,7 @@ test("async-await-normal-function-return", async () => {
 
 
 //
-// An example showing how to use jest to assert a promise is rejected correctly.
+// Rejected promises are
 //
 test("async-await-error-handling", async () => {
 
@@ -167,6 +168,5 @@ test("parallel-await-with-array", async () => {
         let result = await promises[i];
         expect(result).toBe(values[i]);
     }
-
 });
 

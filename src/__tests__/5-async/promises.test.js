@@ -1,12 +1,21 @@
 //
 // ES6 formalizes Promises.
 //
-// Promises are an improved version of callbacks
+// Promises are an improved version of callbacks. They represent a "promise" to
+// return a value in the future. The future value could indicate success
+// (resolve) or failure (reject).
+//
+// What are the advantages of promises over callbacks?
 //
 // * Callbacks do not allow you to elegantly chain operations.
 // * Callbacks put you in callback hell.
 // * Callbacks do not allow you to run multiple operations at a time, waiting
 //   for all operations to complete.
+//
+// * Promises provide infrastructure for elegantly handling and chaining
+//   results.
+// * Promises are the foundation for async / await, which allows you to write
+//   asynchronous code as if it were synchronous.
 //
 // General guidance:
 // * When using promises, *always* add a `catch` handler.
@@ -17,17 +26,55 @@
 const arraysEqual = require('array-equal');
 const setsEqual = require('sets-equal');
 
-test("simple-promise", () => {
 
-    let chainResults = new Set();
+//
+// Promises execute a function (the "executor") and must either resolve
+// (success) or reject (error).
+//
+// In this test, we create two promises that execute asynchronously.
+// The first one succeeds, the second fails. We verify both the success
+// and failure by attaching a `.then` and `.catch` respectively.
+//
+test("promise-fundamentals", () => {
+
+    expect.assertions(2);
+
+    let p = new Promise((resolve) => {
+        setTimeout(() => resolve("done"), 50);
+    }).then(val => {
+        expect(val).toBe("done");
+    });
+
+    let p2 = new Promise((undefined, reject) => {
+        setTimeout(() => reject(new Error("err")), 50);
+    }).catch(err => {
+        expect(err.message).toBe("err");
+    });
+
+    return Promise.all([p, p2]);
+
+});
+
+//
+// Shows how to attach multiple listeners to a promise and promise chaining with `then`.
+//
+test("promise-chaining", () => {
+
+    // Two assertions will verify the top level callback returns "success".
+    // The third assertion verifies the listenerOrder.
+    expect.assertions(3);
+
+    // Each listener will add it's value to `listenerOrder` to show the order in which
+    // listeners are executed.
     let listenerOrder = [];
 
     //
     // The function you give to the promise is executed immediately.
     // It could return immediately or asychronously, either way,
-    // any listener will be notified when subscribing
+    // any listener will be notified when it's complete.
     //
-    var promise = new Promise((resolve, reject) => {
+    var promise = new Promise((resolve) => {
+        listenerOrder.push(0);
         // do something async.
         setTimeout(() => {
             resolve("success");
@@ -39,46 +86,30 @@ test("simple-promise", () => {
     //
     promise.then(success => {
         expect(success).toBe("success");
-
-        //
         // Since this is the first listener attached, it will be the first one invoked.
-        //
         listenerOrder.push(1);
-        chainResults.add(success);
-        return "first";
     }).then(val => {
-        //
-        // this chained promise will be invoked in both
-        // success and failure cases
-        //
-        expect(val).toBe("first");
-        chainResults.add(val);
-        return "second";
+        // Note that another top level listener is added below, which will execute before
+        // this chained promise.
+        listenerOrder.push(3);
     }).then(val => {
-        expect(val).toBe("second");
-        expect(setsEqual(new Set(["success", "first"]), chainResults)).toBeTruthy();
+        expect(arraysEqual([0, 1, 2, 3], listenerOrder)).toBeTruthy();
     });
 
     //
     // A promise can have multiple listeners.
     //
-    promise.then(val => {
-        listenerOrder.push(2);
-        expect(val).toBe("success");
-    });
-
-    //
     // Important Note:
     //
-    // This test shows how promise callbacks are called in order they are
+    // This test shows how promise listeners are invoked in order they are
     // attached to the promise.
     //
     // Do *not* write callbacks which depends on the ordering / existence of
     // other registered callbacks.
     //
-    promise.then((val) => {
-        listenerOrder.push(3);
-        expect(arraysEqual([1, 2, 3], listenerOrder)).toBeTruthy();
+    promise.then(val => {
+        expect(val).toBe("success");
+        listenerOrder.push(2);
     });
 
     return promise;
@@ -115,10 +146,10 @@ test("multiple-promises", () => {
     // Promise.all takes an iterable of promises and itself returns
     // a promise that is resolved after all it's promises are resolved.
     //
-    let p1 = new Promise((resolve, reject) => {
+    let p1 = new Promise((resolve) => {
         setTimeout(() => resolve(1), 50);
     });
-    let p2 = new Promise((resolve, reject) => {
+    let p2 = new Promise((resolve) => {
         setTimeout(() => resolve(2), 10);
     });
 
@@ -166,11 +197,11 @@ test("multiple-promises-resolve-and-reject", () => {
 
 //
 // Only the first parameter sent to resolve() or reject() will be delivered to
-// the handler.
+// the handler. This should be caught by a compiler / linter.
 //
 test("promise-single-return-value", () =>  {
 
-    let p = new Promise((resolve, reject) => {
+    let p = new Promise((resolve) => {
         resolve(1, 2, 3); // Attempt to return multiple values.
     });
     p.then(value => {
