@@ -15,7 +15,7 @@
 ## Libraries
 
 * ES6 built-ins. Including "native" types (`String`, `Boolean`, etc).
-* lodash
+* `lodash`: part of the standard library that should be incuded in JS.
 * Library to check for array equality.
 * What are the built in functions / native environment?
 

@@ -89,7 +89,8 @@ $ npm test
     age well - ES6, strict mode, arrow functions (lexical let), the standard
     itself, typescript, are all moving JS toward a more strict, well defined
     future that prevents so many of the quirks that the book says we should
-    embrace.
+    embrace. Rather than fight the future ("classes aren't necessary, embrace
+    prototype inheritance), we should adopt it.
 
 ## ECMAScript Versions
 
@@ -241,6 +242,10 @@ look identical. Here is the 2019 version.
 * Scoping
   * `var` scoping is not lexical. `var`, even when defined in a block, is
     available to the entire function.
+
+* No standard library.
+  * Even basic things like array equality, object value equality are not part of
+    any standard, official library. Everything is community based.
 
 ---
 

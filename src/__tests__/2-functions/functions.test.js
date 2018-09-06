@@ -37,16 +37,10 @@ const arraysEqual = require("array-equal");
 //
 //      let v = typeof arg !== "undefined" ? arg : {}
 //
-//  * Javascript adds an `arguments` array to every function. This is a hack.
-//    Callers do not know they can pass additional arguments to a function by
-//    looking at its definition.
-//
-
-//
-// Javascript has closures.
-//
-// Always declare variables with `let` or `const`.
-// `var` variables are hoisted to the top of the function, not the block.
+//  * Javascript adds an `arguments` array-like object (but it's not actually an
+//    array, oy..) to every function. This is a hack. Callers do not know they
+//    can pass additional arguments to a function by looking at its definition.
+//    Don't use the `arguments`
 //
 test("closures", () => {
 
@@ -82,6 +76,9 @@ test("default arguments are undefined", () => {
     let calledArg2;
 
     const func = (arg1, arg2) => {
+        //
+        // Dont use `arg1 || "default" - allows you to send a falsy value in for arg1.
+        //
         calledArg1 = arg1 !== undefined ? arg1 : "default";
         calledArg2 = arg2 !== undefined ? arg2 : "default";
     };
@@ -164,19 +161,16 @@ test("es6-variadic-parameters", () => {
     let vars = [];
     const test = (arg1, ...arg2) => {
         //
-        // If ...arg2 receives nothing, it should still be a valid object (empty array)
+        // If ...arg2 receives nothing, it will still be a valid array.
         //
-        expect(arg2.length).toBeDefined();
-
-        for(let i = 0; i < arg2.length; i++) {
-            vars[i] = arg2[i];
-        }
+        expect(arg2 instanceof Array).toBeTruthy();
+        expect(arg2.length).toBeGreaterThanOrEqual(0);
+        vars = arg2;
     };
 
     test("damon", "grace", "lily", "cole");
     expect(arraysEqual(["grace", "lily", "cole"], vars)).toBeTruthy();
 
-    vars = []
     test("damon");
     expect(vars.length).toBe(0);
 

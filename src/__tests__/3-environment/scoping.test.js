@@ -79,7 +79,13 @@ test("scope", () => {
 //
 // Use `const` by default for immutability, `let` otherwise.
 //
-test("block bindings", () => {
+//
+// ES6 binding guidelines:
+//
+// 1. Always use `const` or `let`. Prefer `const` wherever possible. Never use `var`.
+// 2. In `for` loops, *always* use `let`.
+//
+test("block-bindings", () => {
 
     const x = 10;
 
@@ -89,6 +95,7 @@ test("block bindings", () => {
     //
     const obj = { name : "damon" };
     obj.name = "cole";
+    expect(obj.name).toBe("cole");
 
     let funcs = [];
     for (let i = 0; i < 10; i++) {
@@ -104,7 +111,7 @@ test("block bindings", () => {
     }
 
     // for-in iterates object members.
-    for (const key in obj) {
+    for (let key in obj) {
         // key scoped here
         expect(key).toEqual("name");
     }

@@ -11,8 +11,6 @@
 // The new ES2015 OO related keywords are:
 // * class, constructor, static, extends, and super.
 //
-
-
 //
 // Concise property syntax.
 //
@@ -39,7 +37,7 @@ test("property-initializer-shorthand", () => {
         // * `description : function()` can be replaced with just `description()`
         //
         description() {
-            return `${this.name} ${this.age}`
+            return this === undefined ? undefined : `${this.name} ${this.age}`
         }
     };
     expect(person.name).toEqual("damon");
@@ -137,120 +135,4 @@ test("new-target", () => {
     const p = new Person("cole", 10);
     expect(p.name).toBe("cole");
     expect(p.age).toBe(10);
-});
-
-
-//
-// Object and array destructuring
-//
-
-//
-// ES6 introduces object descructuring to pull out relevant pieces from an object.
-//
-test("object-destructuring", () => {
-    let person = {
-        firstName : "damon",
-        age: 41,
-        children: ["grace", "lily", "cole"],
-        birth: {
-            hospital: "south memorial",
-            date: {
-                month : 8,
-                day : 22
-            }
-        }
-    };
-
-    let { firstName, age } = person;
-
-    expect(firstName).toBe("damon");
-
-    // You can also use object descructuring to assign values.
-    firstName = "kari";
-    age = 40;
-    ({firstName, age} = person);
-    expect(firstName).toBe("damon");
-    expect(age).toBe(41);
-
-    // If a variable is undefined, you'll get `undefined` or a default value (if specified)
-    let { children, lastName = "default" } = person;
-    expect(children).toEqual(["grace", "lily", "cole"]);
-    expect(lastName).toBe("default");
-
-    // You can specify different names.
-    // Here, you are defining fName and lName, binding them to `fistName` and `lastName`
-    // on person.
-    let { firstName : fName, lastName : lName = "default" } = person;
-    expect(fName).toBe("damon");
-    expect(lName).toBe("default");
-
-    // Extracting nested members. This extracts "birthMonth" from person.birth.date.month.
-    let { birth: { date: { month : birthMonth}}} = person;
-    expect(birthMonth).toBe(8);
-    expect(person.birth.date.month).toBe(8); // Identical (and more straight forward!)
-
-});
-
-//
-// Array descructuring allows you to pull out array values into vars.
-//
-test("array-destructuring", () => {
-    let colors = ["red", "green", "blue"];
-    let [r, g, b] = colors;
-    expect(r).toBe("red");
-
-    // Wow, is this shitty syntax.
-    let [ , , blue] = colors;
-    expect(blue).toBe("blue");
-});
-
-
-//
-// Object destructuring allows you to pull out select pieces of an object.
-//
-test("object-destructuring", () => {
-    let person = {
-        firstName : "damon",
-        age: 41,
-        children: ["grace", "lily", "cole"],
-        birth: {
-            hospital: "south memorial",
-            date: {
-                month : 8,
-                day : 22
-            }
-        }
-    };
-
-    // Extract firstBorn, thirdBorn from the `children` array,
-    // Along with `birthMonth` from birth.date.month.
-    let {
-        children: [firstBorn, , thirdBorn],
-        birth: { date : { month : birthMonth } }
-    } = person
-
-    expect(firstBorn).toBe("grace");
-    expect(thirdBorn).toBe("cole");
-    expect(birthMonth).toBe(8);
-
-});
-
-//
-// Descructured parameters allow you to pass function arguments using an object.
-// This makes the function definition more explicit and automatically unwraps
-// (err, destructs) the objects into variables for you. Less code, less room for error.
-//
-test("destructured-parameters", () => {
-
-    let process = (url, { secure, expires }) => {
-        expect(url).toBe("http://google.com");
-        expect(secure).toBe(true);
-        expect(expires).toBe(10);
-    }
-
-    process("http://google.com", {
-        secure: true,
-        expires: 10,
-        someOtherVar: "test",
-    });
 });
