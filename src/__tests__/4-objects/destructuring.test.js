@@ -217,6 +217,12 @@ test("destructured-parameters", () => {
     });
 });
 
+//
+// Object destructuring can get really crazy, really fast.
+//
+// The example below shows how default behavior works and
+// makes you really think about how object destructuring works.
+//
 test("crazy-destructuring", () => {
 
     var x = 200, y = 300, z = 100;
@@ -240,4 +246,5 @@ test("crazy-destructuring", () => {
     // o1 does have an `z` property, so `z` is sto to { y: 42 }
     ( { x: z = { y: x } } = o1 );
     expect(_.isEqual(z, { y: 42 })).toBeTruthy();
+
 });

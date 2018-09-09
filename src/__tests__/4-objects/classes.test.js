@@ -24,9 +24,9 @@ class Person {
     };
 
     //
-    // Note that properties are defined as functions, however
-    // when calling them, they are invoked as properties. They are
-    // stored on the object as properties.
+    // Note that properties are defined as functions, however when calling them,
+    // they are invoked as properties. They are stored on the object as
+    // properties.
     //
     get capitalizedName() {
         return this.name.toLocaleUpperCase();
@@ -39,7 +39,7 @@ class Person {
         return `${this.name} was created on ${this.createdDate}. Last updated ${this.lastUpdated}`;
     };
 
-    // 
+    //
     // An example static function.
     //
     static personFactory(name) {
@@ -61,7 +61,10 @@ class Teacher extends Person {
     }
 }
 
-test("class-creation", () => {
+//
+// Shows use of property accessors and methods.
+//
+test("class-basics", () => {
 
     let p = new Person("damon");
 
@@ -70,12 +73,13 @@ test("class-creation", () => {
     expect(p instanceof Person).toBeTruthy();
     expect(p instanceof Teacher).toBeFalsy();
 
-    expect(p.capitalizedName).toBe("DAMON");
-
+    // Shows use of property get/set invocation.
     p.name = "cole";
-    expect(p.capitalizedName).toBe("COLE");
+    expect(p.capitalizedName).toBe("COLE"); // get
+    p.capitalizedName = "DAMON"; // set
+    expect(p.name).toBe("damon");
 
-    // toString() will be used
+    // Method invocation.
     expect(p.toString()).toMatch(/created on.*Last updated/i);
 });
 
@@ -95,7 +99,9 @@ test("singleton", () => {
     expect(p2.name).toBe("damon");
 });
 
-test("factory", () => {
+// 
+// Static methods are 
+test("static-methods", () => {
 
     let p = Person.personFactory("damon");
     expect(p.capitalizedName).toBe("DAMON");
@@ -112,5 +118,5 @@ test("inheritance", () => {
     expect(t.name).toBe("damon");
     expect(t.subject).toBe("math");
     expect(t.toString()).toMatch(/^damon.*students.$/i)
-    
+
 });

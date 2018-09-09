@@ -1,5 +1,7 @@
 "use strict";
 
+const _ = require("lodash");
+
 //
 // ES6 improves object creation.
 //
@@ -17,9 +19,10 @@
 // If the name of a property is the value of a variable, you
 // can omit the value when creating a property.
 //
+// Concise method syntax.
+//
 // Concise method syntax allows you to omit the name and `function`
 // keyword when creating a method.
-//
 //
 test("property-initializer-shorthand", () => {
     const name = "damon";
@@ -38,10 +41,22 @@ test("property-initializer-shorthand", () => {
         //
         description() {
             return this === undefined ? undefined : `${this.name} ${this.age}`
+        },
+        echo(val) {
+            return val;
         }
     };
     expect(person.name).toEqual("damon");
     expect(person.description()).toEqual("damon 41");
+
+    // Concise methods still follow `this` semantics.
+    const f = person.description;
+    expect(f()).toBeUndefined();
+
+    // Concise methods can still be used for event handlers, as long as they don't
+    // depend on `this`.
+    const f2 = person.echo;
+    expect(f2("test")).toBe("test");
 });
 
 //
@@ -59,7 +74,7 @@ test("computed-property-names", () => {
 
     expect(person.firstName).toEqual("damon");
 
-})
+});
 
 //
 // Object.is() determines if two objects are truly equal.
@@ -81,6 +96,15 @@ test("object-equality", () => {
 
     // Object.is avoids type cohesion.
     expect(Object.is(5, "5")).toBeFalsy();
+
+    // Note that object equality does *not* do value equality, only reference equality.
+    const a = { x: 100 };
+    const b = { x: 100 };
+    expect(a === b).toBeFalsy();
+
+    // In order to perform value equality, use lodash.
+    expect(_.isEqual(a, b)).toBeTruthy();
+
 
 });
 
