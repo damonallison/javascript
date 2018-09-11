@@ -193,7 +193,8 @@ test("es6-variadic-parameters", () => {
 //
 // * Cannot be called with `new`.
 // * `prototype` does not exist.
-// * Can't change the value of `this`. `this` is lexically bound)
+// * `this` is lexically bound. Not based on how the function was invoked.
+// * Can't change the value of `this`.
 //
 test("es6-arrow-functions", () => {
 
@@ -201,7 +202,7 @@ test("es6-arrow-functions", () => {
     // Note the entire IIFE must be wrapped in ().
     var person = ((name) => {
         return {
-            getName: function() {
+            getName() {
                 return name;
             }
         };
@@ -217,4 +218,6 @@ test("es6-arrow-functions", () => {
     expect(f.call(null)).toBe(10);
     expect(f.apply(undefined, [])).toBe(10);
 });
+
+
 

@@ -24,10 +24,17 @@ const arraysEqual = require("array-equal");
 //
 
 
+//
+// The following built-in objects provide iterables:
+//
+// * Array
+// * String
+// * Generators
+// * Collections
+//
 test("simple-iterable", () => {
 
     const a = [1, 2, 3];
-
     const results = [];
 
     //
@@ -161,7 +168,7 @@ test("generator-manual", () => {
     //
     x = 100;
     activity.push("resuming iterator");
-    expect(it.next().done).toBeTruthy(); 
+    expect(it.next().done).toBeTruthy();
     activity.push("done");
 
     // console.log(activity);

@@ -6,7 +6,7 @@
 
 
 //
-// JS strings are immutable. They are "array-like" in that you can 
+// JS strings are immutable. They are "array-like" in that you can
 // access characters by ordinal, but they are *not* arrays.
 //
 test("strings are \"array like\"", () => {
@@ -26,9 +26,9 @@ test("strings are \"array like\"", () => {
     // an array. Split("")ting an array and join("") to get the string
     // representation back is actually a very common operation.
     //
-    // Example: Reverse a string. 
+    // Example: Reverse a string.
     //
-    // Split the string into an array, reverse the array, and rejoin. 
+    // Split the string into an array, reverse the array, and rejoin.
     //
     // **WARNING: This will **NOT** work for unicode characters.
     // Find an npm package to do this operation. (esrever)
@@ -44,14 +44,14 @@ test("strings are \"array like\"", () => {
 // One of the biggest mistakes in the initial implementation of JS was making
 // the "native" and "object" versions of a type (like Java).
 //
-// 
+//
 test("native string vs object String", () => {
 
     const native = "test";
     const obj = new String("test");
 
     //
-    // Strings are immutable. 
+    // Strings are immutable.
     //
     // To mutate individual characters, you'll have to convert
     // the string to an array.
@@ -61,7 +61,7 @@ test("native string vs object String", () => {
     obj.replace(/e/, "E");
     expect(obj.charAt(1)).toBe("e");
     expect(obj.charAt(100)).toBe(""); // uh!
-    
+
     expect(native).toEqual(obj);
     expect(native).not.toBe(obj);
 
@@ -72,7 +72,7 @@ test("native string vs object String", () => {
     expect(obj instanceof String).toBeTruthy();
 
     //
-    // Natives will be boxed on the fly. 
+    // Natives will be boxed on the fly.
     //
     // Here, "trim " is a native which is boxed to `String` for a call to `trim`.
     //
@@ -105,19 +105,18 @@ test("unicode strings", () => {
     expect(s1.normalize()).toEqual(s2.normalize());
 });
 
+//
+// ES6 string template literals : backticks.
+//
+// * Multi-line strings using \. Tabs count on newlines, so watch indentations.
+// * Expressions can be embedded into templates using ${}.
+//
 test("string templates", () => {
 
-    //
-    // ES6 string template literals : backticks.
-    //
-    // * Multi-line strings using \. Tabs count on newlines, so watch indentations.
-    // * Expressions can be embedded into templates using ${}.
-    //
     const name = "damon";
     const s10 = `
 I said:
     "hello, ${name}. We can embed expressions. The time is: ${new Date().toString()}!"`
-    // console.log(s10);
     expect(s10.indexOf(name) > 0).toBeTruthy();
 
     //
@@ -139,24 +138,65 @@ I said:
         return result
     }
 
+    //
+    // The same function, much more compact, using reduce.
+    //
+    // Understand that length(strings) === length(values) + 1
+    //
+    function echoReduce(strings, ...values) {
+        // console.log(`Strings len=${strings.length} Values len=${values.length}`);
+        // console.log(strings);
+        // console.log(values);
+        return strings.reduce((fullStr, value, idx) => {
+            return `${fullStr}${idx > 0 ? values[idx - 1] : ""}${value}`
+        });
+    };
     let count = 10,
-        price = 0.25,
-        message = echoTag`${count} items cost $${(count * price).toFixed(2)}.`;
+        price = 0.25;
 
-    expect(message).toEqual("10 items cost $2.50.");
-
+    let message = echoTag`${count} items cost $${(count * price).toFixed(2)}`;
+    expect(message).toEqual("10 items cost $2.50");
+    expect(echoReduce`${count} items cost $${(count * price).toFixed(2)}`).toBe("10 items cost $2.50");
 
 });
 
 test('string iterating', () => {
     const name = "damon";
     let found = "";
+
     for (let i = 0; i < name.length; i++) {
         // creates a new immutable string with every iteration.
         // would be more efficient as an array.
         found += name[i];
     }
     expect(found).toBe(name);
+
+    found = "";
+
+    // String is an iterable.
+    for (let i of name) {
+        found += i;
+    }
+    expect(found).toBe(name);
+
+});
+
+//
+// ES6 altered the way to represent unicode characters outside the BMP (0x0000 to 0xFFFF).
+// Prior to ES6, you needed to specify unicode characters outide the BMP using a surroage pair.
+//
+// Pre-ES6
+// var gclef = "\uD834\uDD1E";
+//
+// ES6
+// const gclef = "\u{1D11E}";
+//
+test("unicode", () => {
+
+    var gclefES5 = "\uD834\uDD1E";
+    var gclefES6 = "\u{1D11E}";
+    expect(gclefES5).toBe(gclefES6);
+
 });
 
 

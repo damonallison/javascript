@@ -6,11 +6,6 @@
 // * All code inside of classes run in strict mode automatically.
 //
 class Person {
-    //
-    // Class properties can only be set in the constructor and
-    // from within methods. General guidance suggests that you
-    // should accept all state in an object's constructor
-    //
     constructor(name) {
         if (typeof name === "undefined") {
             throw Error("name is required");
@@ -81,6 +76,10 @@ test("class-basics", () => {
 
     // Method invocation.
     expect(p.toString()).toMatch(/created on.*Last updated/i);
+
+    // Classes are *not* locked. Additonal state can be added.
+    p.test = "test";
+    expect(p.test).toBe("test");
 });
 
 test("singleton", () => {
@@ -99,8 +98,8 @@ test("singleton", () => {
     expect(p2.name).toBe("damon");
 });
 
-// 
-// Static methods are 
+//
+// Static methods are
 test("static-methods", () => {
 
     let p = Person.personFactory("damon");
@@ -117,6 +116,8 @@ test("inheritance", () => {
 
     expect(t.name).toBe("damon");
     expect(t.subject).toBe("math");
+
+    // Verifies `super` works, that `Person.toString()` is executed.
     expect(t.toString()).toMatch(/^damon.*students.$/i)
 
 });
