@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/react": "^16.4.6",
-    "@types/react-dom": "^16.0.6",
-    "array-equal": "~1.0.0",
-    "lodash": "^4.17.10",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-scripts": "1.1.4",
-    "sets-equal": "^1.0.0"
+    "@types/react": "^16.4.14",
+    "@types/react-dom": "^16.0.7",
+    "lodash": "^4.17.11",
+    "react": "^16.5.1",
+    "react-dom": "^16.5.1",
+    "react-scripts": "1.1.5",
+    "sets-equal": "^1.0.0",
+    "array-equal": "~1.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

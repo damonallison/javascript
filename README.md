@@ -533,9 +533,4 @@ AuthController.login = function(pass) {
 * `asm.js`
   * It's hard for JS engines to optimize JS (especially GC and coercion).
   * It's easier for C/C++ to be transpiled into JS (See Emscripten).
-* Look into WebAssembly.
-
-##### Benchmarks and Tuning
-
-* `benchmark.js`: benchmarking JS library.
-    *
+* WebAssembly allows native code to run.

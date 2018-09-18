@@ -199,4 +199,71 @@ test("unicode", () => {
 
 });
 
+//
+// JS regular expressions are instances of `RegExp`.
+//
+// Regexes can be created in two ways:
+//
+// 1. A regular expression literal
+//
+// ```
+//   const re = /pattern/flags
+// ```
+//
+// Regular expression literals are compiled when the script is loaded.
+//
+// 2. Instances of RegExp.
+//
+// ```
+//   const re = new RegExp("pattern", "flags");
+// ```
+//
+// RegExp instances are compiled at runtime. Use the constructor function when
+// you know the regex pattern will be changing, or you are getting it from
+// another source - like user input.
+//
+// `exec` returns an array containing match results or `null` if a match was not found.
+// `test` is a simple test, returning a boolean if there is at least one match.
+//
+test("regular-expressions", () => {
+
+    const str = "this is a test, test";
+
+    //
+    // The `string` object contains regex methods.
+    //
+    // `string.match` : returns the match information, or null. Similar to Regexp.exec()
+    // `string.search`: returns the index of a match, or null. Similar to Regexp.test()
+    //
+    const m = str.match(/t(e).t/); // To show match captures, we'll capture 'e'
+    expect(m[0]).toBe("test");     // [0] is always the entire pattern match.
+    expect(m[1]).toBe("e");        // [1]+ will be the match captures.
+    expect(m.index).toBe(10);      // The position of the match
+    expect(m.input).toBe("this is a test, test");  // If we want to retrieve the string source used in the match.
+
+    //
+    // Using the Regexp object
+    //
+    const re = /(te.t)/igm;
+
+    //
+    // Print the flags used. The ES6 spec calls for flags to be in this order
+    // "gimuy" regardless of the order they were defined.
+    //
+    expect(re.flags).toBe("gim");
+    expect(re.source).toBe("(te.t)");
+    expect(re.global).toBeTruthy();
+    expect(re.ignoreCase).toBeTruthy();
+    expect(re.multiline).toBeTruthy();
+
+    const match = re.exec(str);
+    expect(match.index).toBe(10);
+
+    // Test failing patterns
+    const failPattern = /notthere/
+    expect(failPattern.test(str)).toBeFalsy();
+    expect(failPattern.exec(str)).toBeNull();
+
+});
+
 
