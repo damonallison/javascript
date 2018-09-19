@@ -1,5 +1,4 @@
 "use strict";
-
 //
 // ES6 introduces "modules"
 //
@@ -11,27 +10,8 @@
 //
 // The state of modules in JS is a holy mess. There wasn't an official standard
 // until ES6. By then, the community created their own module format, CommonJS,
-// which is used by node.
+// which is used by node. Eventually, the ES6 module system will be de-facto.
 //
-// These examples use CommonJS.
-
-const calculator = require("../modules/calculator");
-
-test("module-importing", () => {
-    expect(calculator.add(2, 2)).toBe(4);
-    expect(calculator.subtract(10, 2)).toBe(8);
-});
-
-// ----------------------------------------------------------------------------------
-//
-// NOTE:
-//
-// These notes are about ES6 modules. I wasn't able to get ES6 modules working.
-// I need to understand what execution environment `npm test` runs under and
-// what module system(s) it supports.
-//
-// ----------------------------------------------------------------------------------
-
 //
 //
 // Modules:
@@ -43,36 +23,83 @@ test("module-importing", () => {
 // In order to understand modules, you must understand exporting and importing.
 //
 // Exporting:
+//
 // * See ../modules/calculator.js for examples of exporting.
 //
-// Importing
+// Importing:
+//
+// The golden rule with importing is to *only import what you need*. This
+// reduces the amount of code that packing utilities need to distribute with
+// your application.
 //
 // There are a few ways to import members from a module.
 //
-// All non-default elements being imported from a module must be enclosed in
-// curly braces.
+// All non-default named elements being imported from a module must be enclosed
+// in curly braces.
 //
 // Default elements being imported do *not* need to be enclosed in curly braces.
 // This is the most common way to implement members, since ideally each module
 // should only export a single, default, element.
 //
-// import Calculator from "../modules/calculator";
+// import Calculator  from "../modules/calculator";
+//
+
+// Imports the default class as "Calculator", named exports `add` and `sub`.
+import Calculator, { add, sub } from "../modules/calculator";
+
+// Imports named exports addition and subtraction, which were exported as
+// aliases.
+import { addition, subtraction } from "../modules/calculator";
+
+// Imports add, aliasing it locally to `addMe`.
+import { add as addMe } from "../modules/calculator";
+
+test("es-module-import", ()  => {
+
+    // Default export
+    expect(Calculator.add(2, 2)).toBe(4);
+
+    // Named exports
+    expect(add(2, 2)).toBe(4);
+    expect(sub(4, 2)).toBe(2);
+
+    // Aliased named exports
+    expect(addition(2, 2)).toBe(4);
+    expect(subtraction(4, 2)).toBe(2);
+
+    // Aliased import
+    expect(addMe(2, 2)).toBe(4);
+});
 
 //
 // A "namespace import"
 //
-// All exports are referenced via the `CalculatorModule` object.
-// The `CalculatorObject` becomes the "namespace" in which you access the module's exports.
+// A namespace import allows you to import *all* bindings to be available under
+// a common identifier (namespace).
 //
-// import * as CalculatorModule from "../modules/calculator";
+// Here, all exports are accessed via the `CalculatorModule` object. The
+// `CalculatorObject` becomes the "namespace" in which you access the module's
+// exports.
+//
+// The "default" export is literally accessed using `default`.
+//
 
-// test("importing", () => {
+import * as CalculatorModule from "../modules/calculator";
 
-//     expect(Calculator.add(2, 2)).toEqual(4);
-//     expect(echo("test")).toEqual("test");
+test("es-module-namespace-import", () => {
 
-//     // Using namespace imports, access the default member with `default`.
-//     expect(CalculatorModule.default.add(2, 2)).toEqual(4);
-//     expect(CalculatorModule.echo("test")).toEqual("test");
+    // Using namespace imports, access the default member with `default`.
+    expect(CalculatorModule.default.add(2, 2)).toBe(4);
+    expect(CalculatorModule.addition(2, 2)).toBe(4);
 
-// });
+});
+
+
+// CommonJS
+
+const calculator = require("../modules/calculator-commonjs");
+
+test("module-importing", () => {
+    expect(calculator.addition(2, 2)).toBe(4);
+    expect(calculator.subtraction(10, 2)).toBe(8);
+});

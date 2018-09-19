@@ -1,19 +1,53 @@
 //
-// CommonJS (Node.js) module example.
+// ES6 Modules
 //
-// * Each js file is a module.
-// * Objects / functions / properties are added to the module by adding them to
-//   the special `exports` object.
+// Modules provide the ability to encapsulate and organize code. By default,
+// everything in the module is private to the module. Members must be exported
+// to be visible outside the module.
 //
-function add(x, y) {
+// * Modules are file based - 1 module per file.
+//
+// * Use `export` to expose functionality outside the module. Anything not
+//   `export`ed cannot be used outside the module.
+//
+//
+// Exporting
+//
+// There are two ways to export members.
+//
+// 1. Named exports. Use the `export` attribute on any member.
+// 2. Default export.
+//
+//
+//
+
+//
+// You can have multiple "named" exports within a single module.
+//
+// ES6 prefers the approach of a single, default export to simplify the import
+// syntax.
+//
+export function add(x, y) {
     return x + y;
 };
 
-function subtract(x, y) {
+export function sub(x, y) {
     return x - y;
 };
 
-module.exports = {
-    add,
-    subtract
+//
+// In order to keep the public API user friendly, you can
+// export aliases. The consuming module uses the user friendly
+// alias.
+//
+export { add as addition };
+export { sub as subtraction };
+
+export default class Calculator {
+    static add(x, y) {
+        return add(x, y);
+    };
+    static subtract(x, y) {
+        return sub(x, y);
+    }
 };
