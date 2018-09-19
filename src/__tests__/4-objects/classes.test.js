@@ -5,81 +5,99 @@
 //
 // * All code inside of classes run in strict mode automatically.
 //
-class Person {
-    constructor(name) {
-        if (typeof name === "undefined") {
-            throw Error("name is required");
-        }
-        if (typeof name !== "string") {
-            throw Error("name must be a string");
-        }
-
-        this.name = name;
-        this.createdDate = Date();
-    };
-
-    //
-    // Note that properties are defined as functions, however when calling them,
-    // they are invoked as properties. They are stored on the object as
-    // properties.
-    //
-    get capitalizedName() {
-        return this.name.toLocaleUpperCase();
-    };
-    set capitalizedName(value) {
-        this.name = value.toLocaleLowerCase();
-    };
-    toString() {
-        this.lastUpdated = Date();
-        return `${this.name} was created on ${this.createdDate}. Last updated ${this.lastUpdated}`;
-    };
-
-    //
-    // An example static function.
-    //
-    static personFactory(name) {
-        return new Person(name);
-    };
-};
-
-class Teacher extends Person {
-    constructor(name, subject, students) {
-        // When extending from a base class, you must first call `super`
-        // before using `this`.
-        super(name);
-        this.subject = subject;
-        this.students = students;
-    };
-
-    toString() {
-        return `${super.toString()} with ${this.students.length} students.`;
-    }
-}
+import Person from "../../model/person";
+import Teacher from "../../model/teacher";
+import NameError from "../../model/name-error";
 
 //
-// Shows use of property accessors and methods.
+// Use instanceof to determine an object's type.
 //
-test("class-basics", () => {
+test("classes-instanceof", () => {
 
     let p = new Person("damon");
 
+    // typeof in JS parlance will not be of much use.
     expect(typeof p).toBe("object");
+
     expect(p instanceof Object).toBeTruthy();
     expect(p instanceof Person).toBeTruthy();
     expect(p instanceof Teacher).toBeFalsy();
 
-    // Shows use of property get/set invocation.
+    let t = new Teacher("damon", "math", []);
+    expect(t instanceof Person).toBeTruthy();
+    expect(t instanceof Teacher).toBeTruthy();
+});
+
+//
+// Shows determining a type using `instanceof` and basic class usage.
+//
+test("classes-member-access", () => {
+
+    let p = new Person("damon");
+
+    // Property access.
     p.name = "cole";
+    p.createdDate = new Date();
+
+    // Custom getter / setter access.
     expect(p.capitalizedName).toBe("COLE"); // get
-    p.capitalizedName = "DAMON"; // set
+    p.capitalizedName = "DAMON";            // set
     expect(p.name).toBe("damon");
 
     // Method invocation.
     expect(p.toString()).toMatch(/created on.*Last updated/i);
+});
 
-    // Classes are *not* locked. Additonal state can be added.
-    p.test = "test";
-    expect(p.test).toBe("test");
+//
+// Class instances are *not* locked. Members can be added or removed just
+// like any other JS object.
+//
+// This is completely screwed! You can delete members which the class
+// depends on!
+//
+test("classes-member-deletion", () => {
+
+    let p = new Person("test");
+
+    expect(p.name).toBe("test");
+
+    // Add a member
+    p.test = "wtf";
+    expect(p.test).toBe("wtf");
+    delete p.test;
+    expect(p.test).toBeUndefined();
+
+    // Delete a member
+    delete p.name;
+    try {
+        expect(p.name).toBeUndefined();
+
+        // Now that we don't have `name`, the class is broken.
+        // Call a method which depends on `name` to exist, which will
+        // throw a `TypeError`.
+        p.capitalizedName;
+        expect(false).toBeTruthy(); // fail test
+    }
+    catch (e) {
+        expect(e instanceof TypeError).toBeTruthy();
+    }
+
+});
+
+//
+// Extend `Error` to create custom error types.
+//
+test("classes-custom-error", () => {
+
+    try {
+        throw new NameError("you're not welcome here", "damon");
+    }
+    catch(e) {
+        expect(e instanceof NameError).toBeTruthy();
+        expect(e.name).toBe("damon");
+        expect(e.stack).toBeDefined();
+    }
+
 });
 
 test("singleton", () => {

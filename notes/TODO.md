@@ -4,9 +4,6 @@
 
 ### ES6 & Beyond
 
-* Chapter 3: Organization
-  * Iterators / Generators
-  * Modules
 * Chapter 4: Async Control Flow
   * Promises
 * Chapter 5: Collections

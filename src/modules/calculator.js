@@ -16,10 +16,13 @@
 // There are two ways to export members.
 //
 // 1. Named exports. Use the `export` attribute on any member.
-// 2. Default export.
+// 2. Default export. Each module can export a single default member.
 //
+// Importing
 //
+// import * as calc from 'calculator';
 //
+// calc.ad
 
 //
 // You can have multiple "named" exports within a single module.
