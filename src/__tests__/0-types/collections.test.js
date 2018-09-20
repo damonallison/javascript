@@ -1,5 +1,7 @@
 "use strict";
 
+import _ from "lodash"
+
 //
 // Up until ES6, Object and Array were the only two data structures.
 //
@@ -172,8 +174,11 @@ test("collections-maps", () => {
 
 
     //
-    // WeakMap will remove an object from the Map when all references
-    // to the key are null (or GC'd).
+    // WeakMap will remove an object from the Map when all references to the key
+    // are null (or GC'd).
+    //
+    // Weak data structures are useful when you don't control the lifetime of
+    // the objects being used in the map - like DOM elements.
     //
     let wMap = new WeakMap();
     let name = {}; // keys must be objects.
