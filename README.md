@@ -130,7 +130,6 @@ The goals of ES6 were centered around support for larger applications and better
 project structure.
 
 * Lexical (block) scoping with `let` and `const`
-  * Don't ever use `var`. Use `let`, which is truly lexically scoped.
 * Classes
 * Modules
 * Iterators / generators / for-of
@@ -246,6 +245,18 @@ look identical. Here is the 2019 version.
 * No standard library.
   * Even basic things like array equality, object value equality are not part of
     any standard, official library. Everything is community based.
+  * Up until ES6, `Object` and `Array` were the only main data structures. `Set`
+    and `Map` didn't get added until ES6. This highlights how poor the standard
+    library is and why there are so many competing 3rd party libraries which do
+    similar things, causing "javascript fatigue".
+
+* Arrays
+  * Arrays do *not* need to be contiguous. They assume the length of the last
+    ordinal, adding `undefined` to ordinals.
+
+* Classes
+  * `delete` can remove state from any object, which the instance of the class
+    is expecting to exist.
 
 ---
 

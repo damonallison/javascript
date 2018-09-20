@@ -1,20 +1,30 @@
 "use strict";
 
-test('arrays', () => {
+//
+// Up until ES6, Object and Array were the only two data structures.
+//
+// ES6 adds Map and Set, along with their WeakMap and WeakSet equivalents.
+//
+test('collections-arrays', () => {
 
     //
     // Arrays in JS can contain values of different types.
     //
     const a1 = ["tree", 20, [1, 2, 3]];
+
+    // Determining if an object is an Array.
+    expect(a1 instanceof Array).toBeTruthy();
     expect(typeof a1).toBe("object");
+
+    // Arrays are indexed 0-based.
     expect(a1[0]).toEqual("tree");
     expect(a1[1]).toEqual(20);
     expect(a1[2]).toEqual([1, 2, 3]);
 
     // Copy the array via iteration.
-    var a2 = []
+    const a2 = []
     for(let i = 0; i < a1.length; i++) {
-        a2.push(a1[i]);
+        a2[i] = a1[i];
     }
     expect(a1).toEqual(a2);
 
@@ -23,22 +33,23 @@ test('arrays', () => {
     expect(a1.slice()).not.toBe(a1);
 
 
-    // 
+    //
     // Deleting objects
     //
-    let a3 = [1, 2, 3];
+    const a3 = [1, 2, 3];
     expect(a3.length).toBe(3);
 
     //
     // Delete will replace the value with `undefined`.
     //
-    // **Don't use delete with arrays**. Use `pop` or `shift` 
-    // as shown below.
+    // **Don't use delete with arrays**.
+    //
+    // Use `pop` or `shift` as shown below.
     //
     delete a3[0];
     expect(a3[0]).not.toBeDefined();
     expect(a3.length).toBe(3);
-    
+
     //
     // Use `pop` or `shift` to remove elements from the array.
     //
@@ -55,13 +66,15 @@ test('arrays', () => {
 });
 
 //
-// Array length is the highest ordinal in the array. 
+// Array length is the highest ordinal in the array.
 //
 // * Arrays do not have to be contiguous.
 // * If elements are missing, they will be returned as "undefined".
 // * Only elements which are explicity set will be included in iteration.
 //
-test("sparse arrays", () => {
+// Yes, this sucks.
+//
+test("collections-sparse-arrays", () => {
 
     let a = [];
 
@@ -73,26 +86,13 @@ test("sparse arrays", () => {
 
     // Missing elements are `undefined`
     expect(a[2]).toBeUndefined();
-    expect(typeof a[2]).toBe("undefined");
-
-    // 
-    // Enumeration will "skip" any elements which are not explicitly set,
-    // even if set to `undefined`.
-    //
-
-    let count = 0
-    for(let i in a) {
-        count++
-    }
-    expect(a.length).toBe(10); // Remember - a is sparse
-    expect(count).toBe(3);
 
     //
     // Arrays are like any JS object. You can add any properties
     // you want to the array. You should *not* do this - use another
     // object if want to store state.
     //
-    
+
     let a2 = [1, 2, 3];
     a2["test"] = "test"; // not part of the array
     expect(a2.length).toBe(3);
@@ -101,7 +101,8 @@ test("sparse arrays", () => {
     expect(a2.length).toBe(3);
 
     //
-    // Using an explicit cast will force ordinal access.
+    // Using an explicit cast will force ordinal access. Use this when you have
+    // a string value you want to turn into an ordinal.
     //
     a2[Number("2")] = 100;
     expect(a2.length).toBe(3);
@@ -121,7 +122,7 @@ test("sparse arrays", () => {
 // Note that the *key* values are weak. When the key is GC'd,
 // it will be removed from the collection. The value is not stored weak.
 //
-test("sets", () => {
+test("collections-sets", () => {
 
     let set = new Set();
     set.add(1);
@@ -136,10 +137,9 @@ test("sets", () => {
     //
     // Set iteration using `forEach`
     // `key` and `value` are identical for sets.
-    
-    set.forEach((value) => {
-        found.add(value);
-    });
+    for(let val of set) {
+        found.add(val);
+    }
 
     expect(set).toEqual(found);
 
@@ -153,7 +153,12 @@ test("sets", () => {
     expect(set.size).toBe(0);
 });
 
-test("maps", () => {
+//
+// Objects in JS are techncially maps. JS objects can only store string keys.
+//
+// In general, whenever you are using dealing with collections, use Map, not Object.
+//
+test("collections-maps", () => {
     let map = new Map();
 
     map.set("name", "damon");
@@ -163,9 +168,13 @@ test("maps", () => {
     expect(map.get("name")).toBe("damon");
 
     map.delete("age");
-    map.clear();
+    expect(map.has("age")).toBeFalsy();
 
 
+    //
+    // WeakMap will remove an object from the Map when all references
+    // to the key are null (or GC'd).
+    //
     let wMap = new WeakMap();
     let name = {}; // keys must be objects.
     wMap.set(name, "damon");

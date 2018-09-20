@@ -4,11 +4,6 @@
 
 ### ES6 & Beyond
 
-* Chapter 4: Async Control Flow
-  * Promises
-* Chapter 5: Collections
-  * Map / WeakMap
-  * Set / WeakSet
 * Chapter 6: API Additions
   * Array API
   * Object
