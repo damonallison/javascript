@@ -7,35 +7,71 @@
 //
 // What are the advantages of promises over callbacks?
 //
-// * Callbacks do not allow you to elegantly chain operations.
-// * Callbacks put you in callback hell.
+// * Subscribers are guaranteed to be invoked, regardless if the promise is
+//   already settled when the subscriber subscribes.
+//
+// * Subscribers are invoked exactly once when the promise settles, even if you
+//   attempt to settle the promise more than once.
+//
+// * Callbacks do not allow you to elegantly chain operations, avoiding
+//   "callback hell".
+//
 // * Callbacks do not allow you to run multiple operations at a time, waiting
 //   for all operations to complete.
 //
 // * Promises provide infrastructure for elegantly handling and chaining
 //   results.
+//
 // * Promises are the foundation for async / await, which allows you to write
 //   asynchronous code as if it were synchronous.
 //
 // General guidance:
-// * When using promises, *always* add a `catch` handler.
+//
+// * When using promises, *always* add a `catch` handler. You should always
+//   observe promise rejections.
+//
 // * Consider always rejecting with an `Error`. This will capture the stack
 //   trace as part of the response.
 //
 
-const arraysEqual = require('array-equal');
-const setsEqual = require('sets-equal');
-
+import _ from "lodash";
 
 //
-// Promises execute a function (the "executor") and must either resolve
-// (success) or reject (error).
+// Creates a simple promise, chaining another promise to the first promise's
+// success (then), and catching any errors that occur within the entire promise
+// chain by attaching the `catch` last.
 //
-// In this test, we create two promises that execute asynchronously.
-// The first one succeeds, the second fails. We verify both the success
-// and failure by attaching a `.then` and `.catch` respectively.
+test("promises-basics", () => {
+
+    expect.assertions(1);
+
+    let p = new Promise((resolve) => {
+        setTimeout(() => resolve("hello, world"), 50);
+    })
+
+    p.then((val) => {
+        expect(val).toBe("hello, world");
+    }).catch(() => {
+        expect(false).toBeTruthy()
+    });
+
+    return p;
+});
+
 //
-test("promise-fundamentals", () => {
+// Promises execute a function (the "executor") which accepts two callbacks:
+//
+// 1. The "resolve" callback which is invoked on success.
+// 2. The "reject" callback which is invoked on failure.
+//
+// The executor must invoke one of the two callbacks. Invoking one of the
+// callbacks is called "resolving" the promise.
+//
+// In this test, we create two promises that execute asynchronously. The first
+// one succeeds, the second fails. We verify both the success and failure by
+// attaching a `.then` and `.catch` respectively.
+//
+test("promises-resolution-and-rejection", () => {
 
     expect.assertions(2);
 
@@ -43,14 +79,27 @@ test("promise-fundamentals", () => {
         setTimeout(() => resolve("done"), 50);
     }).then(val => {
         expect(val).toBe("done");
+    }).catch(() => {
+        expect(false).toBeTruthy(); // fail test - no promise should have been rejected.
     });
 
     let p2 = new Promise((undefined, reject) => {
         setTimeout(() => reject(new Error("err")), 50);
+    }).then((val) => {
+        expect(false).toBeTruthy(); // fail test - catch() should have been invoked.
     }).catch(err => {
         expect(err.message).toBe("err");
     });
 
+    //
+    // Promise.all will wait either:
+    //
+    // 1. All promises resolve.
+    // 2. The first rejection occurs.
+    //
+    // If multiple promises reject, only the *first* rejection will
+    // be handled.
+    //
     return Promise.all([p, p2]);
 
 });
@@ -58,7 +107,7 @@ test("promise-fundamentals", () => {
 //
 // Shows how to attach multiple listeners to a promise and promise chaining with `then`.
 //
-test("promise-chaining", () => {
+test("promises-chaining", () => {
 
     // Two assertions will verify the top level callback returns "success".
     // The third assertion verifies the listenerOrder.
@@ -93,7 +142,7 @@ test("promise-chaining", () => {
         // this chained promise.
         listenerOrder.push(3);
     }).then(val => {
-        expect(arraysEqual([0, 1, 2, 3], listenerOrder)).toBeTruthy();
+        expect(_.isEqual([0, 1, 2, 3], listenerOrder)).toBeTruthy();
     });
 
     //
@@ -102,7 +151,8 @@ test("promise-chaining", () => {
     // Important Note:
     //
     // This test shows how promise listeners are invoked in order they are
-    // attached to the promise.
+    // attached to the promise. This handler is attached at the top level
+    // and executes before the chained `then` above.
     //
     // Do *not* write callbacks which depends on the ordering / existence of
     // other registered callbacks.
@@ -117,21 +167,28 @@ test("promise-chaining", () => {
 
 //
 // Promises ensure that even if the promised is fulfilled synchronously, any
-// callback you define with `then` will be invoked.
+// callback you define with `then` will be still be invoked.
 //
-test("settled-promise", () => {
+// This is critical as it ensures all subscribers are invoked regardless of when
+// the promises completes, avoiding race conditions.
+//
+test("promises-guaranteed-callback-on-settlement", () => {
+
+    expect.assertions(1);
 
     // Create a promise that is already resolved.
     let p = Promise.resolve(100);
 
-    // Even tho the promise is already resolved, any handler attached to
-    // the promise will be invoked. This is a great feature, it ensures
-    // we do not encounter race conditions when the promise is fulfilled
-    // before the handler is attached.
+    //
+    // Even tho the promise is already resolved, any handler attached to the
+    // promise will be invoked. This is a great feature, it ensures we do not
+    // encounter race conditions when the promise is fulfilled before the
+    // handler is attached.
+    //
     let called = false;
-    p.then(value => {
+    p.then(() => {
         called = true;
-    }).then(value => {
+    }).then(() => {
         expect(called).toBeTruthy();
     });
     return p;
@@ -141,7 +198,7 @@ test("settled-promise", () => {
 // Promise.all() is a "gate" to wait on 1->n parallel / concurrent tasks to
 // finish before continuing.
 //
-test("multiple-promises", () => {
+test("promises-gating", () => {
     //
     // Promise.all takes an iterable of promises and itself returns
     // a promise that is resolved after all it's promises are resolved.
@@ -155,11 +212,11 @@ test("multiple-promises", () => {
 
     return new Promise((resolve, reject) => {
         //
-        // Results will be returned in the order they are given to Promise.all
+        // Results will be returned in the order they are given to Promise.all()
         //
         let p3 = Promise.all([p1, p2]);
         p3.then(value => {
-            expect(arraysEqual([1, 2], value)).toBeTruthy();
+            expect(_.isEqual([1, 2], value)).toBeTruthy();
             resolve("done");
         }).catch(error => {
             reject(error);
@@ -191,7 +248,7 @@ test("multiple-promises-resolve-and-reject", () => {
             expect(false).toBeTruthy();
         }).catch(err => {
             expect(err.message).toBe("bad");
-            expect(setsEqual(new Set(["p1", "p2"]), executedPromises)).toBeTruthy();
+            expect(_.isEqual(new Set(["p1", "p2"]), executedPromises)).toBeTruthy();
         });
 });
 
@@ -236,9 +293,15 @@ test("nested-promise", () => {
             }, 100);
         })
     }).then(val => {
-        expect(setsEqual(new Set([1, 2]), results)).toBeTruthy();
+        expect(_.isEqual(new Set([1, 2]), results)).toBeTruthy();
     });
 });
+
+
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+
 
 //
 // Error Handling
@@ -281,6 +344,8 @@ test("nested-promise", () => {
 // your promise chain.
 //
 test("error-handling", () => {
+
+    expect.assertions(1);
 
     const p = new Promise((undefined, reject) => {
         reject(new Error("oops"));
