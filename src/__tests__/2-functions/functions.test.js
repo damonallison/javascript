@@ -1,6 +1,6 @@
 "use strict";
 
-const arraysEqual = require("array-equal");
+import _ from "lodash";
 
 //
 // Functions
@@ -169,7 +169,7 @@ test("es6-variadic-parameters", () => {
     };
 
     test("damon", "grace", "lily", "cole");
-    expect(arraysEqual(["grace", "lily", "cole"], vars)).toBeTruthy();
+    expect(_.isEqual(["grace", "lily", "cole"], vars)).toBeTruthy();
 
     test("damon");
     expect(vars.length).toBe(0);

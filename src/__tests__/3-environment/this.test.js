@@ -1,6 +1,6 @@
 'use strict';
 
-const arraysEqual = require('array-equal');
+import _ from "lodash";
 
 //
 // this
@@ -279,13 +279,13 @@ test("indirect-invocation", () => {
     // .call
     //
     expect(getThis.call(obj)).toBe(obj);
-    expect(arraysEqual(getThisAndArgs.call(obj, 1, 2), [obj, 1, 2])).toBeTruthy();
+    expect(_.isEqual(getThisAndArgs.call(obj, 1, 2), [obj, 1, 2])).toBeTruthy();
 
     //
     // .apply
     //
     expect(getThis.apply(obj)).toBe(obj);
-    expect(arraysEqual(getThisAndArgs.apply(obj, [1, 2]), [obj, 1, 2])).toBeTruthy();
+    expect(_.isEqual(getThisAndArgs.apply(obj, [1, 2]), [obj, 1, 2])).toBeTruthy();
 
 
     //

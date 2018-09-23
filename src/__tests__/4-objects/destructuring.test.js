@@ -1,7 +1,6 @@
 "use strict";
 
-const arraysEqual = require("array-equal");
-const _ = require("lodash");
+import _ from "lodash";
 
 //
 // Object & Array Destructuring
@@ -60,7 +59,7 @@ test("array-destructuring-using-rest-operator", () => {
     let [x, ...y] = a; // Destructures the remaining values of `a` into `y`.
 
     expect(x).toBe(1);
-    expect(arraysEqual([2, 3], y)).toBeTruthy();
+    expect(_.isEqual([2, 3], y)).toBeTruthy();
 
 });
 

@@ -1,6 +1,6 @@
 "use strict";
 
-const _ = require("lodash");
+import _ from "lodash";
 
 //
 // ES6 improves object creation.

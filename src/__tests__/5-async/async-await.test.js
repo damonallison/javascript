@@ -1,6 +1,7 @@
-const arraysEqual = require("array-equal");
-
 "use strict";
+
+import _ from "lodash";
+
 //
 // Async / Await
 //
@@ -25,14 +26,15 @@ const arraysEqual = require("array-equal");
 // is rejected, and you expected success, the test will fail.
 //
 // This test shows how to use jest to assert a promise is resolved successfully.
+//
 test("async-await", async () => {
+
     //
     // async functions *always* return a promise.
     //
     // This example shows that `await` will pause execution until an entire
     // promise chain is unwound and the outermost promise is resolved.
     //
-
     async function run(func, ms) {
         return new Promise(resolve => {
             setTimeout(() => {
@@ -79,14 +81,14 @@ test("async-await-normal-function-return", async () => {
 
 
 //
-// Rejected promises are
+// Rejected promises throw catchable errors. 
 //
 test("async-await-error-handling", async () => {
 
     expect.assertions(2);
 
     async function reject(ms) {
-        return new Promise((resolve, reject) => setTimeout(() => reject("error")), ms);
+        return new Promise((resolve, reject) => setTimeout(() => reject(new Error("error"))), ms);
     }
 
     //
@@ -97,14 +99,14 @@ test("async-await-error-handling", async () => {
         expect(false).toBeTruthy(); // fail test - should not be here.
     }
     catch(error) {
-        expect(error).toBe("error");
+        expect(error.message).toBe("error");
     }
 
     //
     // Using jest, a "rejects" assertion will verify the rejection. Use this
     // as shorthand for the try / catch above when writing tests.
     //
-    await expect(reject(50)).rejects.toBe("error");
+    await expect(reject(50)).rejects.toEqual(new Error("error"));
 
 });
 
@@ -158,7 +160,7 @@ test("parallel-await-with-array", async () => {
     // that async functions simply return regular promises.
     //
     let all = Promise.all(promises);
-    all.then(vals => expect(arraysEqual(vals, values)).toBeTruthy());
+    all.then(vals => expect(_.isEqual(vals, values)).toBeTruthy());
 
     //
     // Read the results. The time to await all promises is 50 ms,

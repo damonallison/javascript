@@ -1,6 +1,6 @@
 "use strict";
 
-const arraysEqual = require('array-equal');
+import _ from "lodash";
 
 //
 // Scoping Tests
@@ -122,7 +122,7 @@ test("block-bindings", () => {
     for (let val of a) {
         b.push(val);
     }
-    expect(arraysEqual(a, b)).toBeTruthy();
+    expect(_.isEqual(a, b)).toBeTruthy();
 });
 
 

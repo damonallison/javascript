@@ -25,8 +25,6 @@
 // Callbacks are the most fundamental async pattern in JS.
 //
 
-const setEquals = require('sets-equal');
-
 //
 // There are multiple problems with callbacks.
 //
@@ -36,6 +34,9 @@ const setEquals = require('sets-equal');
 //
 // All of these problems are addressed with Promises.
 //
+
+import _ from "lodash";
+
 test("callbacks", (done) => {
 
     let completions = new Set();
@@ -43,7 +44,7 @@ test("callbacks", (done) => {
 
     let complete = (completed) => {
         completions.add(completed);
-        if (setEquals(expected, completions)) {
+        if (_.isEqual(expected, completions)) {
             done();
         }
     }
