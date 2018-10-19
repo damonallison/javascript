@@ -5,12 +5,15 @@
 // Modules allow you to abstract away functionality into individual files and
 // selectively import pieces of functionality into our current scope.
 //
+// Each module has it's own scope and can encapsulate (hide) state. 
+//
 // Prior to ES6, modules were "faked" by creating functions which returned
 // objects that encapsulated functions and closed over state.
 //
 // The state of modules in JS is a holy mess. There wasn't an official standard
-// until ES6. By then, the community created their own module format, CommonJS,
-// which is used by node. Eventually, the ES6 module system will be de-facto.
+// until ES6. By then, the community created their own module formats - AMD,
+// UMD, CommonJS (which is used by node). Eventually, the ES6 module system will
+// be de-facto.
 //
 //
 //

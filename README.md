@@ -4,8 +4,8 @@ Unit tests which show JS features.
 
 ## Quick Start
 
-* All tests are in the `__tests__` folder. The tests are written using
-  [jest](https://facebook.github.io/jest/)
+All tests are in the `__tests__` folder. The tests are written using
+[jest](https://facebook.github.io/jest/).
 
 ```bash
 
@@ -542,6 +542,11 @@ AuthController.login = function(pass) {
 * Shared workers allow you to share a web worker across all pages accessing a domain.
   * Each page has a `port` into the web worker.
 * `asm.js`
+  * ASM.js is a subset of valid JS which is easier for JS engines to optimize,
+    allowing `asm.js` code to run close to C/C++ speeds.
   * It's hard for JS engines to optimize JS (especially GC and coercion).
   * It's easier for C/C++ to be transpiled into JS (See Emscripten).
-* WebAssembly allows native code to run.
+* WebAssembly (`WASM`) is *not* JS. It is native code.
+  * WASM allows developers to use language features that would be difficult to
+    introduce into JS (like multithreading).
+

@@ -36,8 +36,8 @@ test("classes-member-access", () => {
     let p = new Person("damon");
 
     // Property access.
-    p.name = "cole";
-    p.createdDate = new Date();
+    p.name = "cole";            // get
+    p.createdDate = new Date(); // set
 
     // Custom getter / setter access.
     expect(p.capitalizedName).toBe("COLE"); // get
@@ -100,7 +100,7 @@ test("classes-custom-error", () => {
 
 });
 
-test("singleton", () => {
+test("classes-singleton", () => {
 
     // // Not sure what value this provides over an object literal like this:
     // let p2 = {
