@@ -1,6 +1,7 @@
-const arraysEqual = require("array-equal");
-
 "use strict";
+
+import _ from "lodash";
+
 //
 // Async / Await
 //
@@ -16,7 +17,7 @@ const arraysEqual = require("array-equal");
 //
 
 //
-// An example of an async test.
+// An example of an async function.
 //
 // Notice the jest test accepts an async function (async () => { }). This test
 // function *must* return a promise or an await statement (which is a promise).
@@ -144,6 +145,10 @@ test("parallel-await-with-array", async () => {
     let run = async (ms) => new Promise(resolve => setTimeout(() => resolve(ms), ms));
 
     let values = [10, 20, 30, 40, 50];
+
+    //
+    // We will assert the entire array once, in addition to one assertion per element.
+    //
     expect.assertions(values.length + 1);
 
     //
@@ -158,7 +163,7 @@ test("parallel-await-with-array", async () => {
     // that async functions simply return regular promises.
     //
     let all = Promise.all(promises);
-    all.then(vals => expect(arraysEqual(vals, values)).toBeTruthy());
+    all.then(vals => expect(_.isEqual(vals, values)).toBeTruthy());
 
     //
     // Read the results. The time to await all promises is 50 ms,
