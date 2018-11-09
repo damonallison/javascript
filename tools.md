@@ -103,4 +103,34 @@ $ ncu --upgradeAll
 * `rimraf` - recursively delete a directory (`rm -rf`)
 * `ncu` - npm-check-updates - allows you to upgrade packages regardless of
   semver. (`npm install npm-check-updates -g`). Invoke with `ncu`.
+* `create-react-app` - tools for creating a skeleton react UI app.
+* `eslint` - JS linter.
+* `redux` - JS state container which implements the Flux architecture.
+* `prop-types` - Runtime type checking for React props. Used to document the intended types of properties passed to components.
+* `react-router` - For rendering components based on URL matching.
 
+## create-react-app (CRA)
+
+* create-react-app provides pre-configured set of tools and scripts to simply JS app development.
+  * Webpack - module bundler.
+  * Babel - transpiler to produce ES5 compatible JS.
+  * Jest - unit testing framework.
+
+---
+
+## Node.js
+
+* `tape` - a unit testing framework with great results analysis tools.
+* `hapi` - A simple HTTP server. Simple to create middleware / handle routes.
+  * `boom` - HTTP friendly error handling.
+  * `joi` - JS schema validator.
+  * `hapi-swagger` - Integrates hapi w/ swagger. Routes are annotated and
+    documentation is made available thru a `/documentation` route.
+* `lru-cache` - An `lru` cache ;)
+
+## Typescript
+
+* Typescript provides better code readability and reasoning, better tooling
+  support.
+* Typescript is opt-in. If you don't want to use it in places, don't.
+* Types force you to think about interface boundaries.
