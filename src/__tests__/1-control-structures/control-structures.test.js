@@ -3,13 +3,14 @@
 test("switch", () => {
 
     let a = "test";
+    let val = "initial";
 
     switch (a) {
         case "damon":
         case "cole":
         case "test":
+            val = "test";
             return;
     }
-    expect(false).toBeTruthy();
-
+    expect(val).toBe("test");
 });

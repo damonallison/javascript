@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import { Hello } from "./components/hello";
+// import { Hello } from "./components/hello";
+// <Hello compiler="TypeScript" framework="React" />
+
 
 class App extends Component {
   render() {
@@ -16,7 +18,6 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <div>
-        <Hello compiler="TypeScript" framework="React" />
         </div>
       </div>
     );

@@ -19,6 +19,7 @@ test("strings are \"array like\"", () => {
 
     // String properties
     expect(s.toUpperCase()).toBe("TEST");
+    expect(s.toLowerCase()).toBe("test");
 
     //
     // Strings in JS are immutable. In order to operate on strings

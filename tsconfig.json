@@ -3,9 +3,19 @@
         "outDir": "./dist/",
         "sourceMap": true,
         "noImplicitAny": true,
-        "module": "commonjs",
+        "module": "esnext",
         "target": "es5",
-        "jsx": "react"
+        "jsx": "preserve",
+        "allowJs": true,
+        "skipLibCheck": false,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true
     },
     "include": [
         "./src/**/*"

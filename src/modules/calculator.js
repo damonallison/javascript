@@ -22,8 +22,7 @@
 //
 // import * as calc from 'calculator';
 //
-// calc.ad
-
+// calc.add(2, 2);
 //
 // You can have multiple "named" exports within a single module.
 //

@@ -3,9 +3,9 @@
 // ES6 introduces "modules"
 //
 // Modules allow you to abstract away functionality into individual files and
-// selectively import pieces of functionality into our current scope.
+// selectively import pieces of functionality into your current scope / file.
 //
-// Each module has it's own scope and can encapsulate (hide) state. 
+// Each module has it's own scope and can encapsulate (hide) state.
 //
 // Prior to ES6, modules were "faked" by creating functions which returned
 // objects that encapsulated functions and closed over state.
@@ -44,7 +44,7 @@
 // This is the most common way to implement members, since ideally each module
 // should only export a single, default, element.
 //
-// import Calculator  from "../modules/calculator";
+// import Calculator from "../modules/calculator";
 //
 
 // Imports the default class as "Calculator", named exports `add` and `sub`.
@@ -59,14 +59,14 @@ import { add as addMe } from "../modules/calculator";
 
 test("es-module-import", ()  => {
 
-    // Default export
+    // Default import
     expect(Calculator.add(2, 2)).toBe(4);
 
-    // Named exports
+    // Named imports
     expect(add(2, 2)).toBe(4);
     expect(sub(4, 2)).toBe(2);
 
-    // Aliased named exports
+    // Named imports which were exported as aliases
     expect(addition(2, 2)).toBe(4);
     expect(subtraction(4, 2)).toBe(2);
 

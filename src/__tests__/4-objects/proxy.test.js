@@ -1,11 +1,15 @@
 "use strict";
 
 //
-// Proxies allow you to create objects which wrap other objects. Your code
-// interacts with the proxy, which marshals calls to it's target object.
+// Proxies allow you to create handler objects which contain traps. Your code
+// interacts with the proxy, which invokes traps, optionally calling into it's
+// target object.
 //
 // Proxies can be revokable (not shown here). Revokable proxies are proxies
 // which can be disabled or removed from observing.
+//
+// Proxy
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
 //
 test("proxies-basic", () => {
 
@@ -41,6 +45,10 @@ test("proxies-basic", () => {
     expect(proxy.name).toBe("damon");
     expect(accesses).toBe(1);
 
+    //
+    // `proxy` does not trap a function call.
+    // `echo()` will pass thru the proxy to the target object.
+    //
     expect(proxy.echo()).toBe("damon");
     expect(accesses).toBe(2);
 

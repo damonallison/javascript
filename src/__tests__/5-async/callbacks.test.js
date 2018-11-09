@@ -1,3 +1,4 @@
+"use strict";
 //
 // This file contains notes and theory behind JavaScript's runtime and
 // performance characteristics.
@@ -20,11 +21,6 @@
 //
 // Callbacks were the original "async" pattern in JS. Pass functions to be
 // invoked at some later point in time.
-
-//
-// Callbacks are the most fundamental async pattern in JS.
-//
-
 //
 // There are multiple problems with callbacks.
 //

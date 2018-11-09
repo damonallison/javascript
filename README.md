@@ -1,6 +1,6 @@
 # Javascript
 
-Unit tests which show JS features.
+Javascript sample code.
 
 ## Quick Start
 
@@ -27,60 +27,45 @@ $ npm test
 
 ### To Read
 
-* [Javascript - The Good
-  Parts](http://shop.oreilly.com/product/9780596517748.do) - Douglas Crockford
-* [Effective Javascript
-  6](https://www.amazon.com/Effective-JavaScript-Specific-Software-Development/dp/0321812182)
-  - David Herman
-* [Node.js in
-  Action](https://www.amazon.com/Node-js-Action-Alex-R-Young/dp/1617292575/ref=dp_ob_title_bk)
-  - Alex R. Young, Bradley Meck, Mike Cantelon, Tim Oxley, Marc Harter, TJ
-  Holowaychuk, Nathan Rajlich
-
-### Completed Research Materials
-
-* [Mozilla :
-  Javascript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript)
-  * Not recommended. Too light, not relevant.
-  * A high level JS walk through, all from a DOM manipulation perspective.
-  * Is not up to date with ES2015. Inheritance examples were done using
-    prototypal inheritance, which `class` *should* clean up.
+* [Javascript - The Good Parts](http://shop.oreilly.com/product/9780596517748.do) - Douglas Crockford
+* [Effective Javascript 6](https://www.amazon.com/Effective-JavaScript-Specific-Software-Development/dp/0321812182) - David Herman
+* [Node.js in Action](https://www.amazon.com/Node-js-Action-Alex-R-Young/dp/1617292575/ref=dp_ob_title_bk) - Alex R. Young, Bradley Meck, Mike Cantelon, Tim Oxley, Marc Harter, TJ Holowaychuk, Nathan Rajlich
 
 * [Read Understanding ECMAScript 6 |
   Leanpub](https://leanpub.com/understandinges6/read)
 
-* [A Brief History of
-  JavaScript](https://auth0.com/blog/a-brief-history-of-javascript/)
-  * Conceived in 1995 by Brendan Eich to allow HTML designers to interact with
-    the DOM.
-  * JS was originally called Mocha, a play on "Java", which was on the rise at
-    the time.
-  * Eich was contracted by Netscape (Marc Andreessen) to create a "Scheme for
-    the browser".
-  * Java was too big for the web, Netscape thought, they wanted to create
-    something simple.
-  * Due to time constraints, JS was born. It looks like java, with Scheme
-    underneath.
-  * Sun / Netscape closed a deal - Java for the backend, JavaScript for the
-    browser.
-  * Eich was happy he chose Scheme's first class functions and Self's
-    prototypes.
-  * The java influences (primitive vs. Object -- `string` vs `String`) were
-    unfortunate.
-  * Prototypes allow you to differ the behavior of one instance over another -
-    by modifying the object's prototype. This is harder to do with a `class`
-    based approach. (But how many times will you do this in practice?)
-  * When the language was standardized, ECMA could not use `JavaScript` due to
-    trademark reasons. They chose `ECMAScript`.
-  * The web (CSS / HTML / JS) evolve by implementors (Google, Microsoft,
-    Firefox) pushing the standards bodies.
-  * Microsoft, during ES3, was implementing ActiveX extensions in their
-    `embrace, extend, extinguish` model.
-  * ES4 was an ambitious, large project aimed at making JS scale to work better
-    for large projects.
-  * ES4 was under development for 8 years and was scrapped. Two projects were
-    formed - ES 3.1 and Harmony.
-  * Harmony would go on to develop future versions of the language.
+* [A Brief History of JavaScript](https://auth0.com/blog/a-brief-history-of-javascript/)
+
+* Conceived in 1995 by Brendan Eich to allow HTML designers to interact with the
+  DOM.
+* JS was originally called Mocha, a play on "Java", which was on the rise at the
+  time.
+* Eich was contracted by Netscape (Marc Andreessen) to create a "Scheme for
+  the browser".
+* Java was too big for the web, Netscape thought, they wanted to create
+  something simple.
+* Due to time constraints, JS was born. It looks like java, with Scheme
+  underneath.
+* Sun / Netscape closed a deal - Java for the backend, JavaScript for the
+  browser.
+* Eich was happy he chose Scheme's first class functions and Self's
+  prototypes.
+* The java influences (primitive vs. Object -- `string` vs `String`) were
+  unfortunate.
+* Prototypes allow you to differ the behavior of one instance over another -
+  by modifying the object's prototype. This is harder to do with a `class`
+  based approach. (But how many times will you do this in practice?)
+* When the language was standardized, ECMA could not use `JavaScript` due to
+  trademark reasons. They chose `ECMAScript`.
+* The web (CSS / HTML / JS) evolves by implementors (Google, Microsoft, Firefox)
+  pushing the standards bodies.
+* Microsoft, during ES3, was implementing ActiveX extensions in their `embrace,
+  extend, extinguish` model.
+* ES4 was an ambitious, large project aimed at making JS scale to work better
+  for large projects.
+* ES4 was under development for 8 years and was scrapped. Two projects were
+  formed - ES 3.1 and Harmony.
+* Harmony would go on to develop future versions of the language.
 
 * [You Don't Know JS](https://github.com/getify/You-Dont-Know-JS) - Kyle Simpson
   * 6 book series with the focus on "really" learning JavaScript.
@@ -191,7 +176,7 @@ look identical. Here is the 2019 version.
 
 * Dynamic typing - no static analyzer, poor tooling support.
 
-* Differing execution contexts. Node, various browsers.
+* The ecosystem. Differing execution contexts. Node, various browsers.
   * Polyfills / transpilers.
 
 * The `Number` type.
@@ -240,7 +225,7 @@ look identical. Here is the 2019 version.
 
 * Scoping
   * `var` scoping is not lexical. `var`, even when defined in a block, is
-    available to the entire function.
+    available to the entire function (always use let and const).
 
 * No standard library.
   * Even basic things like array equality, object value equality are not part of

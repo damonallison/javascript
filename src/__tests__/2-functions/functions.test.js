@@ -40,7 +40,7 @@ import _ from "lodash";
 //  * Javascript adds an `arguments` array-like object (but it's not actually an
 //    array, oy..) to every function. This is a hack. Callers do not know they
 //    can pass additional arguments to a function by looking at its definition.
-//    Don't use the `arguments`
+//    Don't use `arguments`
 //
 test("closures", () => {
 

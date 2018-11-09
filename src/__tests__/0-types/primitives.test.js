@@ -14,26 +14,26 @@
 // These tests show examples of working with these primitive types.
 // Objects are a bigger topic and will be described elsewhere.
 //
-// Javascript is a dynamically typed language. Variables do not have types in 
+// Javascript is a dynamically typed language. Variables do not have types in
 // Javascript, values have types. A variable is simply a container for an
 // underlying value.
 //
 //
 // "Natives"
-// 
-// Each primitive type has a "native" type which primitives are boxed into when 
+//
+// Each primitive type has a "native" type which primitives are boxed into when
 // needed. For example, string's native is String(). String() defines the capabilities
 // for strings, like `.toUpperCase()`.
 //
 // Native vs. Object types was one of the regrets Brendan Eich had when creating JavaScript.
 // He called it "unfortunate" that they made it into the language - he would
 // have rather had a single type.
-// 
+//
 test("undefined", () => {
 
     //
     // Variables that have no value are `undefined`.
-    // 
+    //
     // It's tempting to think "Oh, v is defined - I just defined it.".
     // From Javascript's perspective, if it doesn't have a *value* it's
     // considered undefined.
@@ -63,8 +63,7 @@ test("undefined", () => {
 
     // Variables can be set to "undefined".
     x = undefined;
-    expect(x === undefined).toBeTruthy();
-
+    expect(x).toBeUndefined()
 });
 
 test("null", () => {
@@ -92,7 +91,7 @@ test("null", () => {
 // `typeof` will always return one of 7 string values.
 //
 // "undefined", "string", "number", "boolean" "object", "symbol", "function"
-// 
+//
 test("typeof", () => {
 
     //
@@ -101,20 +100,22 @@ test("typeof", () => {
     let v;
     expect(typeof v).toBe("undefined");
     expect(typeof true).toBe("boolean");
-    expect(typeof 42).toBe("number")
+    expect(typeof 42).toBe("number");
+    expect(typeof 42.0).toBe("number");
     expect(typeof "42").toBe("string");
     expect(typeof Symbol("42")).toBe("symbol");
     expect(typeof (() => {})).toBe("function");
 
     //
     // typeof can be used to determine if a variable exists.
-    // 
+    //
     expect(typeof x).toBe("undefined");
 
+    //
     // Objects
     //
     expect(typeof {}).toBe("object");
-    // null is reported as an object (bug?)
+    // null is reported as an object. A long standing JS bug that won't be fixed.
     expect(typeof null).toBe("object");
     // Arrays are objects
     expect(typeof([1, 2])).toBe("object");
@@ -130,7 +131,7 @@ test("typeof", () => {
 //
 // "", 0, -0, NaN, null, undefined, false
 //
-// 
+//
 test("truthy and falsy", () => {
 
     expect(NaN).toBeFalsy();
@@ -144,5 +145,5 @@ test("truthy and falsy", () => {
     expect("0").toBeTruthy();
     expect({}).toBeTruthy();
     expect(() => {}).toBeTruthy();
-    
+
 });

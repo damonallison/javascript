@@ -37,7 +37,12 @@ import _ from "lodash";
 //
 // 2. Method invocation. Invoking a function on an object. `this` == the object.
 //
+// let obj = {}
+// obj.func() // `this` in `func()` will be `obj`
+//
 // 3. Constructor invocation. `new Regexp("\\d");`
+//
+// `this` points to the newly created object.
 //
 // 4. Indirect invocation. `object.call(obj, "hello world");
 //
@@ -68,11 +73,11 @@ import _ from "lodash";
 test("this-function-invocation", () => {
     // We are in 'use strict'; - making `this` undefined when called in function invocation.
     expect(this).toBeUndefined();
-    function echo(val) {
-        expect(this).toBeUndefined();
-        return val;
-    };
-    expect(echo("42")).toBe("42");
+
+    function echoThis() {
+        return this;
+    }
+    expect(echoThis()).toBeUndefined();
 });
 
 //

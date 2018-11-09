@@ -112,7 +112,7 @@ test('number parsing', () => {
     // parsing will stop when a non-numeric character is reached.
     //
     // If you do *not* want to tolerate non-numeric characters (which I would
-    // highly encourage), than do not use parseInt() or parseFloat(). Use 
+    // highly encourage), than do not use parseInt() or parseFloat(). Use
     // a numeric conversion instead (e.g., Number(val))
     //
     expect(parseInt("100test")).toBe(100);
@@ -223,13 +223,13 @@ test("number comparisons", () => {
     //
     expect(num1 + num2).toBeCloseTo(0.3);
 
-    // 
+    //
     // Javascript has +0 and -0 to distinguish between how the number arrived at 0.
     //
     // For example, if the direction of movement was negative, the value -0 could
     // be used. If the direction of movement was positive, the value 0 could be used.
     //
-    expect(-0).toBe(+0);
+    expect(-0 === +0).toBeTruthy();
 });
 
 //
