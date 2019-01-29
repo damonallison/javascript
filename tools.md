@@ -47,7 +47,8 @@ $ nvm alias default node
 ## npm
 
 * `npm` has two install locations - local and global.
-* If you want to use a package as a module, install it locally.
+* If you want to use a package as a module from within an application, install
+  it locally.
 * If you want to use a package as a command line tool, install it globally.
 
 ```shell
@@ -93,12 +94,18 @@ Allows you to update your node packages regardless of semver.
 # ncu is a node package. Install it.
 $ npm install npm-check-updates -g
 
+# Show any dependenccies for the project in the current directory
+$ ncu
+
+# Upgrade a project
+$ ncu -u
+
 # Upgrade all packages, including dependencies whose latest versions match semver dependencies
 $ ncu --upgradeAll
 
 ```
 
-## npm packages
+A## npm packages
 
 * `rimraf` - recursively delete a directory (`rm -rf`)
 * `ncu` - npm-check-updates - allows you to upgrade packages regardless of
