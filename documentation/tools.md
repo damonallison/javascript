@@ -6,7 +6,6 @@
 * `npm` - node package manager.
   * Requires `node`. Install `node` first with `nvm`.
 
-
 ## nvm
 
 The "Node Version Manager". Allows you to install / switch between multiple
@@ -41,6 +40,10 @@ $ nvm install <version> --latest-npm
 
 # Always default to the latest version of node in new shells
 $ nvm alias default node
+
+# Determine current node version
+$ nvm current
+$ node --version
 
 ```
 
@@ -85,7 +88,7 @@ $ ncu -g --updateAll
 
 ```
 
-## ncu
+## ncu (npm-check-updates)
 
 Allows you to update your node packages regardless of semver.
 
@@ -94,7 +97,7 @@ Allows you to update your node packages regardless of semver.
 # ncu is a node package. Install it.
 $ npm install npm-check-updates -g
 
-# Show any dependenccies for the project in the current directory
+# Show any dependencces for the project in the current directory.
 $ ncu
 
 # Upgrade a project
