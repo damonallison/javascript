@@ -3,22 +3,23 @@
 //
 // JavaScript has implicit and explicit type coercion.
 //
-// Coercions can be made explicit by explicitly casting a value to a primitive type.
+// Coercions can be made explicit by casting a value to a primitive type.
 //
 // > let x = Number("42")
 // > let y = String(42)
 //
 // Implicit Coercion
 //
-// When does implicit coercion happen? When operators are being applied to operands with
+// Implicit coercion happens when operators are being applied to operands with
 // different types.
 //
 // There are two primary scenarios for cohesion: equality (== and !=) and inequality (< and >).
 //
 // Equality:
-// 
-// JavaScript has two equality operators - equality (== and !=) and strict equality (=== and !==).
-// 
+//
+// JavaScript has two equality operators - equality (== and !=) and strict
+// equality (=== and !==).
+//
 // Coercion is *only* allowed with the non-strict equality operators.
 // Coercion does not happen with strict equality operators.
 //
@@ -40,7 +41,7 @@
 // * If y is Boolean(), return x == ToNumber(y)
 //
 //
-// Type coercion can be broken down into a few actions, depending on the 
+// Type coercion can be broken down into a few actions, depending on the
 // operand types.
 //
 // 1. Convert Boolean() to Number().
@@ -54,7 +55,7 @@
 //
 //
 // Rules:
-// 
+//
 // To safely use implicit coercion, here are a few heuristic rules to follow:
 //
 // * If either side of the comparsion has `true` or `false`, always use ===.
@@ -64,11 +65,11 @@
 
 test("boolean coercion", () => {
 
-    // 
+    //
     // Explicit coercion
     //
 
-    // 
+    //
     // There are two ways to explicitly convert values into a boolean.
     //
     // 1. Use Boolean(val)
@@ -89,23 +90,23 @@ test("boolean coercion", () => {
     expect(!!a).toBeTruthy();
     expect(!!d).toBeFalsy();
 
-    // 
+    //
     // Implicit coercion
     //
     //
-    // Rule: 
+    // Rule:
     //
     // If x or y is Boolean(), return the boolean to Number().
     //
     // ToNumber(false) == 0
     // ToNumber(true) == 1
     //
-    // 
+    //
     // 1. `false` converted to 0. 0 == "0".
     // 2. "0" converted to 0 (rule 1 above). 0 == 0
     // 3. return true
     //
-    expect(false == "0").toBeTruthy(); 
+    expect(false == "0").toBeTruthy();
 
     // If y is Boolean(), return the result of x == ToNumber(y)
     expect("0" == false).toBeTruthy();
@@ -113,7 +114,7 @@ test("boolean coercion", () => {
     expect("2" == true).toBeFalsy();
 
 
-    // 
+    //
     // Watch out for *falsy* values, which always coerce into false.
     //
     expect(0 == "").toBeTruthy();     // Ouch, this sucks. JS is working off the "falsy" rules.
@@ -126,7 +127,7 @@ test("boolean coercion", () => {
 
 });
 
-// 
+//
 // When one of two operands is a number, the other value is coerced into a Number.
 //
 test("number coercion", () => {
@@ -138,9 +139,9 @@ test("number coercion", () => {
     //
     // y is a Number() and x is String(), perform ToString(x) == y
     //
-    expect("0" == 0).toBeTruthy(); 
+    expect("0" == 0).toBeTruthy();
 
-    // 
+    //
     // Type cohesion is not allowed using "strict" equality.
     //
     expect("0" === 0).toBeFalsy();
@@ -162,13 +163,13 @@ test("number coercion", () => {
     // In the open source JS community, unary `+` is an accepted form
     // of explicit Number() type coercion.
     //
-    const num2 = +num; 
+    const num2 = +num;
     expect(num2).toBe(42);
 
     //
     // Number -> String
     //
-    
+
     // Option 1 : using an explicit String() cast. This is *not* idiomatic JS.
     const str2 = String(num2);
     expect(str2).toBe("42")
@@ -187,7 +188,7 @@ test("date coercion", () => {
     const marker = 1530973247103;
     let d = new Date();
 
-    // Coercing a date to a number will return the number of seconds 
+    // Coercing a date to a number will return the number of seconds
     // since the unix epoch (1970-01-01T00:00:00.000Z)
     expect(+d).toBeGreaterThan(marker);
     expect(Number(d)).toBeGreaterThan(marker);
@@ -205,7 +206,7 @@ test("date coercion", () => {
 // All primitive values have a toString() defined.
 //
 test("custom toString()", () => {
-    
+
     const num = 42.000;
     expect(num.toString()).toBe("42");
 
@@ -228,12 +229,12 @@ test("custom toString()", () => {
 // and `String` concatenation.
 //
 // If either operand to `+` is a string, the operation will be string concatenation.
-// 
+//
 test("+ operator", () => {
 
     expect("damon" + 100).toBe("damon100");
     expect(100 + "damon").toBe("100damon");
-    
+
     expect(100 + "100").toBe("100100");
 
     // Explicit cast
@@ -246,21 +247,21 @@ test("+ operator", () => {
 
 //
 // Objects are only == or === when they point to themselves.
-// 
-// Coercion does *not* happen with objects, so == and === are 
+//
+// Coercion does *not* happen with objects, so == and === are
 // identical when dealing with objects.
 //
 test("object equality", () => {
     //
     // Objects, functions, and array equality,
-    // whether using == or ===, 
+    // whether using == or ===,
     //
     const obj  = { "name" : "damon" };
     const obj2 = { "name" : "damon" };
 
     expect(obj == obj2).toBeFalsy();
     expect(obj === obj2).toBeFalsy();
-    
+
     expect(obj == obj).toBeTruthy();
     expect(obj === obj).toBeTruthy();
 
@@ -287,28 +288,28 @@ test("object equality", () => {
 
     //
     // When objects are used in equality comparisons, they are first converted
-    // to primitive values. 
+    // to primitive values.
     //
     // valueOf() should return the primitive value of an object.
     // toString() should return the string representation of an object.
     //
-    let o1 = { 
+    let o1 = {
         id: 1,
         name: "damon",
-        toString() { 
+        toString() {
             return this.name.toString();
         },
-        valueOf() { 
-            return this.id; 
+        valueOf() {
+            return this.id;
         }
     };
-    let o2 = { 
+    let o2 = {
         id: 2,
         name: "cole",
-        toString() { 
+        toString() {
             return this.name.toString();
         },
-        valueOf() { 
+        valueOf() {
             return this.id;
         }
     };
@@ -323,12 +324,12 @@ test("object equality", () => {
 
 
 //
-// If one value is an Object, the other is not, the following two rules apply. 
+// If one value is an Object, the other is not, the following two rules apply.
 //
 // Essentially, the object is converted to a string or number based
 // on the context in which it's used.
 //
-// * If Type(x) is either String or Number and Type(y) is Object, 
+// * If Type(x) is either String or Number and Type(y) is Object,
 //   return the result of the comparison x == ToPrimitive(y)
 //
 // * If Type(x) is Object and Type(y) is String or Number,
@@ -368,9 +369,9 @@ test("object to non-object equality", () => {
     expect(10 == obj2).toBeTruthy();
 
     // String hint - calls toString()
-    expect(`Value is ${obj2}`).toBe("Value is 10"); 
-    expect(`Value is ${obj1}`).toBe("Value is 10"); 
-    
+    expect(`Value is ${obj2}`).toBe("Value is 10");
+    expect(`Value is ${obj1}`).toBe("Value is 10");
+
 });
 
 //

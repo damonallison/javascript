@@ -1,6 +1,6 @@
 "use strict";
 
-const _ = require("lodash");
+import _ from "lodash";
 
 //
 // Generators / Iterators
@@ -76,7 +76,14 @@ test("built-in-map-iterable", () => {
     const keys = new Set();
     const vals = new Set();
 
-    for([key, val] of m1) {
+    let pairs = []
+    for (const kvPair of m1) {
+        pairs.push(kvPair);
+    }
+
+    expect(_.isEqual(pairs, [["one", 1], ["two", 2], ["three", 3]])).toBeTruthy();
+
+    for(const [key, val] of m1) {
         keys.add(key);
         vals.add(val);
     };

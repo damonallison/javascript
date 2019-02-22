@@ -30,10 +30,16 @@ test('collections-arrays', () => {
     }
     expect(a1).toEqual(a2);
 
+    // Copy the array using for...of (iterator)
+    const a22 = []
+    for (let i of a1) {
+        a22[a22.length] = i;
+    }
+    expect(a1).toEqual(a22);
+
     // `slice()` will copy an array.
     expect(a1.slice()).toEqual(a1);
     expect(a1.slice()).not.toBe(a1);
-
 
     //
     // Deleting objects
@@ -137,7 +143,8 @@ test("collections-sets", () => {
     let found = new Set();
 
     //
-    // Set iteration using `forEach`
+    // Set iteration using for...of
+    //
     // `key` and `value` are identical for sets.
     for(let val of set) {
         found.add(val);
@@ -164,7 +171,7 @@ test("collections-maps", () => {
     let map = new Map();
 
     map.set("name", "damon");
-    map.set("age", 41);
+    map.set("age", 43);
 
     expect(map.has("name")).toBeTruthy();
     expect(map.get("name")).toBe("damon");

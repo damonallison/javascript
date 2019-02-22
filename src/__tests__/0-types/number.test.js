@@ -113,7 +113,7 @@ test('number parsing', () => {
     //
     // If you do *not* want to tolerate non-numeric characters (which I would
     // highly encourage), than do not use parseInt() or parseFloat(). Use
-    // a numeric conversion instead (e.g., Number(val))
+    // a numeric type conversion instead (e.g., Number(val))
     //
     expect(parseInt("100test")).toBe(100);
     expect(parseFloat("20.ATest")).toBe(20);

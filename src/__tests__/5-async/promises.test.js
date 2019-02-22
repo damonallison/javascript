@@ -13,8 +13,9 @@
 // * Subscribers are invoked exactly once when the promise settles, even if you
 //   attempt to settle the promise more than once.
 //
-// * Callbacks do not allow you to elegantly chain operations, avoiding
-//   "callback hell".
+// * Callbacks do not allow you to elegantly chain operations, resulting in
+//   "callback hell". Promise chaining provides a natural, fluid syntax for
+//   chaining operations together.
 //
 // * Callbacks do not allow you to run multiple operations at a time, waiting
 //   for all operations to complete.
