@@ -76,13 +76,19 @@ test("built-in-map-iterable", () => {
     const keys = new Set();
     const vals = new Set();
 
+    //
+    // "Default" iteration of a map will return [key, value] arrays for each
+    // item in the map.
+    //
     let pairs = []
     for (const kvPair of m1) {
         pairs.push(kvPair);
     }
-
     expect(_.isEqual(pairs, [["one", 1], ["two", 2], ["three", 3]])).toBeTruthy();
 
+    //
+    // Use object destructuring to simplify access to key / value pairs.
+    //
     for(const [key, val] of m1) {
         keys.add(key);
         vals.add(val);
@@ -91,9 +97,14 @@ test("built-in-map-iterable", () => {
     expect(_.isEqual(vals, new Set([1, 3, 2]))).toBeTruthy();
 });
 
+/**
+ * The for...of iterable with sets will *not* guarantee element ordering. Do
+ * *not* rely on ordering with sets.
+ */
 test("built-in-set-iterable", () => {
     const keys = new Set(["one", "two", "three"]);
     const keys2 = new Set();
+
     for (let key of keys) {
         keys2.add(key);
     }
@@ -174,6 +185,10 @@ test("custom-iterable-using-array", () => {
     let myIterable = {
         values: [1, 2, 3],
         [Symbol.iterator]() {
+            //
+            // Symbol.iterator is a generator. Invoke it to return
+            // an iterator instance.
+            //
             return this.values[Symbol.iterator]();
         }
     }
