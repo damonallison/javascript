@@ -2,6 +2,18 @@
 
 Javascript sample code.
 
+## Questions
+
+* Will RxJS's `Observable` become part of Javascript?
+
+> RxJS provides an implementation of the Observable type, which is
+> needed until the type becomes part of the language and until
+> browsers support it.
+
+[Angular: The RxJS Library](https://angular.io/guide/rx-library)
+
+
+
 ## Quick Start
 
 All tests are in the `__tests__` folder. The tests are written using
