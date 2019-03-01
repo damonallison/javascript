@@ -13,7 +13,6 @@
  * * Subscribing / unsubscribing to Observables is the same regardless of what
  *   data the observable stream contains.
  *
- * `from` will create an Observable from a promise
  */
 import { of, from } from 'rxjs';
 import { Observer, Observable} from 'rxjs';
@@ -38,6 +37,9 @@ test("rxjs-simple-observer", done => {
     //
     // error(err) - Optional. A handler for an error notification. An error
     //                        halts execution of the observable instance.
+    //                        Because observables are asynchronous, Observables
+    //                        will not catch errors. You handle errors by
+    //                        specifying an error callback.
     //
     // complete() - Optional. A handler for the execution-complete notification.
     //
@@ -68,6 +70,8 @@ test("rxjs-simple-observer", done => {
  */
 test("rxjs-simpler-observable", done => {
 
+    expect.assertions(3);
+
     let actions: String[] = [];
     // This function is run when subscribe() is called.
     let sequenceSubscriber = (observer: Observer<Number>) => {
@@ -85,17 +89,22 @@ test("rxjs-simpler-observable", done => {
         // subscriber unsubscribes - allowing you to clean up.
         //
         return { unsubscribe() {}};
-    }
+    };
 
     const sequence = new Observable(sequenceSubscriber);
 
+    //
     // The subscriber function is not invoked until a subscriber subscribes.
+    //
     expect(actions.length).toBe(0);
 
     let results: Number[] = [];
+
     sequence.subscribe( {
         next(num) { results.push(num) },
         complete() {
+            expect(results).toEqual([1, 2, 3]);
+            expect(actions).toEqual(["inSubscriber"]);
             done();
         }
     });
@@ -106,17 +115,28 @@ test("rxjs-simpler-observable", done => {
  */
 test("rxjs-from", done => {
 
+    expect.assertions(2);
+
     let actions: string[] = [];
 
-    const makeP = (success: boolean): Promise<string> => {
-        actions.push("makeP");
+    const genP = (success: boolean): Promise<string> => {
         return new Promise((resolve, reject) => {
             actions.push("inPromise");
             success ? resolve("yes") : reject("no");
         });
     };
-    const ob = from(makeP(true));
 
+    //
+    // The promise executor function is invoked immediately. So the promise has
+    // been resolved, even tho we do not have a subscriber.
+    //
+    const p = genP(true);
+    expect(["inPromise"]).toEqual(actions);
+
+    //
+    // Creates an Observable from a Promise
+    //
+    const ob = from(p);
     ob.subscribe( {
         next(resp) {
             expect(resp).toBe("yes");
@@ -125,8 +145,6 @@ test("rxjs-from", done => {
             expect(true).toBeFalsy(); // Fail this test
         },
         complete() {
-            expect(actions.length).toBe(2);
-            expect(actions).toEqual(["makeP", "inPromise"]);
             done();
         }
     });
@@ -136,5 +154,101 @@ test("rxjs-from", done => {
 /**
  * Multicasting
  *
+ * Multicasting allows you to notify multiple subscribers from a single event source.
  *
  */
+test("rxjs-multicast", done => {
+
+    // Will run through an array of numbers, emitting one value per second
+    // until it gets to the end of the array.
+    function doSequence(observer: Observer<number>, arr: any[], idx: number) {
+        return setTimeout(() => {
+            observer.next(arr[idx]);
+            if (idx === arr.length - 1) {
+                observer.complete();
+            } else {
+                doSequence(observer, arr, ++idx);
+            }
+        }, 1000);
+    };
+
+    const multicastSequenceSubscriber = () => {
+
+        const seq = [1, 2, 3];
+
+        // Keep track of observers (subscribers)
+        const observers: Observer<number>[] = [];
+
+        let timeoutId: NodeJS.Timeout;
+
+
+        // Return the subscriber function (runs when subscribe() is invoked).
+        return (observer: Observer<number>) => {
+            observers.push(observer);
+            // Upon first subscription, start the sequence
+            if (observers.length == 1) {
+                timeoutId = doSequence({
+                    next(val) {
+                        observers.forEach(obs => obs.next(val));
+                    },
+                    error(val) {
+                        expect(true).toBeFalsy();
+                    },
+                    complete() {
+                        observers.slice(0).forEach(obs => obs.complete());
+                    }
+                }, seq, 0);
+            }
+
+            return {
+                unsubscribe() {
+                    // Remove this observer from observers array so it's no
+                    // longer notified.
+                    observers.splice(observers.indexOf(observer), 1);
+                    if (observers.length === 0) {
+                        // No more listeners - clean up.
+                        clearTimeout(timeoutId);
+                    }
+            }}
+        };
+    };
+
+    const multicastSequence = new Observable(multicastSequenceSubscriber());
+
+    const completed: string[] = [];
+    const completeTest = (sub: string): void => {
+        completed.push(sub);
+        if (completed.length == 2) {
+            done();
+        }
+    };
+
+    //
+    // The first subscriber is going to receive all events.
+    //
+    const resultsFirst: number[] = [];
+    multicastSequence.subscribe({
+        next(num) { resultsFirst.push(num); },
+        complete() {
+            expect([1, 2, 3]).toEqual(resultsFirst);
+            completeTest("one");
+        }
+    });
+
+    //
+    // The second subscriber, starting a second later, will
+    // miss the first event.
+    //
+    const resultsSecond: number[] = [];
+    setTimeout(() => {
+        multicastSequence.subscribe({
+            next(num) { resultsSecond.push(num); },
+            complete() {
+                expect([2, 3]).toEqual(resultsSecond);
+                completeTest("two");
+            }
+        });
+    }, 1500);
+
+
+});

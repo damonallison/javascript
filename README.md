@@ -12,8 +12,6 @@ Javascript sample code.
 
 [Angular: The RxJS Library](https://angular.io/guide/rx-library)
 
-
-
 ## Quick Start
 
 All tests are in the `__tests__` folder. The tests are written using

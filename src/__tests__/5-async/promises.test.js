@@ -60,6 +60,31 @@ test("promises-basics", () => {
 });
 
 //
+// Promises execute the executor function immediately. In fact, it is invoked
+// in the Promise constructor, *before* the Promise is returned.
+//
+test("promises-execute-immediately", async () => {
+
+    expect.assertions(2);
+
+    let actions = [];
+    let p = new Promise((resolve) => {
+        actions.push("executed");
+        resolve("done");
+    });
+
+    //
+    // Before we've even subscribed to the promise, the promise executor has
+    // been executed
+    //
+    expect(_.isEqual(["executed"], actions)).toBeTruthy();
+
+    return p.then((val) => {
+        expect(val).toBe("done");
+    });
+});
+
+//
 // Promises execute a function (the "executor") which accepts two callbacks:
 //
 // 1. The "resolve" callback which is invoked on success.
@@ -279,6 +304,8 @@ test("nested-promise", () => {
 
     let results = new Set();
 
+    expect.assertions(1);
+
     return new Promise((resolve, reject) => {
         results.add(1);
         resolve(1);
@@ -291,7 +318,7 @@ test("nested-promise", () => {
             setTimeout(() => {
                 results.add(2);
                 resolve(2);
-            }, 100);
+            }, value);
         })
     }).then(val => {
         expect(_.isEqual(new Set([1, 2]), results)).toBeTruthy();
@@ -315,11 +342,11 @@ test("nested-promise", () => {
 //    `resolve`s.
 // 2. onRejected(err). This will be invoked when the promise is `reject`ed.
 //
-// Both functions are optional. If you omit the first (by using `null`), an
+// Both functions are optional. If you omit the first (by using `undefined`), an
 // implicit handler will be created which simply returns the value.
 //
-// If you omit the second (by using `null`), an implicit handler will be created
-// which simply throws the value.
+// If you omit the second (by using `undefined`), an implicit handler will be
+// created which simply throws the value.
 //
 // ------------------------------------------------------------------------
 // This:

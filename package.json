@@ -12,7 +12,8 @@
     "typescript": "^3.3.3333"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.6"
+    "@types/jest": "^24.0.6",
+    "@types/lodash": "^4.14.121"
   },
   "scripts": {
     "start": "react-scripts start",

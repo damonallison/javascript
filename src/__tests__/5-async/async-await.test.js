@@ -81,14 +81,14 @@ test("async-await-normal-function-return", async () => {
 
 
 //
-// Rejected promises throw catchable errors. 
+// Rejected promises throw catchable errors.
 //
 test("async-await-error-handling", async () => {
 
     expect.assertions(2);
 
     async function reject(ms) {
-        return new Promise((resolve, reject) => setTimeout(() => reject(new Error("error"))), ms);
+        return new Promise((undefined, reject) => setTimeout(() => reject(new Error("error"))), ms);
     }
 
     //
