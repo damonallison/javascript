@@ -14,6 +14,7 @@ test('collections-arrays', () => {
     //
     const a1 = ["tree", 20, [1, 2, 3]];
 
+
     // Determining if an object is an Array.
     expect(a1 instanceof Array).toBeTruthy();
     expect(typeof a1).toBe("object");
