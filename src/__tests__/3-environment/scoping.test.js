@@ -1,5 +1,4 @@
-"use strict";
-
+import { expect, test } from "vitest";
 import _ from "lodash";
 
 //
@@ -16,7 +15,6 @@ import _ from "lodash";
 // * Scoping. Shows javascript's lexical scoping rules.
 //
 
-
 //
 // Strict Mode
 //
@@ -29,8 +27,8 @@ import _ from "lodash";
 // * `this` is undefined at global scope (which `isStrictMode` is defined here
 //   as) with strict mode enabled.
 //
-const isStrictMode = function() {
-    return this === undefined;
+function isStrictMode() {
+  return this === undefined;
 }
 
 //
@@ -40,7 +38,7 @@ const isStrictMode = function() {
 // so verify it's set.
 //
 test("check strict mode", () => {
-    expect(isStrictMode()).toBeTruthy();
+  expect(isStrictMode()).toBeTruthy();
 });
 
 //
@@ -52,20 +50,18 @@ test("check strict mode", () => {
 let x = 10;
 
 test("scope", () => {
+  // We have access to our parent scope.
+  expect(typeof x).toBe("number");
 
-    // We have access to our parent scope.
-    expect(typeof x).toBe("number");
+  // Define a new block to introduce a new scope.
+  {
+    let y = 11;
+  }
+  expect(typeof y).toBe("undefined");
 
-    // Define a new block to introduce a new scope.
-    {
-        let y = 11;
-    }
-    expect(typeof y).toBe("undefined");
-
-    // Attempting to reference y will result in a ReferenceError.
-    // A ReferenceError is *always* thrown when a variable cannot
-    // be found.
-
+  // Attempting to reference y will result in a ReferenceError.
+  // A ReferenceError is *always* thrown when a variable cannot
+  // be found.
 });
 
 //
@@ -86,45 +82,45 @@ test("scope", () => {
 // 2. In `for` loops, *always* use `let`.
 //
 test("block-bindings", () => {
+  const x = 10;
 
-    const x = 10;
+  //
+  // With object consts, only the reference is fixed.
+  // The contents of the reference can change.
+  //
+  const obj = { name: "damon" };
+  obj.name = "cole";
+  expect(obj.name).toBe("cole");
 
+  let funcs = [];
+  for (let i = 0; i < 10; i++) {
     //
-    // With object consts, only the reference is fixed.
-    // The contents of the reference can change.
+    // a new value for `i` is created at every iteration.
+    // allowing us to capture the current value in a function.
     //
-    const obj = { name : "damon" };
-    obj.name = "cole";
-    expect(obj.name).toBe("cole");
+    funcs.push(() => {
+      return i;
+    }); // i is captured as 0, 1, 2, 3...
+  }
 
-    let funcs = [];
-    for (let i = 0; i < 10; i++) {
-        //
-        // a new value for `i` is created at every iteration.
-        // allowing us to capture the current value in a function.
-        //
-        funcs.push(() => { return i }); // i is captured as 0, 1, 2, 3...
-    }
+  for (let i = 0; i < funcs.length; i++) {
+    expect(funcs[i]()).toEqual(i);
+  }
 
-    for (let i = 0; i < funcs.length; i++) {
-        expect(funcs[i]()).toEqual(i);
-    }
+  // for-in iterates object members.
+  for (let key in obj) {
+    // key scoped here
+    expect(key).toEqual("name");
+  }
 
-    // for-in iterates object members.
-    for (let key in obj) {
-        // key scoped here
-        expect(key).toEqual("name");
-    }
-
-    // for-of iterates an iterable
-    const a = [1, 2, 3];
-    let b = [];
-    for (let val of a) {
-        b.push(val);
-    }
-    expect(_.isEqual(a, b)).toBeTruthy();
+  // for-of iterates an iterable
+  const a = [1, 2, 3];
+  let b = [];
+  for (let val of a) {
+    b.push(val);
+  }
+  expect(_.isEqual(a, b)).toBeTruthy();
 });
-
 
 //
 // We are able to cheat lexical scoping by using eval.
@@ -134,20 +130,18 @@ test("block-bindings", () => {
 //  It's full of security and performance problems.
 //
 test("using-eval-to-cheat-lexical-scope", () => {
+  let a = 10;
 
-    let a = 10;
+  let f = (str) => {
+    return eval(str);
+  };
 
-    let f = (str) => {
-        return eval(str);
-    };
+  // eval() executes within the current lexical scope,
+  // therefore it has access to `a`.
+  expect(f("(() => { let b = 20; a += 1; return a + b; })()")).toBe(31);
 
-    // eval() executes within the current lexical scope,
-    // therefore it has access to `a`.
-    expect(f("(() => { let b = 20; a += 1; return a + b; })()")).toBe(31);
-
-    // eval updated `a`, verify the update exists in our scope.
-    expect(a).toBe(11);
-
+  // eval updated `a`, verify the update exists in our scope.
+  expect(a).toBe(11);
 });
 
 //
@@ -158,10 +152,9 @@ test("using-eval-to-cheat-lexical-scope", () => {
 // *** Don't use var! Use let and const. ***
 //
 test("hoisting", () => {
+  a = 10;
 
-    a = 10;
+  expect(a).toBe(10);
 
-    expect(a).toBe(10);
-
-    var a;
+  var a;
 });

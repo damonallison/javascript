@@ -1,5 +1,4 @@
-'use strict';
-
+import { expect, test } from "vitest";
 import _ from "lodash";
 
 //
@@ -71,13 +70,13 @@ import _ from "lodash";
 // * `this` === global when running in non-strict mode. (Turn on strict mode!)
 //
 test("this-function-invocation", () => {
-    // We are in 'use strict'; - making `this` undefined when called in function invocation.
-    expect(this).toBeUndefined();
+  // We are in 'use strict'; - making `this` undefined when called in function invocation.
+  expect(this).toBeUndefined();
 
-    function echoThis() {
-        return this;
-    }
-    expect(echoThis()).toBeUndefined();
+  function echoThis() {
+    return this;
+  }
+  expect(echoThis()).toBeUndefined();
 });
 
 //
@@ -85,96 +84,94 @@ test("this-function-invocation", () => {
 // strict mode - even with nested functions.
 //
 test("this-function-invocation-nested-function", () => {
-    let obj = {
-        myFunc() {
-            //
-            // Because this function is being invoked on `obj`, `obj` is the context.
-            //
-            expect(this).toBe(obj);
-            function echo(val) {
-                //
-                // Even if `this` is defined in the myFunc() context, that
-                // context does not matter. Because *this* function was called
-                // using function invocation without a context, this is
-                // undefined (we are in strict mode).
-                //
-                expect(this).toBeUndefined();
-                return val;
-            };
-            return echo("hello, world!");
-        }
-    };
+  let obj = {
+    myFunc() {
+      //
+      // Because this function is being invoked on `obj`, `obj` is the context.
+      //
+      expect(this).toBe(obj);
+      function echo(val) {
+        //
+        // Even if `this` is defined in the myFunc() context, that
+        // context does not matter. Because *this* function was called
+        // using function invocation without a context, this is
+        // undefined (we are in strict mode).
+        //
+        expect(this).toBeUndefined();
+        return val;
+      }
+      return echo("hello, world!");
+    },
+  };
 
-    //
-    // Here, we are invoking `myFunc` using method invocation.
-    // However, within `myFunc`, `echo` is invoked using function invocation.
-    // Within `echo`, `this` will always be undefined.
-    //
-    expect(obj.myFunc()).toBe("hello, world!");
+  //
+  // Here, we are invoking `myFunc` using method invocation.
+  // However, within `myFunc`, `echo` is invoked using function invocation.
+  // Within `echo`, `this` will always be undefined.
+  //
+  expect(obj.myFunc()).toBe("hello, world!");
 });
 
 //
 // Arrow functions will lexically bind `this` to what it is in the current context.
 //
 test("this-function-invocation-arrow-functions", () => {
-    let obj = {
-        getThis() {
-            //
-            // Capture this to verify the same object is lexically bound from
-            // within the child `echo` function.
-            //
-            let that = this;
-            let echo = (val) => {
-                expect(that).toBe(this);
-                return val;
-            };
-            return echo(this);
-        }
-    };
+  let obj = {
+    getThis() {
+      //
+      // Capture this to verify the same object is lexically bound from
+      // within the child `echo` function.
+      //
+      let that = this;
+      let echo = (val) => {
+        expect(that).toBe(this);
+        return val;
+      };
+      return echo(this);
+    },
+  };
 
-    //
-    // In both of the following cases, `this` will be equal in both the parent
-    // `getThis()` function and the child `echo()` function.
-    //
-    // They are equal because `this` in the child function is lexically bound to
-    // the same `this` value in the parent function.
-    //
+  //
+  // In both of the following cases, `this` will be equal in both the parent
+  // `getThis()` function and the child `echo()` function.
+  //
+  // They are equal because `this` in the child function is lexically bound to
+  // the same `this` value in the parent function.
+  //
 
-    // Call using method invocation - this is bound to obj.
-    expect(obj.getThis()).toBe(obj);
+  // Call using method invocation - this is bound to obj.
+  expect(obj.getThis()).toBe(obj);
 
-    //
-    // Call using function invocation. `this` is always undefined
-    // when using function invocation.
-    //
-    let f = obj.getThis;
-    expect(f()).toBeUndefined();
+  //
+  // Call using function invocation. `this` is always undefined
+  // when using function invocation.
+  //
+  let f = obj.getThis;
+  expect(f()).toBeUndefined();
 });
-
 
 //
 // Method invocation
 //
 
 test("this-method-invocation", () => {
+  let obj = {
+    getThis() {
+      return this;
+    },
+  };
+  expect(obj.getThis()).toBe(obj);
 
-    let obj = {
-        getThis() {
-            return this;
-        }
-    };
-    expect(obj.getThis()).toBe(obj);
-
-    //
-    // Remember that `this` is entirely based on how the method is invoked.
-    // Here, we obtain a pointer to the method and invoke it using **function**
-    // invocation, not method invocation.
-    //
-    // This is a common case in callbacks - when a function like `getThis` is
-    // passed as a callback, it could be invoked using function invocation.
-    //
-    var gt = obj.getThis;
-    expect(gt()).toBeUndefined();
+  //
+  // Remember that `this` is entirely based on how the method is invoked.
+  // Here, we obtain a pointer to the method and invoke it using **function**
+  // invocation, not method invocation.
+  //
+  // This is a common case in callbacks - when a function like `getThis` is
+  // passed as a callback, it could be invoked using function invocation.
+  //
+  var gt = obj.getThis;
+  expect(gt()).toBeUndefined();
 });
 
 //
@@ -189,72 +186,65 @@ test("this-method-invocation", () => {
 //    object is returned.
 //
 test("this-constructor-invocation", () => {
-
-    // An example constructor function (pre-ES6)
-    function Person(fName, lName, age) {
-
-        //
-        // A check to verify we are being invoked as a constructor function.
-        //
-        if (!(this instanceof Person)) {
-            throw new Error("Expected a `new` invocation.");
-        };
-
-        this.firstName = fName;
-        this.lastName = lName;
-        this.age = age;
-    }
-
-    let p = new Person("damon", "allison", 41);
-    expect(p instanceof Person).toBeTruthy();
-
-    expect(p.firstName).toBe("damon");
-    expect(p.lastName).toBe("allison");
-    expect(p.age).toBe(41);
-
+  // An example constructor function (pre-ES6)
+  function Person(fName, lName, age) {
     //
-    // Pitfall - ensure `new` is used when invoking a constructor function.
+    // A check to verify we are being invoked as a constructor function.
     //
-    try {
-        let p = Person("damon", "allison", 41);
-        expect(true).toBeFalsy();
+    if (!(this instanceof Person)) {
+      throw new Error("Expected a `new` invocation.");
     }
-    catch(err) {
-        expect(err instanceof Error).toBeTruthy();
-        expect(err.message).toBe("Expected a `new` invocation.");
-    }
+
+    this.firstName = fName;
+    this.lastName = lName;
+    this.age = age;
+  }
+
+  let p = new Person("damon", "allison", 41);
+  expect(p instanceof Person).toBeTruthy();
+
+  expect(p.firstName).toBe("damon");
+  expect(p.lastName).toBe("allison");
+  expect(p.age).toBe(41);
+
+  //
+  // Pitfall - ensure `new` is used when invoking a constructor function.
+  //
+  try {
+    let p = Person("damon", "allison", 41);
+    expect(true).toBeFalsy();
+  } catch (err) {
+    expect(err instanceof Error).toBeTruthy();
+    expect(err.message).toBe("Expected a `new` invocation.");
+  }
 });
 
 //
 // Shows an ES6 "class" equivalent to the Person constructor function shown above.
 //
 test("this-class-constructor", () => {
-
+  //
+  // An example class definition (ES6)
+  //
+  class Person2 {
     //
-    // An example class definition (ES6)
+    // Object initialization is handled by a special `constructor` function.
     //
-    class Person2 {
-        //
-        // Object initialization is handled by a special `constructor` function.
-        //
-        // Only **1** constructor function can be defined on a class.
-        //
-        constructor(fName, lName, age) {
-            this.firstName = fName;
-            this.lastName = lName;
-            this.age = age;
-        }
+    // Only **1** constructor function can be defined on a class.
+    //
+    constructor(fName, lName, age) {
+      this.firstName = fName;
+      this.lastName = lName;
+      this.age = age;
     }
+  }
 
-    const p = new Person2("damon", "allison", 41);
-    expect(p instanceof Person2).toBeTruthy();
-    expect(p.firstName).toBe("damon");
-    expect(p.lastName).toBe("allison");
-    expect(p.age).toBe(41);
-
+  const p = new Person2("damon", "allison", 41);
+  expect(p instanceof Person2).toBeTruthy();
+  expect(p.firstName).toBe("damon");
+  expect(p.lastName).toBe("allison");
+  expect(p.age).toBe(41);
 });
-
-
 
 //
 // Indirect invocation
@@ -270,45 +260,45 @@ test("this-class-constructor", () => {
 // .call(thisArg, arg0, arg1, arg2 ...); .apply(thisArg, [args]);
 //
 test("indirect-invocation", () => {
+  function getThis() {
+    return this;
+  }
+  function getThisAndArgs(arg1, arg2) {
+    return [this, arg1, arg2];
+  }
 
-    function getThis() {
-        return this;
-    };
-    function getThisAndArgs(arg1, arg2) {
-        return [this, arg1, arg2];
-    };
+  let obj = {};
 
-    let obj = {};
+  //
+  // .call
+  //
+  expect(getThis.call(obj)).toBe(obj);
+  expect(_.isEqual(getThisAndArgs.call(obj, 1, 2), [obj, 1, 2])).toBeTruthy();
 
-    //
-    // .call
-    //
-    expect(getThis.call(obj)).toBe(obj);
-    expect(_.isEqual(getThisAndArgs.call(obj, 1, 2), [obj, 1, 2])).toBeTruthy();
+  //
+  // .apply
+  //
+  expect(getThis.apply(obj)).toBe(obj);
+  expect(
+    _.isEqual(getThisAndArgs.apply(obj, [1, 2]), [obj, 1, 2])
+  ).toBeTruthy();
 
-    //
-    // .apply
-    //
-    expect(getThis.apply(obj)).toBe(obj);
-    expect(_.isEqual(getThisAndArgs.apply(obj, [1, 2]), [obj, 1, 2])).toBeTruthy();
+  //
+  // .bind
+  //
+  // `bind` creates a new function which "hard binds" `this` to the given value.
+  //
+  let f = getThis.bind(obj);
+  expect(f()).toBe(obj);
 
-
-    //
-    // .bind
-    //
-    // `bind` creates a new function which "hard binds" `this` to the given value.
-    //
-    let f = getThis.bind(obj);
-    expect(f()).toBe(obj);
-
-    //
-    // Once a function is bound with `bind`, this will *always* equal the bound
-    // value.
-    //
-    // Here, we try to rebind `this` to a new object, but `this` is still being
-    // bound to the object we bound to (obj).
-    //
-    expect(f.call({})).toBe(obj);
+  //
+  // Once a function is bound with `bind`, this will *always* equal the bound
+  // value.
+  //
+  // Here, we try to rebind `this` to a new object, but `this` is still being
+  // bound to the object we bound to (obj).
+  //
+  expect(f.call({})).toBe(obj);
 });
 
 //
@@ -320,22 +310,20 @@ test("indirect-invocation", () => {
 // This is great, since there is no ambiguity of what `this` points to.
 //
 test("lexical this (arrow functions)", () => {
-
-    function foo() {
-        return () => {
-            // `this` here is lexically scoped from `foo`
-            return this.a
-        };
+  function foo() {
+    return () => {
+      // `this` here is lexically scoped from `foo`
+      return this.a;
     };
+  }
 
-    let obj1 = {
-        a: 2
-    };
-    let obj2 = {
-        a: 3
-    };
+  let obj1 = {
+    a: 2,
+  };
+  let obj2 = {
+    a: 3,
+  };
 
-    expect(foo.call(obj1)()).toBe(2);
-    expect(foo.call(obj2)()).toBe(3);
-
+  expect(foo.call(obj1)()).toBe(2);
+  expect(foo.call(obj2)()).toBe(3);
 });

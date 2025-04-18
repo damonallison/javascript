@@ -1,42 +1,38 @@
-"use strict";
-
+import { expect, test } from "vitest";
 //
 // Strings
 //
-
 
 //
 // JS strings are immutable. They are "array-like" in that you can
 // access characters by ordinal, but they are *not* arrays.
 //
-test("strings are \"array like\"", () => {
+test('strings are "array like"', () => {
+  const s = "test";
 
-    const s = "test";
+  // Array-like properties.
+  expect(s.length).toBe(4); // length
+  expect(s[0]).toBe("t"); // ordinal access
 
-    // Array-like properties.
-    expect(s.length).toBe(4); // length
-    expect(s[0]).toBe("t");   // ordinal access
+  // String properties
+  expect(s.toUpperCase()).toBe("TEST");
+  expect(s.toLowerCase()).toBe("test");
 
-    // String properties
-    expect(s.toUpperCase()).toBe("TEST");
-    expect(s.toLowerCase()).toBe("test");
-
-    //
-    // Strings in JS are immutable. In order to operate on strings
-    // as arrays (ability to move characters, convert the string to
-    // an array. Split("")ting an array and join("") to get the string
-    // representation back is actually a very common operation.
-    //
-    // Example: Reverse a string.
-    //
-    // Split the string into an array, reverse the array, and rejoin.
-    //
-    // **WARNING: This will **NOT** work for unicode characters.
-    // Find an npm package to do this operation. (esrever)
-    //
-    let s2 = s.split("").reverse().join("");
-    expect(s2).toBe("tset");
-
+  //
+  // Strings in JS are immutable. In order to operate on strings
+  // as arrays (ability to move characters, convert the string to
+  // an array. Split("")ting an array and join("") to get the string
+  // representation back is actually a very common operation.
+  //
+  // Example: Reverse a string.
+  //
+  // Split the string into an array, reverse the array, and rejoin.
+  //
+  // **WARNING: This will **NOT** work for unicode characters.
+  // Find an npm package to do this operation. (esrever)
+  //
+  let s2 = s.split("").reverse().join("");
+  expect(s2).toBe("tset");
 });
 
 //
@@ -47,39 +43,37 @@ test("strings are \"array like\"", () => {
 //
 //
 test("native string vs object String", () => {
+  const native = "test";
+  const obj = new String("test");
 
-    const native = "test";
-    const obj = new String("test");
+  //
+  // Strings are immutable.
+  //
+  // To mutate individual characters, you'll have to convert
+  // the string to an array.
+  //
+  // let a = obj.split("");
+  //
+  obj.replace(/e/, "E");
+  expect(obj.charAt(1)).toBe("e");
+  expect(obj.charAt(100)).toBe(""); // uh!
 
-    //
-    // Strings are immutable.
-    //
-    // To mutate individual characters, you'll have to convert
-    // the string to an array.
-    //
-    // let a = obj.split("");
-    //
-    obj.replace(/e/, "E");
-    expect(obj.charAt(1)).toBe("e");
-    expect(obj.charAt(100)).toBe(""); // uh!
+  expect(native).toEqual(obj);
+  expect(native).not.toBe(obj);
 
-    expect(native).toEqual(obj);
-    expect(native).not.toBe(obj);
+  expect(typeof native).toBe("string");
+  expect(typeof obj).toBe("object");
 
-    expect(typeof native).toBe("string");
-    expect(typeof obj).toBe("object");
+  expect(native instanceof String).toBeFalsy();
+  expect(obj instanceof String).toBeTruthy();
 
-    expect(native instanceof String).toBeFalsy();
-    expect(obj instanceof String).toBeTruthy();
-
-    //
-    // Natives will be boxed on the fly.
-    //
-    // Here, "trim " is a native which is boxed to `String` for a call to `trim`.
-    //
-    expect("test ".trim()).toBe("test");
-    expect("test".length).toBe(4);
-
+  //
+  // Natives will be boxed on the fly.
+  //
+  // Here, "trim " is a native which is boxed to `String` for a call to `trim`.
+  //
+  expect("test ".trim()).toBe("test");
+  expect("test".length).toBe(4);
 });
 
 //
@@ -88,22 +82,22 @@ test("native string vs object String", () => {
 // * String template literals provide string interpolation and allow for embedded expressions.
 //
 test("unicode strings", () => {
-    //
-    // Unicode
-    //
-    const text = "𠮷";
-    expect(text.length).toBe(2); // There are two code units.
-    expect(/^.$/u.test(text)).toBeTruthy(); // But it is only treated as one character.
+  //
+  // Unicode
+  //
+  const text = "𠮷";
+  expect(text.length).toBe(2); // There are two code units.
+  expect(/^.$/u.test(text)).toBeTruthy(); // But it is only treated as one character.
 
-    //
-    // When comparing strings w/ the potential for Unicode code points,
-    // always normalize the strings. This ensures that two character strings
-    // which are equivalent in meaning but not the same code points
-    // are treated as equal.
-    //
-    const s1 = "damon";
-    const s2 = "damon";
-    expect(s1.normalize()).toEqual(s2.normalize());
+  //
+  // When comparing strings w/ the potential for Unicode code points,
+  // always normalize the strings. This ensures that two character strings
+  // which are equivalent in meaning but not the same code points
+  // are treated as equal.
+  //
+  const s1 = "damon";
+  const s2 = "damon";
+  expect(s1.normalize()).toEqual(s2.normalize());
 });
 
 //
@@ -113,73 +107,72 @@ test("unicode strings", () => {
 // * Expressions can be embedded into templates using ${}.
 //
 test("string templates", () => {
-
-    const name = "damon";
-    const s10 = `
+  const name = "damon";
+  const s10 = `
 I said:
-    "hello, ${name}. We can embed expressions. The time is: ${new Date().toString()}!"`
-    expect(s10.indexOf(name) > 0).toBeTruthy();
+    "hello, ${name}. We can embed expressions. The time is: ${new Date().toString()}!"`;
+  expect(s10.indexOf(name) > 0).toBeTruthy();
 
-    //
-    // Tagged templates.
-    // Allows you to apply transformations on a template.
-    // literals is an array of literal strings as intrepreted by JS.
-    // Each subsequent argument is the interpreted value of each substitution.
-    //
-    // This allows you to create domain specific languages for translating strings.
-    //
-    function echoTag(literals, ...substitutions) {
-        let result = "";
-        for (let i = 0; i < substitutions.length; i++) {
-            result += literals[i];
-            result += substitutions[i];
-        }
-        // add the last literal.
-        result += literals[literals.length - 1];
-        return result
+  //
+  // Tagged templates.
+  // Allows you to apply transformations on a template.
+  // literals is an array of literal strings as intrepreted by JS.
+  // Each subsequent argument is the interpreted value of each substitution.
+  //
+  // This allows you to create domain specific languages for translating strings.
+  //
+  function echoTag(literals, ...substitutions) {
+    let result = "";
+    for (let i = 0; i < substitutions.length; i++) {
+      result += literals[i];
+      result += substitutions[i];
     }
+    // add the last literal.
+    result += literals[literals.length - 1];
+    return result;
+  }
 
-    //
-    // The same function, much more compact, using reduce.
-    //
-    // Understand that length(strings) === length(values) + 1
-    //
-    function echoReduce(strings, ...values) {
-        // console.log(`Strings len=${strings.length} Values len=${values.length}`);
-        // console.log(strings);
-        // console.log(values);
-        return strings.reduce((fullStr, value, idx) => {
-            return `${fullStr}${idx > 0 ? values[idx - 1] : ""}${value}`
-        });
-    };
-    let count = 10,
-        price = 0.25;
+  //
+  // The same function, much more compact, using reduce.
+  //
+  // Understand that length(strings) === length(values) + 1
+  //
+  function echoReduce(strings, ...values) {
+    // console.log(`Strings len=${strings.length} Values len=${values.length}`);
+    // console.log(strings);
+    // console.log(values);
+    return strings.reduce((fullStr, value, idx) => {
+      return `${fullStr}${idx > 0 ? values[idx - 1] : ""}${value}`;
+    });
+  }
+  let count = 10,
+    price = 0.25;
 
-    let message = echoTag`${count} items cost $${(count * price).toFixed(2)}`;
-    expect(message).toEqual("10 items cost $2.50");
-    expect(echoReduce`${count} items cost $${(count * price).toFixed(2)}`).toBe("10 items cost $2.50");
-
+  let message = echoTag`${count} items cost $${(count * price).toFixed(2)}`;
+  expect(message).toEqual("10 items cost $2.50");
+  expect(echoReduce`${count} items cost $${(count * price).toFixed(2)}`).toBe(
+    "10 items cost $2.50"
+  );
 });
 
-test('string iterating', () => {
-    const name = "damon";
-    let found = "";
+test("string iterating", () => {
+  const name = "damon";
+  let found = "";
 
-    for (let i = 0; i < name.length; i++) {
-        // creates a new immutable string with every iteration.
-        // would be more efficient as an array.
-        found += name[i];
-    }
-    expect(found).toBe(name);
+  for (let i = 0; i < name.length; i++) {
+    // creates a new immutable string with every iteration.
+    // would be more efficient as an array.
+    found += name[i];
+  }
+  expect(found).toBe(name);
 
-    found = "";
+  found = "";
 
-    // String is an iterable.
-    for (let i of name) {
-        found += i;
-    }
-    expect(found).toBe(name);
-
+  // String is an iterable.
+  for (let i of name) {
+    found += i;
+  }
+  expect(found).toBe(name);
 });
 
 //
@@ -193,11 +186,9 @@ test('string iterating', () => {
 // const gclef = "\u{1D11E}";
 //
 test("unicode", () => {
-
-    var gclefES5 = "\uD834\uDD1E";
-    var gclefES6 = "\u{1D11E}";
-    expect(gclefES5).toBe(gclefES6);
-
+  var gclefES5 = "\uD834\uDD1E";
+  var gclefES6 = "\u{1D11E}";
+  expect(gclefES5).toBe(gclefES6);
 });
 
 //
@@ -227,44 +218,40 @@ test("unicode", () => {
 // `test` is a simple test, returning a boolean if there is at least one match.
 //
 test("regular-expressions", () => {
+  const str = "this is a test, test";
 
-    const str = "this is a test, test";
+  //
+  // The `string` object contains regex methods.
+  //
+  // `string.match` : returns the match information, or null. Similar to Regexp.exec()
+  // `string.search`: returns the index of a match, or null. Similar to Regexp.test()
+  //
+  const m = str.match(/t(e).t/); // To show match captures, we'll capture 'e'
+  expect(m[0]).toBe("test"); // [0] is always the entire pattern match.
+  expect(m[1]).toBe("e"); // [1]+ will be the match captures.
+  expect(m.index).toBe(10); // The position of the match
+  expect(m.input).toBe("this is a test, test"); // If we want to retrieve the string source used in the match.
 
-    //
-    // The `string` object contains regex methods.
-    //
-    // `string.match` : returns the match information, or null. Similar to Regexp.exec()
-    // `string.search`: returns the index of a match, or null. Similar to Regexp.test()
-    //
-    const m = str.match(/t(e).t/); // To show match captures, we'll capture 'e'
-    expect(m[0]).toBe("test");     // [0] is always the entire pattern match.
-    expect(m[1]).toBe("e");        // [1]+ will be the match captures.
-    expect(m.index).toBe(10);      // The position of the match
-    expect(m.input).toBe("this is a test, test");  // If we want to retrieve the string source used in the match.
+  //
+  // Using the Regexp object
+  //
+  const re = /(te.t)/gim;
 
-    //
-    // Using the Regexp object
-    //
-    const re = /(te.t)/igm;
+  //
+  // Print the flags used. The ES6 spec calls for flags to be in this order
+  // "gimuy" regardless of the order they were defined.
+  //
+  expect(re.flags).toBe("gim");
+  expect(re.source).toBe("(te.t)");
+  expect(re.global).toBeTruthy();
+  expect(re.ignoreCase).toBeTruthy();
+  expect(re.multiline).toBeTruthy();
 
-    //
-    // Print the flags used. The ES6 spec calls for flags to be in this order
-    // "gimuy" regardless of the order they were defined.
-    //
-    expect(re.flags).toBe("gim");
-    expect(re.source).toBe("(te.t)");
-    expect(re.global).toBeTruthy();
-    expect(re.ignoreCase).toBeTruthy();
-    expect(re.multiline).toBeTruthy();
+  const match = re.exec(str);
+  expect(match.index).toBe(10);
 
-    const match = re.exec(str);
-    expect(match.index).toBe(10);
-
-    // Test failing patterns
-    const failPattern = /notthere/
-    expect(failPattern.test(str)).toBeFalsy();
-    expect(failPattern.exec(str)).toBeNull();
-
+  // Test failing patterns
+  const failPattern = /notthere/;
+  expect(failPattern.test(str)).toBeFalsy();
+  expect(failPattern.exec(str)).toBeNull();
 });
-
-
