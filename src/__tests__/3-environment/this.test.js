@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { describe, expect, it, test } from "vitest";
 import _ from "lodash";
 
 //
@@ -10,8 +10,9 @@ import _ from "lodash";
 // different across function invocations.
 //
 // Therefore, from within the function, you do not know what `this` is going to
-// point to. This ambiguity is the source of difficult to track down bugs. When
-// writing the function, you have to either:
+// point to. This ambiguity is the source of dificulty to tracking down bugs.
+//
+// When writing a function, you have to either:
 //
 // 1. Assume. Assume that `this` will be an object you expect.
 // 2. Program defensively. Write countless checks to verify the expected state
@@ -36,8 +37,7 @@ import _ from "lodash";
 //
 // 2. Method invocation. Invoking a function on an object. `this` == the object.
 //
-// let obj = {}
-// obj.func() // `this` in `func()` will be `obj`
+// let obj = {} obj.func() // `this` in `func()` will be `obj`
 //
 // 3. Constructor invocation. `new Regexp("\\d");`
 //
@@ -64,19 +64,17 @@ import _ from "lodash";
 // Function invocation
 //
 
-//
-// With function invocation:
-// * `this` is undefined when running in strict mode.
-// * `this` === global when running in non-strict mode. (Turn on strict mode!)
-//
-test("this-function-invocation", () => {
-  // We are in 'use strict'; - making `this` undefined when called in function invocation.
-  expect(this).toBeUndefined();
+describe("function-invocation", () => {
+  it("is-global-by-default", () => {
+    expect(this).toBe(global);
+  });
 
-  function echoThis() {
-    return this;
-  }
-  expect(echoThis()).toBeUndefined();
+  it("is-undefined-in-function-invocation", () => {
+    function echoThis() {
+      return this;
+    }
+    expect(echoThis()).toBeUndefined();
+  });
 });
 
 //
@@ -85,31 +83,25 @@ test("this-function-invocation", () => {
 //
 test("this-function-invocation-nested-function", () => {
   let obj = {
+    /**
+     * Defines a function on `obj`. this == `obj`
+     */
     myFunc() {
-      //
-      // Because this function is being invoked on `obj`, `obj` is the context.
-      //
       expect(this).toBe(obj);
-      function echo(val) {
+      function checkThis(val) {
         //
         // Even if `this` is defined in the myFunc() context, that
         // context does not matter. Because *this* function was called
         // using function invocation without a context, this is
-        // undefined (we are in strict mode).
+        // undefined.
         //
         expect(this).toBeUndefined();
         return val;
       }
-      return echo("hello, world!");
+      checkThis(); // function invocation
     },
   };
-
-  //
-  // Here, we are invoking `myFunc` using method invocation.
-  // However, within `myFunc`, `echo` is invoked using function invocation.
-  // Within `echo`, `this` will always be undefined.
-  //
-  expect(obj.myFunc()).toBe("hello, world!");
+  obj.myFunc(); // method invocation
 });
 
 //
@@ -151,7 +143,7 @@ test("this-function-invocation-arrow-functions", () => {
 });
 
 //
-// Method invocation
+// Method invocation is a function which
 //
 
 test("this-method-invocation", () => {
@@ -171,11 +163,11 @@ test("this-method-invocation", () => {
   // passed as a callback, it could be invoked using function invocation.
   //
   var gt = obj.getThis;
-  expect(gt()).toBeUndefined();
+  expect(gt()).toBeUndefined(); // function invocation
 });
 
 //
-// Constructor invocation
+// Constructor invocation (pre-es6)
 //
 
 // When invoking a function with `new` in front of it.
@@ -202,6 +194,7 @@ test("this-constructor-invocation", () => {
 
   let p = new Person("damon", "allison", 41);
   expect(p instanceof Person).toBeTruthy();
+  expect(typeof p).toBe("object");
 
   expect(p.firstName).toBe("damon");
   expect(p.lastName).toBe("allison");
@@ -215,7 +208,7 @@ test("this-constructor-invocation", () => {
     expect(true).toBeFalsy();
   } catch (err) {
     expect(err instanceof Error).toBeTruthy();
-    expect(err.message).toBe("Expected a `new` invocation.");
+    expect(err.message).toMatch(/expected a `new` invocation/i);
   }
 });
 
@@ -319,11 +312,13 @@ test("lexical this (arrow functions)", () => {
 
   let obj1 = {
     a: 2,
+    foo: foo,
   };
   let obj2 = {
     a: 3,
+    foo: foo,
   };
 
-  expect(foo.call(obj1)()).toBe(2);
-  expect(foo.call(obj2)()).toBe(3);
+  expect(obj1.foo()()).toBe(2);
+  expect(obj2.foo()()).toBe(3);
 });

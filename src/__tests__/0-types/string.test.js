@@ -54,11 +54,12 @@ test("native string vs object String", () => {
   //
   // let a = obj.split("");
   //
+
   obj.replace(/e/, "E");
   expect(obj.charAt(1)).toBe("e");
   expect(obj.charAt(100)).toBe(""); // uh!
 
-  expect(native).toEqual(obj);
+  expect(native).toEqual(obj.toString());
   expect(native).not.toBe(obj);
 
   expect(typeof native).toBe("string");

@@ -1,4 +1,8 @@
-"use strict";
+import { expect, test } from "vitest";
+import { setImmediate, setTimeout } from "timers/promises";
+
+import _ from "lodash";
+
 //
 // This file contains notes and theory behind JavaScript's runtime and
 // performance characteristics.
@@ -31,29 +35,23 @@
 // All of these problems are addressed with Promises.
 //
 
-import _ from "lodash";
+test("promises", async () => {
+  const completions = new Set<string>();
+  const expected = new Set<string>(["immediate", "timeout"]);
 
-test("callbacks", (done) => {
+  function complete(completed: string) {
+    console.log("adding completion", completed);
+    completions.add(completed);
+  }
+  function onImmediate(): void {
+    complete("immediate");
+  }
+  function onTimeout(): void {
+    complete("timeout");
+  }
 
-    let completions = new Set();
-    let expected = new Set(["immediate", "timeout"]);
+  await setImmediate(onImmediate());
+  await setTimeout(20, onTimeout());
 
-    let complete = (completed) => {
-        completions.add(completed);
-        if (_.isEqual(expected, completions)) {
-            done();
-        }
-    }
-
-    setImmediate((a, b) => {
-        expect(a).toBe(10);
-        expect(b).toBe(100);
-        complete("immediate");
-    }, 10, 100);
-
-    setTimeout((a, b) => {
-        expect(a).toBe(10);
-        expect(b).toBe(20);
-        complete("timeout");
-    }, 0, 10, 20);
+  expect(_.isEqual(completions, expected)).toBe(true);
 });

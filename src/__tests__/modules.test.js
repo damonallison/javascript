@@ -1,4 +1,4 @@
-"use strict";
+import { expect, test } from "vitest";
 //
 // ES6 introduces "modules"
 //
@@ -57,21 +57,20 @@ import { addition, subtraction } from "../modules/calculator";
 // Imports add, aliasing it locally to `addMe`.
 import { add as addMe } from "../modules/calculator";
 
-test("es-module-import", ()  => {
+test("es-module-import", () => {
+  // Default import
+  expect(Calculator.add(2, 2)).toBe(4);
 
-    // Default import
-    expect(Calculator.add(2, 2)).toBe(4);
+  // Named imports
+  expect(add(2, 2)).toBe(4);
+  expect(sub(4, 2)).toBe(2);
 
-    // Named imports
-    expect(add(2, 2)).toBe(4);
-    expect(sub(4, 2)).toBe(2);
+  // Named imports which were exported as aliases
+  expect(addition(2, 2)).toBe(4);
+  expect(subtraction(4, 2)).toBe(2);
 
-    // Named imports which were exported as aliases
-    expect(addition(2, 2)).toBe(4);
-    expect(subtraction(4, 2)).toBe(2);
-
-    // Aliased import
-    expect(addMe(2, 2)).toBe(4);
+  // Aliased import
+  expect(addMe(2, 2)).toBe(4);
 });
 
 //
@@ -90,19 +89,16 @@ test("es-module-import", ()  => {
 import * as CalculatorModule from "../modules/calculator";
 
 test("es-module-namespace-import", () => {
-
-    // Using namespace imports, access the default member with `default`.
-    expect(CalculatorModule.default.add(2, 2)).toBe(4);
-    expect(CalculatorModule.addition(2, 2)).toBe(4);
-
+  // Using namespace imports, access the default member with `default`.
+  expect(CalculatorModule.default.add(2, 2)).toBe(4);
+  expect(CalculatorModule.addition(2, 2)).toBe(4);
 });
-
 
 // CommonJS
 
 const calculator = require("../modules/calculator-commonjs");
 
 test("module-importing", () => {
-    expect(calculator.addition(2, 2)).toBe(4);
-    expect(calculator.subtraction(10, 2)).toBe(8);
+  expect(calculator.addition(2, 2)).toBe(4);
+  expect(calculator.subtraction(10, 2)).toBe(8);
 });
