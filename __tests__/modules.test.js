@@ -27,7 +27,7 @@ import { expect, test } from "vitest";
 //
 // Exporting:
 //
-// * See ../modules/calculator.js for examples of exporting.
+// * See ../app/modules/calculator.js for examples of exporting.
 //
 // Importing:
 //
@@ -44,18 +44,18 @@ import { expect, test } from "vitest";
 // This is the most common way to implement members, since ideally each module
 // should only export a single, default, element.
 //
-// import Calculator from "../modules/calculator";
+// import Calculator from "../app/modules/calculator";
 //
 
 // Imports the default class as "Calculator", named exports `add` and `sub`.
-import Calculator, { add, sub } from "../modules/calculator";
+import Calculator, { add, sub } from "../app/modules/calculator";
 
 // Imports named exports addition and subtraction, which were exported as
 // aliases.
-import { addition, subtraction } from "../modules/calculator";
+import { addition, subtraction } from "../app/modules/calculator";
 
 // Imports add, aliasing it locally to `addMe`.
-import { add as addMe } from "../modules/calculator";
+import { add as addMe } from "../app/modules/calculator";
 
 test("es-module-import", () => {
   // Default import
@@ -86,7 +86,7 @@ test("es-module-import", () => {
 // The "default" export is literally accessed using `default`.
 //
 
-import * as CalculatorModule from "../modules/calculator";
+import * as CalculatorModule from "../app/modules/calculator";
 
 test("es-module-namespace-import", () => {
   // Using namespace imports, access the default member with `default`.
@@ -96,7 +96,7 @@ test("es-module-namespace-import", () => {
 
 // CommonJS
 
-const calculator = require("../modules/calculator-commonjs");
+const calculator = require("../app/modules/calculator-commonjs");
 
 test("module-importing", () => {
   expect(calculator.addition(2, 2)).toBe(4);

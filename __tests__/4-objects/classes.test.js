@@ -1,8 +1,8 @@
 import { expect, test } from "vitest";
 
-import Person from "../../model/person";
-import Teacher from "../../model/teacher";
-import NameError from "../../model/name-error";
+import Person from "../../app/model/person";
+import Teacher from "../../app/model/teacher";
+import NameError from "../../app/model/name-error";
 
 //
 // ES6 classes
